@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "STD",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STD(<value:NUMBER>)",
+        "TgtPattern": "STDDEV(<value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GROUP_CONCAT NO DISTINCT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "GROUP_CONCAT(<value: STRING, COLUMN> ORDER BY <value> <order_rule: OPTION['ASC': 'ASC NULLS FIRST', 'DESC': 'DESC NULLS LAST']> SEPARATOR <sep: OPTION['\\', \\'', '\\';\\'']>)",
+        "TgtPattern": "STRING_AGG(<value>, <sep> ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "GROUP_CONCAT DISTINCT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "GROUP_CONCAT(DISTINCT <value: STRING, COLUMN> ORDER BY <value> <order_rule: OPTION['ASC': 'ASC NULLS FIRST', 'DESC': 'DESC NULLS LAST']> SEPARATOR <sep: OPTION['\\', \\'', '\\';\\'']>)",
+        "TgtPattern": "STRING_AGG(DISTINCT <value>, <sep> ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "JSON_ARRAYAGG",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JSON_ARRAYAGG(<value: INT>) OVER(ORDER BY <value> <order_rule: OPTION['ASC': 'ASC NULLS FIRST', 'DESC': 'DESC NULLS LAST']>)",
+        "TgtPattern": "JSON_AGG(<value>) OVER(ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "JSON"
+    },
+    {
+        "Desc": "JSON_OBJECTAGG",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JSON_OBJECTAGG(<key: STRING>, <value: INT>) OVER(ORDER BY <value> <order_rule: OPTION['ASC': 'ASC NULLS FIRST', 'DESC': 'DESC NULLS LAST']>)",
+        "TgtPattern": "JSON_OBJECT_AGG(<key>, <value>) OVER(ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "JSON"
+    }
+]

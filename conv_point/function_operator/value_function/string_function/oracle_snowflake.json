@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "INSTR3",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, <start_pos: INT, LITERAL, [1,3]>, 1)>, <start_pos>)",
+        "TgtPattern": "POSITION(<sub_str>, <str>, <start_pos>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "INSTR4",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, <start_pos: INT, LITERAL, [1,3]>, 2)>, <start_pos>, 2)",
+        "TgtPattern": "POSITION(<sub_str>, <str>, POSITION(<sub_str>, <str>, <start_pos>) + 1)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "INSTR2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, 1, 1)>)",
+        "TgtPattern": "POSITION(<sub_str>, <str>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

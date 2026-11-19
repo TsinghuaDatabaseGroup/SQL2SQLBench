@@ -1,0 +1,134 @@
+[
+    {
+        "Desc": "CORR",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CORR(<value1: NUMBER>, <value2: NUMBER>)",
+        "TgtPattern": "(SUM(<value1> * <value2>) - SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN <value1> ELSE 0 END) * SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN <value2> ELSE 0 END) / NULLIF(SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN 1 END), 0)) / (SQRT(SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN <value1> * <value1> ELSE 0 END) - SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN <value1> ELSE 0 END) * SUM(<CASE WHEN <value1> + <value2> IS NOT NULL THEN <value1> ELSE 0 END) / NULLIF(SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN 1 END), 0)) * SQRT(SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN <value2> * <value2> ELSE 0 END) - SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN <value2> ELSE 0 END) * SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN <value2> ELSE 0 END) / NULLIF(SUM(CASE WHEN <value1> + <value2> IS NOT NULL THEN 1 END), 0) ))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "LISTAGG",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LISTAGG(<value: STRING, COLUMN>, <sep: OPTION['\\', \\'', '\\';\\'']>) WITHIN GROUP (ORDER BY <value> <order_rule: OPTION['ASC NULLS FIRST': 'ASC', 'DESC NULLS LAST': 'DESC']>)",
+        "TgtPattern": "GROUP_CONCAT(<value> ORDER BY <value> <order_rule> SEPARATOR <sep>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "COVAR_POP",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COVAR_POP(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x>*<y> END)\n  -\n  SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> END)\n  *\n  SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END)\n  /\n  NULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)\n)\n/\nNULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_SLOPE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SLOPE(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(IF(<x> + <y> IS NOT NULL, <x> * <y>, 0)) - COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL)) * AVG(IF(<x> + <y> IS NOT NULL, <x>, NULL)) * AVG(IF(<x> + <y> IS NOT NULL, <y>, NULL))) / (SUM(IF(<x> + <y> IS NOT NULL, <y> * <y>, 0)) - COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL)) * POW(AVG(IF(<x> + <y> IS NOT NULL, <y>, NULL)), 2))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_AVGY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGY(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_AVGX",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGX(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_COUNT",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_COUNT(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_SXX",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXX(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <x> * <x>, 0)) - POWER(SUM(IF(<x> + <y> IS NOT NULL, <x>, 0)), 2) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_SYY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SYY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <y> * <y>, 0)) - POWER(SUM(IF(<x> + <y> IS NOT NULL, <y>, 0)), 2) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_SXY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <x> * <y>, 0)) - SUM(IF(<x> + <y> IS NOT NULL, <y>, 0)) * SUM(IF(<x> + <y> IS NOT NULL, <x>, 0)) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DENSE_RANK_FIRST_LAST",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <group_by_cols: LIST[ANY_VALUE]>,  \n{for <aggr_function>,<value>,<first_last>,<order_column> in <aggr_functions: LIST[OPTION['MIN', 'MAX', 'SUM', 'AVG', 'COUNT', 'VARIANCE', 'STDDEV']]>, <values:  LIST[NUMBER]>,  <first_lasts: LIST[OPTION['FIRST': 'ASC','LAST': 'DESC']]>, <order_columns: LIST[ANY_VALUE]> ADD ',':\n            <aggr_function>(<value>) KEEP (DENSE_RANK <first_last> ORDER BY <order_column> ASC NULLS FIRST)\n}\n  FROM <tables: LIST[TABLE]>\n  WHERE <cond: ANY_VALUE>\n  GROUP BY <group_by_cols>",
+        "TgtPattern": "WITH <alias1: ALIAS> AS (\n    SELECT {for <g_col>, <g_alias> in <group_by_cols>, <g_alias_list: LIST[ALIAS]> ADD ',': <g_col> AS <g_alias>}, \n{for <value>, <alias> in <values>, <value_aliases: LIST[ALIAS]> ADD ',':<value> AS <alias>},\n{for <order_column>, <first_last>, <alias> in <order_columns>, <first_lasts>, <aliases: LIST[ALIAS]> ADD ',':\nDENSE_RANK() OVER (PARTITION BY {for <col> in <group_by_cols> ADD ',': <col>} ORDER BY <order_column> <first_last>) AS <alias>}\n      FROM <tables>      \n      WHERE <cond>\n)\nSELECT <g_alias_list>,\n        {for <aggr_function>, <value_alias>, <alias> in <aggr_functions>, <value_aliases>, <aliases> ADD ',':\n       <aggr_function>(CASE WHEN <alias> = 1 THEN <value_alias> END)}\n  FROM <alias1>\n GROUP BY <g_alias_list>",
+        "Condition": null,
+        "Return": null
+    }
+]

@@ -1,0 +1,74 @@
+[
+    {
+        "Desc": "DATE_R",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "DATE",
+        "TgtPattern": "\"DATE\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_R",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "START",
+        "TgtPattern": "\"START\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "NUMBER_R",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "NUMBER",
+        "TgtPattern": "\"NUMBER\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "COMMENT_R",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "COMMENT",
+        "TgtPattern": "\"COMMENT\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "USER_R",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "USER",
+        "TgtPattern": "\"USER\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "MODE_R",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "MODE",
+        "TgtPattern": "\"MODE\"",
+        "Condition": null,
+        "Return": null
+    }
+]

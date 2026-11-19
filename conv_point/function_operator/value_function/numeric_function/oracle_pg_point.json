@@ -1,0 +1,83 @@
+[
+    {
+        "Desc": "REMAINDER",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REMAINDER(<value1: INT>, <value2: INT>)",
+        "TgtPattern": "<value1> - (<value2> * ROUND(<value1>::numeric / <value2>))",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "BITAND",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "BITAND(<value1: INT>, <value2: INT>)",
+        "TgtPattern": "<value1> & <value2>",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "TO_CHAR_NUM_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM99G999G999G999D00')",
+        "TgtPattern": "REPLACE(REPLACE(REPLACE(TO_CHAR(<value>, 'FM99G999G999G999D00'), '.', '|'), ',', '.'), '|', ',')",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_NUMBER_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_NUMBER(<value: @GenOracleStrNumber('.,')>, 'FM99G999G999G999D99')",
+        "TgtPattern": "<num: @GenNumber(<value>, '.,')>",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ".,"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_NUMBER_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_NUMBER(<value:  @GenOracleStrNumber(',.')>, 'FM99G999G999G999D99')",
+        "TgtPattern": "<num: @GenNumber(<value>, ',.')>",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    }
+]

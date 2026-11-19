@@ -1,0 +1,98 @@
+[
+    {
+        "Desc": "CAST_DOUBLE_PRECISION",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: ANY_VALUE, NUMBER>::DOUBLE PRECISION",
+        "TgtPattern": "CAST(<value> AS BINARY_DOUBLE)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_FLOAT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: ANY_VALUE, NUMBER>::FLOAT",
+        "TgtPattern": "CAST(<value> AS BINARY_FLOAT)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_DATE_STRING_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<date: DATE, STRICT> AS CHAR)",
+        "TgtPattern": "TO_CHAR(<date>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_DATE_STRING_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date: DATE, STRICT>::TEXT",
+        "TgtPattern": "TO_CHAR(<date>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_DATE_STRING_3",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date: TIMESTAMP, STRICT>::TEXT",
+        "TgtPattern": "TO_CHAR(<date>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_STRING",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<val: ANY_VALUE>::TEXT",
+        "TgtPattern": "CAST(<val> AS CHAR)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_NUMERIC",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: ANY_VALUE, NUMBER> AS NUMERIC)",
+        "TgtPattern": "CAST(<value> AS NUMBER)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "::NUMERIC",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: ANY_VALUE, NUMBER>::NUMERIC",
+        "TgtPattern": "CAST(<value> AS NUMBER)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

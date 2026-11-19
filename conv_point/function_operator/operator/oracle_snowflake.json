@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "DATE_MINUS_DATE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date1: DATE, STRICT> - <date2: DATE, STRICT>",
+        "TgtPattern": "DATEDIFF(day, <date2>, <date1>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

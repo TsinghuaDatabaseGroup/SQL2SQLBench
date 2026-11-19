@@ -1,0 +1,380 @@
+[
+  {
+    "Desc": "Convert PostgreSQL NOTNULL operator to MySQL IS NOT NULL syntax",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "<expr: ANY_VALUE> NOTNULL",
+    "TgtPattern": "<expr> IS NOT NULL",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL EXTRACT(CENTURY FROM ...) to MySQL equivalent using YEAR function and arithmetic",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "EXTRACT( CENTURY FROM <date_expr: ANY_VALUE> )",
+    "TgtPattern": "FLOOR( ( YEAR( <date_expr> ) + 99 ) / 100 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL DATE_TRUNC('day') to MySQL equivalent by casting to DATE then DATETIME",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "DATE_TRUNC ( 'day' , <expr: ANY_VALUE> )",
+    "TgtPattern": "CAST(CAST(<expr> AS DATE) AS DATETIME)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert EXTRACT(YEAR FROM AGE(timestamp, timestamp)) to TIMESTAMPDIFF in MySQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "EXTRACT ( YEAR FROM AGE ( <date1: ANY_VALUE> , <date2: ANY_VALUE> ) )",
+    "TgtPattern": "TIMESTAMPDIFF ( YEAR , <date2> , <date1> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL ARRAY_LENGTH function with dimension 1 to MySQL JSON_LENGTH with NULLIF to handle empty arrays",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "ARRAY_LENGTH ( <array_expr: ANY_VALUE> , 1 )",
+    "TgtPattern": "NULLIF ( JSON_LENGTH ( <array_expr> ) , 0 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL LPAD function with two arguments to MySQL LPAD with three arguments by adding a space as the pad string",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "LPAD( <expr1: ANY_VALUE> , <length: INT> )",
+    "TgtPattern": "LPAD( <expr1> , <length> , ' ' )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL XPATH_EXISTS function to MySQL equivalent using ExtractValue with NULL handling",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "XPATH_EXISTS ( <xpath_expr: STRING> , <xml_col: ANY_VALUE> )",
+    "TgtPattern": "IF ( <xml_col> IS NULL , NULL , ExtractValue ( <xml_col> , <xpath_expr> ) IS NOT NULL )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace PostgreSQL COSH function with equivalent exponential expression in MySQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "COSH( <expr: ANY_VALUE> )",
+    "TgtPattern": "( EXP( <expr> ) + EXP( - ( <expr> ) ) ) / 2",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL TANH function to MySQL equivalent expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TANH(<x: ANY_VALUE>)",
+    "TgtPattern": "( EXP(2 * (<x>)) - 1 ) / ( EXP(2 * (<x>)) + 1 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace ASINH function with equivalent LN and SQRT expression since MySQL lacks ASINH",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "ASINH(<x: ANY_VALUE>)",
+    "TgtPattern": "LN( ( <x> ) + SQRT( ( <x> ) * ( <x> ) + 1 ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace PostgreSQL ACOSH function with equivalent logarithmic expression for MySQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "ACOSH( <expr: ANY_VALUE> )",
+    "TgtPattern": "LN( ( <expr> ) + SQRT( ( <expr> ) * ( <expr> ) - 1 ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL ATANH function to MySQL equivalent expression using logarithm",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "ATANH( <expr: DOUBLE> )",
+    "TgtPattern": "(0.5 * LN((1 + <expr>) / (1 - <expr>)))",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL TRUNC function (numeric) to MySQL TRUNCATE function with 0 decimal places",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TRUNC( <value: DOUBLE> )",
+    "TgtPattern": "TRUNCATE( <value> , 0 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL CBRT function to MySQL equivalent using POW and SIGN/ABS",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "CBRT ( <value: ANY_VALUE> )",
+    "TgtPattern": "SIGN ( <value> ) * POW ( ABS ( <value> ) , 1/3 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert DIV function call to DIV operator for integer division. MySQL uses DIV as an infix operator rather than a function call syntax.",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "DIV( <a: ANY_VALUE> , <b: ANY_VALUE> )",
+    "TgtPattern": "<a> DIV <b>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL type cast operator to MySQL CAST function for TEXT type",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "<expr: ANY_VALUE> :: TEXT",
+    "TgtPattern": "CAST(<expr> AS CHAR)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL INTEGER cast to MySQL SIGNED cast",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "CAST ( <value: ANY_VALUE> AS INTEGER )",
+    "TgtPattern": "CAST ( <value> AS SIGNED )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL square root operator |/ to MySQL SQRT function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "|/ <expr: ANY_VALUE>",
+    "TgtPattern": "SQRT ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert exponentiation operator (^) to MySQL POW function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "<base: ANY_VALUE> ^ <exponent: ANY_VALUE>",
+    "TgtPattern": "POW ( <base> , <exponent> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert integer division operator from PostgreSQL to MySQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "<expr1: INT> / <expr2: INT>",
+    "TgtPattern": "<expr1> DIV <expr2>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace PostgreSQL CORR function with equivalent correlation calculation in MySQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "CORR ( <x: ANY_VALUE> , <y: ANY_VALUE> )",
+    "TgtPattern": "IF( ( ( SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN 1 ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <x> * <x> ELSE 0 END) - SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <x> ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <x> ELSE 0 END) ) * ( SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN 1 ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <y> ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <y> ELSE 0 END) ) ) = 0, NULL, ( SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN 1 ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <x> ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <y> ELSE 0 END) ) / SQRT( ( SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN 1 ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <x> * <x> ELSE 0 END) - SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <x> ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <x> ELSE 0 END) ) * ( SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN 1 ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <y> ELSE 0 END) * SUM(CASE WHEN <x> IS NOT NULL AND <y> IS NOT NULL THEN <y> ELSE 0 END) ) ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "mysql": {}
+      }
+    }
+  }
+]

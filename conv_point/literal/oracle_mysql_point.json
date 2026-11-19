@@ -1,0 +1,86 @@
+[
+    {
+        "Desc": "EMPTY STRING",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "''",
+        "TgtPattern": "NULL",
+        "Condition": null,
+        "Return": "NULL"
+    },
+    {
+        "Desc": "32-bit binary floating point number",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "<value: FLOAT_LITERAL>F",
+        "TgtPattern": "CAST(<value> AS FLOAT)",
+        "Condition": null,
+        "Return": "DECIMAL"
+    },
+    {
+        "Desc": "64-bit binary floating point number",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "<value: FLOAT_LITERAL>D",
+        "TgtPattern": "CAST(<value> AS DOUBLE)",
+        "Condition": null,
+        "Return": "DECIMAL"
+    },
+    {
+        "Desc": "INTERVAL SINGLE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalSingle(<unit: OPTION['SECOND', 'MINUTE', 'HOUR', 'DAY', 'MONTH', 'YEAR']>)> <unit>(3)",
+        "TgtPattern": "INTERVAL <value> <unit>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL DOUBLE_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalDouble()> DAY TO SECOND(3)",
+        "TgtPattern": "INTERVAL <value> DAY_SECOND",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL DOUBLE_2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalDouble()> DAY TO SECOND",
+        "TgtPattern": "INTERVAL <value> DAY_SECOND",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "Qstring",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "<string: @GenQstring()>",
+        "TgtPattern": "<escape_str: @AddQstrEscape(<string>)>",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

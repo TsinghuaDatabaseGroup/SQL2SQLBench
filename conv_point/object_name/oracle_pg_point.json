@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "CROSS_R",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "CROSS",
+        "TgtPattern": "\"CROSS\"",
+        "Condition": null,
+        "Return": null
+    }
+]

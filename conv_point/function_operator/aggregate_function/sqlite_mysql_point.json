@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "GROUP_CONCAT_SEPARATOR",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "GROUP_CONCAT(<value: STRING>, ',')",
+        "TgtPattern": "GROUP_CONCAT(<value> SEPARATOR ',')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRING_AGG",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRING_AGG(<value: STRING>, ',')",
+        "TgtPattern": "GROUP_CONCAT(<value> SEPARATOR ',')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TOTAL",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "total(<value: NUMBER>)",
+        "TgtPattern": "COALESCE(SUM(<value>), 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

@@ -1,0 +1,385 @@
+[
+    {
+        "mysql": "SELECT DISTINCT `t1`.`a2` FROM `district` AS `t1` INNER JOIN `account` AS `t2` ON `t1`.`district_id` = `t2`.`district_id` INNER JOIN `trans` AS `t3` ON `t2`.`account_id` = `t3`.`account_id` WHERE `t3`.`type` = 'VYDAJ' AND `t3`.`date` LIKE '1996-01%' ORDER BY `a2` ASC LIMIT 10\n",
+        "pg": "SELECT DISTINCT t1.a2 FROM district AS t1 INNER JOIN account AS t2 ON t1.district_id = t2.district_id INNER JOIN trans AS t3 ON t2.account_id = t3.account_id WHERE t3.type = 'VYDAJ' AND t3.date LIKE '1996-01%' ORDER BY a2 ASC LIMIT 10\n",
+        "points": [
+            {
+                "Desc": "DATE LIKE",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "<date_value: DATE> LIKE <str: STRING>",
+                "TgtPattern": "TO_CHAR(<date_value>, 'YYYY-MM-DD') LIKE <str>",
+                "Condition": null,
+                "Return": "BOOL"
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT (CAST('1996-01-01' AS DATE) LIKE '1996-01%'), (CAST('1996-01-01' AS DATE) LIKE '1996-01%') FROM dual;",
+        "points": [
+            {
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "<date_value: DATE> LIKE <str: STRING>",
+                "TgtPattern": "TO_CHAR(<date_value>, 'YYYY-MM-DD') LIKE <str>",
+                "Condition": null,
+                "Return": "BOOL"
+            },
+            {
+                "Desc": "FROM_DUAL",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "PATTERN",
+                "SrcPattern": "SELECT {for <value> in <value_list: LIST[ANY_VALUE]> ADD ',': <value>} FROM dual",
+                "TgtPattern": "SELECT {for <value> in <value_list> ADD ',': <value>}",
+                "Condition": null,
+                "Return": null
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT (CAST('1996-01-01' AS DATE) LIKE '1996-01%'), (CAST('1996-01-01' AS DATE) LIKE '1996-01%') FROM tbl AS tbl1 WHERE 1 GROUP BY cola, colb WITH ROLLUP",
+        "points": [
+            {
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "<date_value: DATE> LIKE <str: STRING>",
+                "TgtPattern": "TO_CHAR(<date_value>, 'YYYY-MM-DD') LIKE <str>",
+                "Condition": null,
+                "Return": "BOOL"
+            },
+            {
+                "Desc": "ROLLUP",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "PATTERN",
+                "SrcPattern": "SELECT {for <value> in <value_list: LIST[ANY_VALUE]> ADD ',': <value>} FROM {for <tbl> in <table_list: LIST[TABLE]> ADD ',': <tbl>} WHERE <cond: BOOL> GROUP BY {for <group_by> in <group_by_list: LIST[ANY_VALUE, GROUP_BY]> ADD ',': <group_by>} WITH ROLLUP",
+                "TgtPattern": "SELECT {for <value> in <value_list> ADD ',': <value>} FROM {for <tbl> in <table_list> ADD ',': <tbl>}  WHERE <cond> GROUP BY ROLLUP({for <group_by> in <group_by_list> ADD ',': <group_by>})",
+                "Condition": null,
+                "Return": null
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT CEILING(1) FROM tbl UNION DISTINCT SELECT CEILING(1) FROM tbl",
+        "points": [
+            {
+                "Desc": "UNION DISTINCT",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "PATTERN",
+                "SrcPattern": "<query1: QUERY> UNION DISTINCT <query2: QUERY>",
+                "TgtPattern": "<query1> UNION <query2>",
+                "Condition": "COLS_TYPES_EQUAL(<query1>, <query2>)",
+                "Return": null
+            },
+            {
+                "Desc": "CEILING",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "CEILING(<value: FLOAT>)",
+                "TgtPattern": "CEIL(<value>)",
+                "Condition": null,
+                "Return": "INT"
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT DATE_FORMAT(cola, '%Y-%m-%d %H:%i:%S') FROM tbl",
+        "points": [
+            {
+                "Desc": "DATE_FORMAT",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "DATE_FORMAT(<date_value:TIMESTAMP>, <used_format: @GenMySQLTimeFormat()>)",
+                "TgtPattern": "TO_CHAR(<date_value>, <format: @TranMySQLDateFormatToPG(<used_format>)>)",
+                "Condition": null,
+                "Return": "STRING"
+            }
+        ]
+    },
+    {
+        "pg": "SELECT COUNT( \"t1\".\"driverId\" ) AS cnt_driver_id FROM \"results\" AS \"t1\" INNER JOIN \"races\" AS \"t2\" ON \"t1\".\"raceId\" = \"t2\".\"raceId\" INNER JOIN \"status\" AS \"t3\" ON \"t1\".\"statusId\" = \"t3\".\"statusId\" WHERE \"t3\".\"statusId\" = 3 AND \"t2\".\"name\" = 'Canadian Grand Prix' GROUP BY \"t1\".\"driverId\" ORDER BY cnt_driver_id DESC NULLS LAST LIMIT 1",
+        "points": [
+            {
+                "Desc": "ORDER_BY_DESC_NULLS_LAST",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "ORDER_BY_CLAUSE",
+                "SrcPattern": "ORDER BY <col:ANY_VALUE> DESC NULLS LAST",
+                "TgtPattern": "ORDER BY <col> DESC",
+                "Condition": "NOT_TYPE_EQUAL(<col>, 'STRING')",
+                "Return": null
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT CAST( SUM( CASE WHEN `t2`.`pt` >= 14 AND `t1`.`sex` = 'F' THEN 1 ELSE 0 END ) AS DOUBLE ) * 100 / COUNT( CASE WHEN `t2`.`pt` >= 14 THEN 1 ELSE 0 END ) FROM `patient` AS `t1` INNER JOIN `laboratory` AS `t2` ON `t1`.`id` = `t2`.`id` WHERE DATE_FORMAT( CAST( CURRENT_TIMESTAMP( ) AS DATETIME ) , '%Y' ) - DATE_FORMAT( CAST( `t1`.`birthday` AS DATETIME ) , '%Y' ) > 55\n",
+        "points": [
+            {
+                "Desc": "DATE_FORMAT",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "DATE_FORMAT(<date_value:TIMESTAMP>, <used_format: @GenMySQLTimeFormat()>)",
+                "TgtPattern": "TO_CHAR(<date_value>, <format: @TranMySQLDateFormatToPG(<used_format>)>)",
+                "Condition": null,
+                "Return": "STRING"
+            },
+            {
+                "Desc": "STRING MINUS STRING",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "<num1: STRING, NUMBER> - <num2: STRING, NUMBER>",
+                "TgtPattern": "CAST(<num1> AS INT) - CAST(<num2> AS INT)",
+                "Condition": null,
+                "Return": "NUMBER"
+            },
+            {
+                "Desc": "CAST_DOUBLE",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "CAST(<value: NUMBER> AS DOUBLE)",
+                "TgtPattern": "CAST(<value> AS DOUBLE PRECISION)",
+                "Condition": null,
+                "Return": "NUMBER"
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT SUM(1=2), SUM(1 + 2), SUM(account_id) FROM account",
+        "points": [
+            {
+                "Desc": "BOOL_TO_INT",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "SUM(<value: BOOL>)",
+                "TgtPattern": "SUM(CASE WHEN <value> THEN 1 ELSE 0 END)",
+                "Condition": null,
+                "Return": null
+            }
+        ]
+    },
+    {
+        "oracle": "SELECT t3.power_name , TO_DATE( '05-FEB-93' ) TO_DATE_PA FROM superhero t1 INNER JOIN hero_power t2 ON t1.id = t2.hero_id INNER JOIN superpower t3 ON t2.power_id = t3.id WHERE t1.superhero_name = 'Abomination'",
+        "points": [
+            {
+                "Desc": "TO_DATE_PARA1",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "mysql"
+                },
+                "Type": "FUNCTION",
+                "SrcPattern": "TO_DATE(<date_str: @GenTimestampOracleStr('DD-MON-RR')>)",
+                "TgtPattern": "DATE(<mysql_date: @TranToStandardTimeFormat(<date_str>, 'DD-MON-RR')>)",
+                "Condition": null,
+                "Return": "DATE",
+                "Tag": {
+                    "DB PARAMETER": {
+                        "NLS_DATE_FORMAT": "DD-MON-RR"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT CAST('2025-06-10' AS DATE) + INTERVAL '10/30' HOUR_MINUTE FROM dual",
+        "points": [
+            {
+                "Desc": "INTERVAL_3",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "LITERAL",
+                "SrcPattern": "INTERVAL '<hour: INT_LITERAL, [1, 24]>/<min: INT_LITERAL, [1, 59]>' HOUR_MINUTE",
+                "TgtPattern": "INTERVAL '<hour>:<min>' HOUR_MINUTE",
+                "Condition": null,
+                "Return": "INTERVAL"
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT 'aaa\\n', 'aaa'",
+        "points": [
+            {
+                "Desc": "COMMON_STRING",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "LITERAL",
+                "SrcPattern": "<string: @ContainBackSlash()>",
+                "TgtPattern": "E<string>",
+                "Condition": null,
+                "Return": "STRING"
+            }
+        ]
+    },
+    {
+        "oracle": "SELECT 1, 2, 3 FROM dual",
+        "points": [
+            {
+                "Desc": "INTERVAL DOUBLE",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "mysql"
+                },
+                "Type": "PATTERN",
+                "SrcPattern": "SELECT <values: LIST[ANY_VALUE]> FROM dual",
+                "TgtPattern": "SELECT <values>",
+                "Condition": null,
+                "Return": "INTERVAL"
+            }
+        ]
+    },
+    {
+        "pg": "with  cross_items as  (select i_item_sk ss_item_sk  from item,  (select iss.i_brand_id brand_id      ,iss.i_class_id class_id      ,iss.i_category_id category_id  from store_sales      ,item iss      ,date_dim d1  where ss_item_sk = iss.i_item_sk    and ss_sold_date_sk = d1.d_date_sk    and d1.d_year between 1998 AND 1998 + 2  intersect   select ics.i_brand_id      ,ics.i_class_id      ,ics.i_category_id  from catalog_sales      ,item ics      ,date_dim d2  where cs_item_sk = ics.i_item_sk    and cs_sold_date_sk = d2.d_date_sk    and d2.d_year between 1998 AND 1998 + 2  intersect  select iws.i_brand_id      ,iws.i_class_id      ,iws.i_category_id  from web_sales      ,item iws      ,date_dim d3  where ws_item_sk = iws.i_item_sk    and ws_sold_date_sk = d3.d_date_sk    and d3.d_year between 1998 AND 1998 + 2) as alias123   where i_brand_id = brand_id       and i_class_id = class_id       and i_category_id = category_id ),  avg_sales as  (select avg(quantity*list_price) average_sales   from (select ss_quantity quantity              ,ss_list_price list_price        from store_sales            ,date_dim        where ss_sold_date_sk = d_date_sk          and d_year between 1998 and 1998 + 2        union all         select cs_quantity quantity               ,cs_list_price list_price        from catalog_sales            ,date_dim        where cs_sold_date_sk = d_date_sk          and d_year between 1998 and 1998 + 2         union all        select ws_quantity quantity              ,ws_list_price list_price        from web_sales            ,date_dim        where ws_sold_date_sk = d_date_sk          and d_year between 1998 and 1998 + 2) x)   select  channel, i_brand_id,i_class_id,i_category_id,sum(sales), sum(number_sales)  from(        select 'store' channel, i_brand_id,i_class_id              ,i_category_id,sum(ss_quantity*ss_list_price) sales              , count(*) number_sales        from store_sales            ,item            ,date_dim        where ss_item_sk in (select ss_item_sk from cross_items)          and ss_item_sk = i_item_sk          and ss_sold_date_sk = d_date_sk          and d_year = 1998+2           and d_moy = 11        group by i_brand_id,i_class_id,i_category_id        having sum(ss_quantity*ss_list_price) > (select average_sales from avg_sales)        union all        select 'catalog' channel, i_brand_id,i_class_id,i_category_id, sum(cs_quantity*cs_list_price) sales, count(*) number_sales        from catalog_sales            ,item            ,date_dim        where cs_item_sk in (select ss_item_sk from cross_items)          and cs_item_sk = i_item_sk          and cs_sold_date_sk = d_date_sk          and d_year = 1998+2           and d_moy = 11        group by i_brand_id,i_class_id,i_category_id        having sum(cs_quantity*cs_list_price) > (select average_sales from avg_sales)        union all        select 'web' channel, i_brand_id,i_class_id,i_category_id, sum(ws_quantity*ws_list_price) sales , count(*) number_sales        from web_sales            ,item            ,date_dim        where ws_item_sk in (select ss_item_sk from cross_items)          and ws_item_sk = i_item_sk          and ws_sold_date_sk = d_date_sk          and d_year = 1998+2          and d_moy = 11        group by i_brand_id,i_class_id,i_category_id        having sum(ws_quantity*ws_list_price) > (select average_sales from avg_sales)  ) y  group by rollup (channel, i_brand_id,i_class_id,i_category_id)  order by channel,i_brand_id,i_class_id,i_category_id  limit 100",
+        "points": [
+            {
+                "Desc": "GROUP BY ROLLUP",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "PATTERN",
+                "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <table_list: LIST[TABLE]> GROUP BY ROLLUP(<group_by_list: LIST[ANY_VALUE, GROUP_BY]>) ORDER BY <order_by_list: LIST[ANY_VALUE]> LIMIT <limit: INT_LITERAL>",
+                "TgtPattern": "SELECT <value_list> FROM <table_list> GROUP BY <group_by_list> WITH ROLLUP ORDER BY <order_by_list> LIMIT <limit>",
+                "Condition": null,
+                "Return": null
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT GROUP_CONCAT(frequency ORDER BY frequency ASC SEPARATOR ', ') FROM account GROUP BY account_id",
+        "points": [
+            {
+                "Desc": "GROUP_CONCAT NO DISTINCT",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "AGGREGATE_FUNCTION",
+                "SrcPattern": "GROUP_CONCAT(<value: STRING, COLUMN> ORDER BY <value> <order_rule: OPTION['ASC': 'ASC NULLS FIRST', 'DESC': 'DESC NULLS LAST']> SEPARATOR <sep: OPTION['\\', \\'', '\\';\\'']>)",
+                "TgtPattern": "LISTAGG(<value>, <sep>) WITHIN GROUP (ORDER BY <value> <order_rule>)",
+                "Condition": null,
+                "Return": "STRING"
+            }
+        ]
+    },
+    {
+        "pg": "SELECT t2.customerid , t1.currency , SUM( t2.price + t2.customerid / NULLIF( t2.amount , 0 ) ) FROM customers AS t1 INNER JOIN transactions_1k AS t2 ON t1.customerid = t2.customerid WHERE t2.customerid = ( SELECT customerid FROM yearmonth WHERE consumption IS NOT NULL ORDER BY consumption DESC LIMIT 1 ) GROUP BY CUBE(t2.customerid , t1.currency)",
+        "points": [
+            {
+                "Desc": "GROUP_BY_CUBE_1",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "PATTERN",
+                "SrcPattern": "SELECT <ele_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY CUBE(<all_cols: LIST[ANY_VALUE]>)",
+                "TgtPattern": "{for <cols> in <cols_list: @EnumCube(<all_cols>)> ADD '\\n UNION \\n':SELECT <revised_ele_list: @ReviseSelectList(<ele_list>, <cols>, <all_cols>)> FROM <tbl_list> WHERE <cond> GROUP BY <cols>} \n UNION \n SELECT <re_last_ele_list: @ReviseSelectList(<ele_list>, [], <all_cols>)> FROM <tbl_list> WHERE <cond>",
+                "Condition": null,
+                "Return": null
+            }
+        ]
+    },
+    {
+        "oracle": "SELECT DISTINCT a.activity_title , d.session_location , c.term_start_date , b.person_name AS leader FROM iap_subject_detail a JOIN iap_subject_person b ON a.iap_subject_person_key = b.iap_subject_person_key JOIN academic_terms_all c ON c.term_code = a.term_code JOIN iap_subject_session d ON a.iap_subject_session_key = d.iap_subject_session_key WHERE b.person_role = 'Activity leader' ORDER BY term_start_date ASC, term_start_date DESC, term_start_date ASC NULLS FIRST;",
+        "points": [
+            {
+                "Desc": "ORDER_BY_CLAUSE",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "mysql"
+                },
+                "Type": "ORDER_BY_CLAUSE",
+                "SrcPattern": "ORDER BY {for <col> in <col_list: LIST[ANY_VALUE]> ADD ',':<col>}",
+                "TgtPattern": "ORDER BY {for <col> in <rev_col_list: @OraMySQLOrderBy(<col_list>)> ADD ',':<col>}",
+                "Condition": "",
+                "Return": null
+            }
+        ]
+    },
+    {
+        "oracle": "SELECT DISTINCT t1.lat , t1.lng FROM circuits t1 INNER JOIN races t2 ON t2.circuitid = t1.circuitid WHERE t2.name = 'Abu Dhabi Grand Prix' AND EXTRACT(YEAR FROM t2.\"date\" + INTERVAL '30 15:28:17' DAY TO SECOND) - EXTRACT(YEAR FROM t2.\"date\") < 2\n",
+        "points": [
+            {
+                "Desc": "INTERVAL DOUBLE",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "mysql"
+                },
+                "Type": "LITERAL",
+                "SrcPattern": "INTERVAL <value: @GenOracleIntervalDouble(<unit: OPTION['DAY TO SECOND(3)', 'DAY TO SECOND', 'DAY TO MINUTE', 'HOUR TO MINUTE', 'YEAR(3) TO MONTH', 'YEAR TO MONTH']>)> <unit>",
+                "TgtPattern": "INTERVAL <value> <unit1: @GenOracleMySQLUnit(<unit>)>",
+                "Condition": null,
+                "Return": "INTERVAL"
+            }
+        ]
+    },
+    {
+        "oracle": "SELECT charternum , avgscrwrite , RANK( ) OVER ( ORDER BY avgscrwrite DESC NULLS LAST ) writingscorerank , TO_CHAR(t1.lastupdate) COL_ALIAS FROM schools t1 INNER JOIN satscores t2 ON t1.cdscode = t2.cds WHERE t2.avgscrwrite > 499 AND NOT charternum IS NULL",
+        "points": [
+            {
+                "Desc": "TO_CHAR_PARAM_GERMAN",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "TO_CHAR(<date_value:DATE>)",
+                "TgtPattern": "TO_CHAR(<date_value>, 'DD-') ||\n    (ARRAY['JAN','FEB','MRZ','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV','DEZ'])[EXTRACT(MONTH FROM <date_value>)] || \n    to_char(<date_value>, '-YY')",
+                "Condition": null,
+                "Return": "STRING",
+                "Tag": {
+                    "DB PARAMETER": {
+                        "oracle": {
+                            "NLS_DATE_LANGUAGE": "GERMAN"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "mysql": "SELECT fb.fac_building_key , fb.building_name , fb.building_height , fba.city , fba.postal_code , fba.state , b.building_street_address , fb.ext_gross_area , fb.assignable_area , GROUP_CONCAT( DISTINCT fr.use_desc ORDER BY fr.use_desc ASC SEPARATOR ', ' ) FROM fac_building fb JOIN fac_building_address fba ON fb.fac_building_key = fba.building_key JOIN fac_floor ff ON fb.fac_building_key = ff.building_key JOIN fac_rooms fr ON ff.floor_key = fr.floor_key JOIN buildings b ON b.building_key = fb.fac_building_key WHERE fba.address_purpose = 'STREET' GROUP BY fb.fac_building_key , fb.building_name , fb.building_height , fba.city , fba.postal_code , fba.state , b.building_street_address , fb.ext_gross_area , fb.assignable_area UNION ALL SELECT NULL , NULL , COUNT( DISTINCT sd.school_code ) AS school_count , NULL , NULL , NULL , NULL , COUNT( DISTINCT sd.department_code ) AS department_count , COUNT( DISTINCT se.mit_id ) AS student_count , NULL FROM moira_list ml JOIN moira_list_detail mld ON ml.moira_list_key = mld.moira_list_key JOIN se_person se ON upper( mld.moira_list_member ) = upper( se.krb_name ) JOIN mit_student_directory msd ON msd.full_name = se.full_name JOIN sis_department sd ON msd.department = sd.department_code WHERE ml.moira_list_name = 'candle-duo-users'",
+        "points": [
+            "GROUP_CONCAT DISTINCT"
+        ]
+    }
+]

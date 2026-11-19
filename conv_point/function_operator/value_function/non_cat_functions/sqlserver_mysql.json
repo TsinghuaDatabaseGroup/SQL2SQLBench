@@ -1,0 +1,354 @@
+[
+    {
+        "Desc": "ISNULL_FUNC",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ISNULL(<expr: ANY_VALUE>, <replacement: ANY_VALUE>)",
+        "TgtPattern": "IFNULL(<expr>, <replacement>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "sqlserver": "SELECT ISNULL(NULL, 'fallback') AS result;",
+            "mysql": "SELECT IFNULL(NULL, 'fallback') AS result;"
+        }
+    },
+    {
+        "Desc": "DATEPART_YEAR",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEPART(year, <value: DATE>)",
+        "TgtPattern": "YEAR(<value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEPART(year, CAST('2024-05-06' AS date)) AS y;",
+            "mysql": "SELECT YEAR(CAST('2024-05-06' AS DATE)) AS y;"
+        }
+    },
+    {
+        "Desc": "DATEPART_MONTH",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEPART(month, <value: DATE>)",
+        "TgtPattern": "MONTH(<value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEPART(month, CAST('2024-05-06' AS date)) AS m;",
+            "mysql": "SELECT MONTH(CAST('2024-05-06' AS DATE)) AS m;"
+        }
+    },
+    {
+        "Desc": "DATEPART_DAY",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEPART(day, <value: DATE>)",
+        "TgtPattern": "DAYOFMONTH(<value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEPART(day, CAST('2024-05-06' AS date)) AS d;",
+            "mysql": "SELECT DAYOFMONTH(CAST('2024-05-06' AS DATE)) AS d;"
+        }
+    },
+    {
+        "Desc": "DATEADD_DAY_TO_DATE_ADD_DAY",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEADD(day, 5, <value: DATE>)",
+        "TgtPattern": "DATE_ADD(<value>, INTERVAL 5 DAY)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlserver": "SELECT DATEADD(day, 7, CAST('2024-05-06' AS date)) AS next_day;",
+            "mysql": "SELECT DATE_ADD(CAST('2024-05-06' AS DATE), INTERVAL 7 DAY) AS next_day;"
+        }
+    },
+    {
+        "Desc": "DATEADD_MONTH_TO_DATE_ADD_MONTH",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEADD(month, 5, <value: DATE>)",
+        "TgtPattern": "DATE_ADD(<value>, INTERVAL 5 MONTH)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlserver": "SELECT DATEADD(month, 2, CAST('2024-05-06' AS date)) AS next_month;",
+            "mysql": "SELECT DATE_ADD(CAST('2024-05-06' AS DATE), INTERVAL 2 MONTH) AS next_month;"
+        }
+    },
+    {
+        "Desc": "DATEDIFF_DAY_TO_DATEDIFF",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(day, <start: DATE>, <end: DATE>)",
+        "TgtPattern": "DATEDIFF(<end>, <start>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEDIFF(day, CAST('2024-05-01' AS date), CAST('2024-05-06' AS date)) AS diff_days;",
+            "mysql": "SELECT DATEDIFF(CAST('2024-05-06' AS DATE), CAST('2024-05-01' AS DATE)) AS diff_days;"
+        }
+    },
+    {
+        "Desc": "DATEDIFF_MONTH_TO_TIMESTAMPDIFF_MONTH",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(month, <start: DATE>, <end: DATE>)",
+        "TgtPattern": "TIMESTAMPDIFF(MONTH, <start>, <end>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEDIFF(month, CAST('2024-01-01' AS date), CAST('2024-05-01' AS date)) AS diff_months;",
+            "mysql": "SELECT TIMESTAMPDIFF(MONTH, CAST('2024-01-01' AS DATE), CAST('2024-05-01' AS DATE)) AS diff_months;"
+        }
+    },
+    {
+        "Desc": "IIF_TO_IF",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "IIF(<condition: BOOL>, <true_expr: STRING>, <false_expr: STRING>)",
+        "TgtPattern": "IF(<condition>, <true_expr>, <false_expr>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "sqlserver": "SELECT IIF(3 > 2, 'yes', 'no') AS result;",
+            "mysql": "SELECT IF(3 > 2, 'yes', 'no') AS result;"
+        }
+    },
+    {
+        "Desc": "CHARINDEX_TO_LOCATE",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CHARINDEX(<sub_str: @GenSubString(<str: STRING>, 1, 1)>, <str>)",
+        "TgtPattern": "LOCATE(<sub_str>, <str>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT CHARINDEX('cd', 'abcdef') AS pos;",
+            "mysql": "SELECT LOCATE('cd', 'abcdef') AS pos;"
+        }
+    },
+    {
+        "Desc": "REPLICATE_TO_REPEAT",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REPLICATE(<str: STRING>, <count: INT, [1,3]>)",
+        "TgtPattern": "REPEAT(<str>, <count>)",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlserver": "SELECT REPLICATE('ab', 3) AS result;",
+            "mysql": "SELECT REPEAT('ab', 3) AS result;"
+        }
+    },
+    {
+        "Desc": "SQUARE_TO_POW",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SQUARE(<num: DOUBLE>)",
+        "TgtPattern": "POW(<num>, 2)",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT SQUARE(4) AS result;",
+            "mysql": "SELECT POW(4, 2) AS result;"
+        }
+    },
+    {
+        "Desc": "CHOOSE_TO_ELT",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CHOOSE(CASE WHEN <cond: BOOL> THEN 1 ELSE 0 END, <val1: STRING>, <val2: STRING>)",
+        "TgtPattern": "ELT(CASE WHEN <cond> THEN 1 ELSE 0 END, <val1>, <val2>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "sqlserver": "SELECT CHOOSE(2, 'A', 'B', 'C') AS result;",
+            "mysql": "SELECT ELT(2, 'A', 'B', 'C') AS result;"
+        }
+    },
+    {
+        "Desc": "EOMONTH_TO_LAST_DAY",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EOMONTH(<date: DATE>)",
+        "TgtPattern": "LAST_DAY(<date>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlserver": "SELECT EOMONTH('2023-02-01') AS result;",
+            "mysql": "SELECT LAST_DAY('2023-02-01') AS result;"
+        }
+    },
+    {
+        "Desc": "STRING_AGG_TO_GROUP_CONCAT",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRING_AGG(<col: STRING>, ',')",
+        "TgtPattern": "GROUP_CONCAT(<col> SEPARATOR ',')",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlserver": "SELECT STRING_AGG(val, ',') FROM (SELECT 'A' AS val UNION ALL SELECT 'B') t;",
+            "mysql": "SELECT GROUP_CONCAT(val SEPARATOR ',') FROM (SELECT 'A' AS val UNION ALL SELECT 'B') t;"
+        }
+    },
+    {
+        "Desc": "STDEV_TO_STDDEV_SAMP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STDEV(<col: DOUBLE>)",
+        "TgtPattern": "STDDEV_SAMP(<col>)",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT STDEV(val) FROM (SELECT 1 AS val UNION ALL SELECT 3 UNION ALL SELECT 5) t;",
+            "mysql": "SELECT STDDEV_SAMP(val) FROM (SELECT 1 AS val UNION ALL SELECT 3 UNION ALL SELECT 5) t;"
+        }
+    },
+    {
+        "Desc": "STDEVP_TO_STDDEV_POP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STDEVP(<col: DOUBLE>)",
+        "TgtPattern": "STDDEV_POP(<col>)",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT STDEVP(val) FROM (SELECT 1 AS val UNION ALL SELECT 3 UNION ALL SELECT 5) t;",
+            "mysql": "SELECT STDDEV_POP(val) FROM (SELECT 1 AS val UNION ALL SELECT 3 UNION ALL SELECT 5) t;"
+        }
+    },
+    {
+        "Desc": "VAR_TO_VAR_SAMP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "VAR(<col: DOUBLE>)",
+        "TgtPattern": "VAR_SAMP(<col>)",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT VAR(val) FROM (SELECT 1 AS val UNION ALL SELECT 3 UNION ALL SELECT 5) t;",
+            "mysql": "SELECT VAR_SAMP(val) FROM (SELECT 1 AS val UNION ALL SELECT 3 UNION ALL SELECT 5) t;"
+        }
+    },
+    {
+        "Desc": "PLUS_TO_CONCAT",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str1: STRING> + <str2: STRING>",
+        "TgtPattern": "CONCAT(<str1>, <str2>)",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlserver": "SELECT 'Hello' + 'World' AS result;",
+            "mysql": "SELECT CONCAT('Hello', 'World') AS result;"
+        }
+    },
+    {
+        "Desc": "VARP_TO_VAR_POP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "VARP(<col: DOUBLE>)",
+        "TgtPattern": "VAR_POP(<col>)",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT VARP(val) FROM (SELECT 1 AS val UNION ALL SELECT 3 UNION ALL SELECT 5) t;",
+            "mysql": "SELECT VAR_POP(val) FROM (SELECT 1 AS val UNION ALL SELECT 3 UNION ALL SELECT 5) t;"
+        }
+    },
+    {
+        "Desc": "LEFT_SHIFT_TO_OP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LEFT_SHIFT(<val: INT, STRICT>, <n: INT, [2,4]>)",
+        "TgtPattern": "(<val> \\<\\< <n>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT LEFT_SHIFT(1, 3) AS result;",
+            "mysql": "SELECT (1 << 3) AS result;"
+        }
+    },
+    {
+        "Desc": "RIGHT_SHIFT_TO_OP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "RIGHT_SHIFT(<val: INT, STRICT>, <n: INT, [2,4]>)",
+        "TgtPattern": "(<val> \\>\\> <n>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT RIGHT_SHIFT(8, 2) AS result;",
+            "mysql": "SELECT (8 >> 2) AS result;"
+        }
+    }
+]

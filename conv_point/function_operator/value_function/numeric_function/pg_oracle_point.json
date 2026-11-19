@@ -1,0 +1,98 @@
+[
+    {
+        "Desc": "ASINH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ASINH(<value: NUMBER>)",
+        "TgtPattern": "LN(<value> + SQRT((<value>) * (<value>) + 1))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ACOSH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ACOSH(<value: NUMBER, [1,+\u221e)>)",
+        "TgtPattern": "LN(<value> + SQRT((<value>) * (<value>) - 1))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ATANH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ATANH(<value: NUMBER, (-1, 1)>)",
+        "TgtPattern": "0.5 * LN((1 + <value>) / (1 - <value>))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "PI",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "PI()",
+        "TgtPattern": "ACOS(-1)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "LOG10",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "log10(<value: NUMBER>)",
+        "TgtPattern": "LOG(10, <value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "LOG",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LOG(<value: NUMBER>)",
+        "TgtPattern": "LOG(10, <value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CBRT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CBRT(<value: NUMBER>)",
+        "TgtPattern": "POWER(<value>, 1/3)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DIV",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DIV(<value1: NUMBER>, NULLIF(<value2: NUMBER>, 0))",
+        "TgtPattern": "TRUNC(<value1> /  NULLIF(<value2>, 0))",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

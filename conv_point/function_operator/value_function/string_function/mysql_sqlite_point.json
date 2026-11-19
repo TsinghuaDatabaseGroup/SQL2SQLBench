@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "SUBSTRING_2",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTRING(<value: STRING> FROM <start: INT, LITERAL, [1, 5], [-5, -1]>)",
+        "TgtPattern": "SUBSTR(<value>, <start>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "SUBSTRING_3",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTRING(<value: STRING> FROM <start: INT, LITERAL, [1, 5], [-5, -1]> FOR <len: INT, LITERAL, [3, 50]>)",
+        "TgtPattern": "SUBSTR(<value>, <start>, <len>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "SUBSTRING_5",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTR(<value: STRING> FROM <start: INT, LITERAL, [1, 5], [-5, -1]>  FOR <len: INT, LITERAL, [3, 50]>)",
+        "TgtPattern": "SUBSTR(<value>, <start>, <len>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "SUBSTRING_6",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTR(<value: STRING> FROM <start: INT, LITERAL, [1, 5], [-5, -1]>)",
+        "TgtPattern": "SUBSTR(<value>, <start>)",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

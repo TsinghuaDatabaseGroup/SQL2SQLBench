@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "TRUE",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "(<cond: BOOL>) = TRUE",
+        "TgtPattern": "<cond>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "FALSE",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "(<cond: BOOL>) = FALSE",
+        "TgtPattern": "not <cond>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "MATCH_R",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "MATCH",
+        "TgtPattern": "[MATCH\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "VIRTUAL_R",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "VIRTUAL",
+        "TgtPattern": "[VIRTUAL\"",
+        "Condition": null,
+        "Return": null
+    }
+]

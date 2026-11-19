@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "IIF",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "IIF(<condition: BOOL>, <exp2: ANY_VALUE>, <exp3: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <condition> THEN <exp2> ELSE <exp3> END",
+        "Condition": null,
+        "Return": "ANY_VALUE"
+    },
+    {
+        "Desc": "LIKELY",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LIKELY(<expr: BOOL>)",
+        "TgtPattern": "<expr>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "LIKELIHOOD",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LIKELIHOOD(<expr: BOOL>, <value: DOUBLE, [0,1]>)",
+        "TgtPattern": "<expr>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

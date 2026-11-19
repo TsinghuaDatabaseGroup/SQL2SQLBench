@@ -1,0 +1,68 @@
+[
+    {
+        "Type": "ORDER_BY_CLAUSE",
+        "SrcPattern": "ORDER BY <col_list: LIST[ORDER_BY_ELEMENT]>",
+        "TgtPattern": "ORDER BY <rev_col_list: @PgMySQLOrderBy(<col_list>)>",
+        "Condition": null
+    },
+    {
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT UNIQUE {for <value> in <values: LIST[ANY_VALUE]> ADD ',': <value>} FROM {for <table> in <tables: LIST[TABLE]> ADD ',': <table>}",
+        "TgtPattern": "SELECT DISTINCT {for <value> in <values> ADD ',': <value>} FROM {for <table> in <tables> ADD ',': <table>}",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <expr1> IS NOT NULL THEN <expr1> ELSE <expr2> END",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <expr1> IS NOT NULL THEN <expr2> ELSE <expr3> END",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SLOPE(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)) / (SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END) * POW(AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END), 2))",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGY(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGX(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_COUNT(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXX(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <x> ELSE 0 END) - POWER(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END), 2) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SYY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - POWER(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END), 2) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END) * SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END)",
+        "Condition": null
+    }
+]

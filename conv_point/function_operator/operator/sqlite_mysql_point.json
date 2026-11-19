@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "CONCAT",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str1: STRING> || <str2: STRING>",
+        "TgtPattern": "CONCAT(<str1>, <str2>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "CONCAT3",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str1: STRING> || <str2: STRING> || <str3: STRING>",
+        "TgtPattern": "CONCAT(<str1>, <str2>, <str3>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "GLOB",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str1: STRING> GLOB <pattern: @GenGlobPattern(<str1>)>",
+        "TgtPattern": "<str1> LIKE <pattern1: @TranGlobPattern(<pattern>)>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

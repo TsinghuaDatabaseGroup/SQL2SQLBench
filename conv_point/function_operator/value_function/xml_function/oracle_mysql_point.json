@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "EXISTSNODE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXISTSNODE(<xml: XML>, <xpath: @GenXmlPath(<xml>)>)",
+        "TgtPattern": "CASE WHEN EXTRACTVALUE(<xml>, <xpath1: @GenCountXpath(<xpath>)>) != 0 THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "XMLEXISTS",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "XMLEXISTS(<xpath: @GenXmlPath(<xml: XML>)> PASSING <xml>)",
+        "TgtPattern": "EXTRACTVALUE(<xml>, <xpath1: @GenCountXpath(<xpath>)>) != 0",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

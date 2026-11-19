@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "ROWNUM",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <ele_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE ROWNUM \\<= <row_num: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <ele_list> FROM <tbl_list> LIMIT <row_num>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "SELECT UNIQUE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT UNIQUE {for <value> in <values: LIST[ANY_VALUE]> ADD ',': <value>} FROM {for <table> in <tables: LIST[TABLE]> ADD ',': <table>}",
+        "TgtPattern": "SELECT DISTINCT {for <value> in <values> ADD ',': <value>} FROM {for <table> in <tables> ADD ',': <table>}",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_WITH_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "",
+        "TgtPattern": "",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_WITH_2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "",
+        "TgtPattern": "",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_WITH_3",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "",
+        "TgtPattern": "",
+        "Condition": null,
+        "Return": null
+    }
+]

@@ -1,0 +1,564 @@
+[
+  {
+    "Desc": "Convert Oracle NVL function to PostgreSQL COALESCE function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "NVL ( <expr1: ANY_VALUE> , <expr2: ANY_VALUE> )",
+    "TgtPattern": "COALESCE ( <expr1> , <expr2> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle NVL2 function to PostgreSQL equivalent using CASE expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "NVL2 ( <expr1: ANY_VALUE> , <expr2: ANY_VALUE> , <expr3: ANY_VALUE> )",
+    "TgtPattern": "CASE WHEN <expr1> IS NOT NULL THEN <expr2> ELSE <expr3> END",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle MONTHS_BETWEEN function to PostgreSQL equivalent expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "months_between ( <date1: ANY_VALUE> , <date2: ANY_VALUE> )",
+    "TgtPattern": "( ( EXTRACT ( YEAR FROM <date1> ) * 12 + EXTRACT ( MONTH FROM <date1> ) ) - ( EXTRACT ( YEAR FROM <date2> ) * 12 + EXTRACT ( MONTH FROM <date2> ) ) + ( ( EXTRACT ( DAY FROM <date1> ) - EXTRACT ( DAY FROM <date2> ) ) / 31.0 ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle numtoyminterval function to PostgreSQL interval expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "numtoyminterval ( <number: ANY_VALUE> , <unit: STRING> )",
+    "TgtPattern": "( <number> || ' ' || <unit> )::INTERVAL",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle ROUND function with date and format argument to PostgreSQL equivalent for day rounding",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "ROUND ( <date_value: ANY_VALUE> , 'DDD' )",
+    "TgtPattern": "( date_trunc ( 'day' , <date_value> + interval '12 hours' ) ) :: date",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle TO_YMINTERVAL function to PostgreSQL standard interval syntax",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "TO_YMINTERVAL ( <interval_str: STRING> )",
+    "TgtPattern": "INTERVAL <interval_str> YEAR TO MONTH",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle LAST_DAY function to PostgreSQL equivalent using date_trunc and interval arithmetic",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "last_day ( <date_value: ANY_VALUE> )",
+    "TgtPattern": "( date_trunc ( 'month' , <date_value> ) + interval '1 month' - interval '1 day' ) :: DATE",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle NEXT_DAY function to PostgreSQL equivalent by computing the next occurrence of the specified day of the week",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "next_day ( <date_value: ANY_VALUE> , <day_string: STRING> )",
+    "TgtPattern": "( <date_value> + ( ( ( CASE LOWER ( <day_string> ) WHEN 'sunday' THEN 0 WHEN 'monday' THEN 1 WHEN 'tuesday' THEN 2 WHEN 'wednesday' THEN 3 WHEN 'thursday' THEN 4 WHEN 'friday' THEN 5 WHEN 'saturday' THEN 6 END - EXTRACT ( DOW FROM <date_value> ) + 6 ) :: int % 7 ) + 1 ) * INTERVAL '1 day' )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle TO_TIMESTAMP with one argument to PostgreSQL TO_TIMESTAMP with two arguments using adjusted format string",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {
+          "NLS_TIMESTAMP_FORMAT": "DD-MON-RR HH.MI.SSXFF AM"
+        },
+        "pg": {}
+      }
+    },
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "TO_TIMESTAMP ( <str: STRING> )",
+    "TgtPattern": "TO_TIMESTAMP ( <str> , 'DD-MON-YY HH.MI.SS.US AM' )",
+    "Condition": null,
+    "Return": "ANY_VALUE"
+  },
+  {
+    "Desc": "Convert Oracle TO_DATE function with single string argument to PostgreSQL TO_DATE with explicit format matching Oracle's NLS_DATE_FORMAT",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {
+          "NLS_DATE_FORMAT": "Mon dd, YYYY"
+        },
+        "pg": {}
+      }
+    },
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "TO_DATE ( <date_str: STRING> )",
+    "TgtPattern": "TO_DATE ( <date_str> , 'Mon dd, YYYY' )",
+    "Condition": null,
+    "Return": "ANY_VALUE"
+  },
+  {
+    "Desc": "Convert Oracle LENGTHB function to PostgreSQL OCTET_LENGTH function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "lengthb ( <expr: ANY_VALUE> )",
+    "TgtPattern": "octet_length ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle two-argument REPLACE function to PostgreSQL by adding empty string as third parameter",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "REPLACE ( <str: ANY_VALUE> , <search: ANY_VALUE> )",
+    "TgtPattern": "REPLACE ( <str> , <search> , '' )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle existsnode XML function to PostgreSQL equivalent with xpath_exists and integer cast",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "existsnode( <xml_col: ANY_VALUE> , <xpath_str: STRING> )",
+    "TgtPattern": "(xpath_exists( <xpath_str> , <xml_col> )::int)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace Oracle REMAINDER function with equivalent arithmetic expression in PostgreSQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "REMAINDER ( <n2: ANY_VALUE> , <n1: ANY_VALUE> )",
+    "TgtPattern": "( <n2> - <n1> * ROUND( CAST( <n2> AS DOUBLE PRECISION ) / CAST( <n1> AS DOUBLE PRECISION ) ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle BITAND function to PostgreSQL bitwise AND operator",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "BITAND( <arg1: ANY_VALUE> , <arg2: ANY_VALUE> )",
+    "TgtPattern": "( <arg1> & <arg2> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle NUMBER type in CAST to PostgreSQL NUMERIC type without parameters",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "CAST( <value: ANY_VALUE> AS NUMBER )",
+    "TgtPattern": "CAST( <value> AS NUMERIC )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle NUMBER type with precision in CAST to PostgreSQL NUMERIC",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "CAST( <value: ANY_VALUE> AS NUMBER( <precision: INT> ) )",
+    "TgtPattern": "CAST( <value> AS NUMERIC( <precision> ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle NUMBER type with precision and scale in CAST to PostgreSQL NUMERIC",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "CAST( <value: ANY_VALUE> AS NUMBER( <precision: INT> , <scale: INT> ) )",
+    "TgtPattern": "CAST( <value> AS NUMERIC( <precision> , <scale> ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle SUM function to PostgreSQL by explicitly casting non-numeric arguments to numeric type",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "SUM(<expr: ANY_VALUE>)",
+    "TgtPattern": "SUM(CAST(<expr> AS NUMERIC))",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace minus operator between string expressions with explicit numeric casting in PostgreSQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<expr1: STRING> - <expr2: STRING>",
+    "TgtPattern": "CAST(<expr1> AS NUMERIC) - CAST(<expr2> AS NUMERIC)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Cast string operand to DOUBLE PRECISION when used in division operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: STRING> / <right: ANY_VALUE>",
+    "TgtPattern": "CAST(<left> AS DOUBLE PRECISION) / <right>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Cast string operand to DOUBLE PRECISION when used in division operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: ANY_VALUE> / <right: STRING>",
+    "TgtPattern": "<left> / CAST(<right> AS DOUBLE PRECISION)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Cast string operand to DOUBLE PRECISION when used in multiplication operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: STRING> * <right: ANY_VALUE>",
+    "TgtPattern": "CAST(<left> AS DOUBLE PRECISION) * <right>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Cast string operand to DOUBLE PRECISION when used in multiplication operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: ANY_VALUE> * <right: STRING>",
+    "TgtPattern": "<left> * CAST(<right> AS DOUBLE PRECISION)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Cast string operand to DOUBLE PRECISION when used in addition operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: STRING> + <right: ANY_VALUE>",
+    "TgtPattern": "CAST(<left> AS DOUBLE PRECISION) + <right>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Cast string operand to DOUBLE PRECISION when used in addition operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: ANY_VALUE> + <right: STRING>",
+    "TgtPattern": "<left> + CAST(<right> AS DOUBLE PRECISION)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Cast string operand to DOUBLE PRECISION when used in subtraction operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: STRING> - <right: ANY_VALUE>",
+    "TgtPattern": "CAST(<left> AS DOUBLE PRECISION) - <right>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Cast string operand to DOUBLE PRECISION when used in subtraction operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: ANY_VALUE> - <right: STRING>",
+    "TgtPattern": "<left> - CAST(<right> AS DOUBLE PRECISION)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "In Oracle, implicit conversion allows comparing string expressions to integer expressions. PostgreSQL requires explicit conversion to preserve semantics and avoid type errors.",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: STRING> = <right: INT>",
+    "TgtPattern": "CAST ( <left> AS NUMERIC ) = <right>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle LISTAGG function to PostgreSQL STRING_AGG function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "LISTAGG ( <expr: ANY_VALUE> , <delim: STRING> ) WITHIN GROUP ( ORDER BY <order_by: ANY_VALUE> )",
+    "TgtPattern": "STRING_AGG ( <expr> , <delim> ORDER BY <order_by> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle STATS_MODE function to PostgreSQL MODE WITHIN GROUP",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "STATS_MODE( <expr: ANY_VALUE> )",
+    "TgtPattern": "mode() WITHIN GROUP (ORDER BY <expr>)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "pg": {}
+      }
+    }
+  }
+]

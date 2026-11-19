@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "CAST_DOUBLE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: ANY_VALUE, NUMBER> AS DOUBLE)",
+        "TgtPattern": "CAST(<value> AS BINARY_DOUBLE)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_UNSIGNED",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: ANY_VALUE, NUMBER> AS UNSIGNED)",
+        "TgtPattern": "CASE WHEN CAST(<value> AS NUMBER) \\< 0 THEN CAST(<value> AS NUMBER) + POWER(2, 64) ELSE CAST(<value> AS NUMBER) END",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_SIGNED",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: ANY_VALUE, NUMBER> AS SIGNED)",
+        "TgtPattern": "CAST(<value> AS NUMBER)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_DATE_STRING",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<date: DATE, STRICT> AS CHAR)",
+        "TgtPattern": "TO_CHAR(<date>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

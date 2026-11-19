@@ -1,0 +1,48 @@
+{
+    "mode": "specified",
+    "src_dialect": "mysql",
+    "tgt_dialect": "oracle",
+    "points": [
+        {
+            "point": "DATE",
+            "num": 2
+        },
+        {
+            "point": "DAYOFMONTH",
+            "num": 1
+        },
+        {
+            "point": "ST_LATITUDE",
+            "num": 1
+        },
+        {
+            "point": "STRING_TO_DATE",
+            "num": 1
+        },
+        {
+            "point": "ADDDATE INTERVAL",
+            "num": 1
+        },
+        {
+            "point": "CAST_DATE_STRING",
+            "num": 1
+        },
+        {
+            "point": "DATE_FORMAT",
+            "num": 1
+        },
+        {
+            "point": "YEAR",
+            "num": 1
+        },
+        {
+            "point": "SUBDATE",
+            "num": 1
+        },
+        {
+            "point": "TIMESTAMPDIFF_DAY",
+            "num": 1
+        }
+    ],
+    "output_path": "xxx/SQL2SQL_Bench/dataset/new_multi_point/test.json"
+}

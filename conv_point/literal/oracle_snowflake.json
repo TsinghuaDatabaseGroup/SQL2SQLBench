@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "INTERVAL_DAY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalSingle(<unit: OPTION['DAY']>)> DAY",
+        "TgtPattern": "<pg_interval: @GenSnowflakeIntervalValue(<value>, 'DAY')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_MONTH",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalSingle(<unit: OPTION['MONTH']>)> MONTH",
+        "TgtPattern": "<pg_interval: @GenSnowflakeIntervalValue(<value>, 'MONTH')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_YEAR",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalSingle(<unit: OPTION['YEAR']>)> YEAR",
+        "TgtPattern": "<pg_interval: @GenSnowflakeIntervalValue(<value>, 'YEAR')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    }
+]

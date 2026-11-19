@@ -1,0 +1,226 @@
+[
+    {
+        "Desc": "DATEPART_YEAR",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('year', <value: DATE>)",
+        "TgtPattern": "EXTRACT(YEAR FROM <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('year', TO_DATE('2024-05-17'));",
+            "oracle": "SELECT EXTRACT(YEAR FROM DATE '2024-05-17');"
+        }
+    },
+    {
+        "Desc": "DATEPART_MONTH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('month', <value: DATE>)",
+        "TgtPattern": "EXTRACT(MONTH FROM <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('month', TO_DATE('2024-05-17'));",
+            "oracle": "SELECT EXTRACT(MONTH FROM DATE '2024-05-17');"
+        }
+    },
+    {
+        "Desc": "DATEPART_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('day', <value: DATE>)",
+        "TgtPattern": "EXTRACT(DAY FROM <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('day', TO_DATE('2024-05-17'));",
+            "oracle": "SELECT EXTRACT(DAY FROM DATE '2024-05-17');"
+        }
+    },
+    {
+        "Desc": "DATE_TRUNC_MONTH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('month', <value: DATE>)",
+        "TgtPattern": "TRUNC(<value>, 'MM')",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATE_TRUNC('month', TO_DATE('2024-05-17'));",
+            "oracle": "SELECT TRUNC(DATE '2024-05-17', 'MM');"
+        }
+    },
+    {
+        "Desc": "DATE_TRUNC_YEAR",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('year', <value: DATE>)",
+        "TgtPattern": "TRUNC(<value>, 'YYYY')",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATE_TRUNC('year', TO_DATE('2024-05-17'));",
+            "oracle": "SELECT TRUNC(DATE '2024-05-17', 'YYYY');"
+        }
+    },
+    {
+        "Desc": "DATEADD_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEADD(day, <n: INT>, <value: DATE>)",
+        "TgtPattern": "<value> + <n>",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATEADD(day, 7, TO_DATE('2024-05-17'));",
+            "oracle": "SELECT DATE '2024-05-17' + 7;"
+        }
+    },
+    {
+        "Desc": "DATEDIFF_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(day, <start: DATE, STRICT>, <end: DATE, STRICT>)",
+        "TgtPattern": "TRUNC(<end>) - TRUNC(<start>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATEDIFF(day, TO_DATE('2024-05-01'), TO_DATE('2024-05-17'));",
+            "oracle": "SELECT TRUNC(DATE '2024-05-17') - TRUNC(DATE '2024-05-01');"
+        }
+    },
+    {
+        "Desc": "ZEROIFNULL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ZEROIFNULL(<expr: INT>)",
+        "TgtPattern": "NVL(<expr>, 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT ZEROIFNULL(NULL);",
+            "oracle": "SELECT NVL(NULL, 0);"
+        }
+    },
+    {
+        "Desc": "NULLIFZERO",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NULLIFZERO(<expr: INT>)",
+        "TgtPattern": "NULLIF(<expr>, 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT NULLIFZERO(0);",
+            "oracle": "SELECT NULLIF(0, 0);"
+        }
+    },
+    {
+        "Desc": "STARTSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STARTSWITH(<str: STRING>, <prefix: STRING>)",
+        "TgtPattern": "CASE WHEN SUBSTR(<str>, 1, LENGTH(<prefix>)) = <prefix> THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT STARTSWITH('abcdef', 'abc');",
+            "oracle": "SELECT CASE WHEN SUBSTR('abcdef', 1, LENGTH('abc')) = 'abc' THEN 1 ELSE 0 END;"
+        }
+    },
+    {
+        "Desc": "ENDSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ENDSWITH(<str: STRING>, <suffix: STRING>)",
+        "TgtPattern": "CASE WHEN SUBSTR(<str>, -LENGTH(<suffix>)) = <suffix> THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT ENDSWITH('abcdef', 'def');",
+            "oracle": "SELECT CASE WHEN SUBSTR('abcdef', -LENGTH('def')) = 'def' THEN 1 ELSE 0 END;"
+        }
+    },
+    {
+        "Desc": "CONTAINS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CONTAINS(<str: STRING>, <substr: STRING>)",
+        "TgtPattern": "CASE WHEN INSTR(<str>, <substr>) > 0 THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT CONTAINS('abcdef', 'cd');",
+            "oracle": "SELECT CASE WHEN INSTR('abcdef', 'cd') > 0 THEN 1 ELSE 0 END;"
+        }
+    },
+    {
+        "Desc": "POSITION",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "POSITION(<substr: STRING>, <str: STRING>)",
+        "TgtPattern": "INSTR(<str>, <substr>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT POSITION('cd', 'abcdef');",
+            "oracle": "SELECT INSTR('abcdef', 'cd');"
+        }
+    },
+    {
+        "Desc": "DIV0",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DIV0(<dividend: DOUBLE>, <divisor: DOUBLE>)",
+        "TgtPattern": "CASE WHEN <divisor> = 0 THEN 0 ELSE <dividend> / <divisor> END",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT DIV0(10, 0);",
+            "oracle": "SELECT CASE WHEN 0 = 0 THEN 0 ELSE 10 / 0 END;"
+        }
+    }
+]

@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "TEXT_TO_NUM",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUM(<value: STRING, NUMBER>)",
+        "TgtPattern": "SUM(CAST (<value> AS DOUBLE PRECISION))",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "TEXT_TO_NUM_AVG",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "AVG(<value: STRING, NUMBER>)",
+        "TgtPattern": "AVG(CAST (<value> AS DOUBLE PRECISION))",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "STRING MINUS STRING",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "FUNCTION",
+        "SrcPattern": "<num1: STRING, NUMBER> - <num2: STRING, NUMBER>",
+        "TgtPattern": "CAST(<num1> AS DOUBLE PRECISION) - CAST(<num2> AS DOUBLE PRECISION)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TEXT_TO_NUM_3",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: STRING, NUMBER> / <value2: NUMBER>",
+        "TgtPattern": "CAST(<value1> AS DOUBLE PRECISION) / <value2>",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TEXT_TO_NUM_4",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: STRING, NUMBER> <op: OPTION['=', '<', '>', '<=', '>=']> <value2: INT, LITERAL, [50, 500]>",
+        "TgtPattern": "CAST(<value1> AS DOUBLE PRECISION) <op> <value2>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

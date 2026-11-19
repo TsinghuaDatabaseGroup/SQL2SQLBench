@@ -1,0 +1,74 @@
+[
+    {
+        "Desc": "EMPTY STRING",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "''",
+        "TgtPattern": "NULL",
+        "Condition": null,
+        "Return": "NULL"
+    },
+    {
+        "Desc": "NSTRING",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "N<string: STRING_LITERAL>",
+        "TgtPattern": "<string>",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "Qstring",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "<string: @GenQstring()>",
+        "TgtPattern": "E<escape_str: @AddQstrEscape(<string>)>",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "INTERVAL SINGLE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalSingle(<unit: OPTION['SECOND', 'MINUTE', 'HOUR', 'DAY', 'MONTH', 'YEAR']>)> <unit>(3)",
+        "TgtPattern": "<pg_interval: @GenOraclePGIntervalValue(<value>, <unit>)>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL DOUBLE_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalDouble()> DAY TO SECOND(3)",
+        "TgtPattern": "<pg_interval: @GenOraclePGIntervalValue(<value>, 'DAY TO SECOND(3)')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL DOUBLE_2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <value: @GenOracleIntervalDouble()> DAY TO SECOND",
+        "TgtPattern": "<pg_interval: @GenOraclePGIntervalValue(<value>, 'DAY TO SECOND')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    }
+]

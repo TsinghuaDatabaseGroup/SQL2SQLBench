@@ -1,0 +1,74 @@
+[
+    {
+        "Desc": "GETX",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_X(<point: POINT>)",
+        "TgtPattern": "ST_Y(<point>::geometry)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GETY",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_Y(<point: POINT>)",
+        "TgtPattern": "ST_X(<point>::geometry)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "SPHERE_DISTANCE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_Distance_Sphere(<point1: POINT>, <point2: POINT>)",
+        "TgtPattern": "ST_DistanceSphere(<point1>, <point2>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ST_Distance",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_Distance(<point1: POINT>, <point2: POINT>)",
+        "TgtPattern": "ST_Distance(<point1>::geography, <point2>::geography)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ST_LATITUDE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_LATITUDE(<point: POINT>)",
+        "TgtPattern": "ST_Y(<point>::geometry)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ST_LONGITUDE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_LONGITUDE(<point: POINT>)",
+        "TgtPattern": "ST_X(<point>::geometry)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

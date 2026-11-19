@@ -1,0 +1,370 @@
+[
+    {
+        "Desc": "YEAR_TO_EXTRACT_oracle",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "YEAR(<date: DATE>)",
+        "TgtPattern": "CAST(strftime('%Y', <date>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT YEAR('2026-04-16') AS result;",
+            "sqlite": "SELECT CAST(strftime('%Y', '2026-04-16') AS INTEGER) AS result;"
+        }
+    },
+    {
+        "Desc": "MONTH_TO_EXTRACT_oracle",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MONTH(<date: DATE>)",
+        "TgtPattern": "CAST(strftime('%m', <date>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT MONTH('2026-04-16') AS result;",
+            "sqlite": "SELECT CAST(strftime('%m', '2026-04-16') AS INTEGER) AS result;"
+        }
+    },
+    {
+        "Desc": "DAY_TO_EXTRACT_oracle",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAY(<date: DATE>)",
+        "TgtPattern": "CAST(strftime('%d', <date>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DAY('2026-04-16') AS result;",
+            "sqlite": "SELECT CAST(strftime('%d', '2026-04-16') AS INTEGER) AS result;"
+        }
+    },
+    {
+        "Desc": "ISNULL_FUNC",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ISNULL(<expr: ANY_VALUE>, <replacement: ANY_VALUE>)",
+        "TgtPattern": "IFNULL(<expr>, <replacement>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "sqlserver": "SELECT ISNULL(NULL, 'fallback') AS result;",
+            "sqlite": "SELECT IFNULL(NULL, 'fallback') AS result;"
+        }
+    },
+    {
+        "Desc": "DATEPART_YEAR",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEPART(year, <value: DATE>)",
+        "TgtPattern": "CAST(strftime('%Y', <value>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEPART(year, CAST('2024-05-06' AS date)) AS y;",
+            "sqlite": "SELECT CAST(strftime('%Y', '2024-05-06') AS INTEGER) AS y;"
+        }
+    },
+    {
+        "Desc": "DATEPART_MONTH",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEPART(month, <value: DATE>)",
+        "TgtPattern": "CAST(strftime('%m', <value>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEPART(month, CAST('2024-05-06' AS date)) AS m;",
+            "sqlite": "SELECT CAST(strftime('%m', '2024-05-06') AS INTEGER) AS m;"
+        }
+    },
+    {
+        "Desc": "DATEPART_DAY",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEPART(day, <value: DATE>)",
+        "TgtPattern": "CAST(strftime('%d', <value>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEPART(day, CAST('2024-05-06' AS date)) AS d;",
+            "sqlite": "SELECT CAST(strftime('%d', '2024-05-06') AS INTEGER) AS d;"
+        }
+    },
+    {
+        "Desc": "DATEADD_DAY_TO_DATE_ADD_DAY",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEADD(day, 5, <value: DATE>)",
+        "TgtPattern": "date(<value>, '+5 day')",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlserver": "SELECT DATEADD(day, 7, CAST('2024-05-06' AS date)) AS next_day;",
+            "sqlite": "SELECT date('2024-05-06', '+7 day') AS next_day;"
+        }
+    },
+    {
+        "Desc": "DATEADD_MONTH_TO_DATE_ADD_MONTH",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEADD(month, 5, <value: DATE>)",
+        "TgtPattern": "date(<value>, '+5 month')",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlserver": "SELECT DATEADD(month, 2, CAST('2024-05-06' AS date)) AS next_month;",
+            "sqlite": "SELECT date('2024-05-06', '+2 month') AS next_month;"
+        }
+    },
+    {
+        "Desc": "DATEDIFF_DAY_TO_DATEDIFF",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(day, <start: DATE>, <end: DATE>)",
+        "TgtPattern": "CAST(julianday(date(<end>)) - julianday(date(<start>)) AS INTEGER)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "sqlserver": "SELECT DATEDIFF(day, CAST('2024-05-01' AS date), CAST('2024-05-06' AS date)) AS diff_days;",
+            "sqlite": "SELECT CAST(julianday(date('2024-05-06')) - julianday(date('2024-05-01')) AS INTEGER) AS diff_days;"
+        }
+    },
+    {
+        "Desc": "DATEDIFF_MONTH_TO_TIMESTAMPDIFF_MONTH",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(month, <start: DATE>, <end: DATE>)",
+        "TgtPattern": "((CAST(strftime('%Y', <end>) AS INTEGER) - CAST(strftime('%Y', <start>) AS INTEGER)) * 12 + (CAST(strftime('%m', <end>) AS INTEGER) - CAST(strftime('%m', <start>) AS INTEGER)))",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT DATEDIFF(month, CAST('2024-01-01' AS date), CAST('2024-05-01' AS date)) AS diff_months;",
+            "sqlite": "SELECT ((CAST(strftime('%Y', '2024-05-01') AS INTEGER) - CAST(strftime('%Y', '2024-01-01') AS INTEGER)) * 12 + (CAST(strftime('%m', '2024-05-01') AS INTEGER) - CAST(strftime('%m', '2024-01-01') AS INTEGER))) AS diff_months;"
+        }
+    },
+    {
+        "Desc": "CHARINDEX_TO_LOCATE",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CHARINDEX(<sub_str: @GenSubString(<str: STRING>, 1, 1)>, <str>)",
+        "TgtPattern": "INSTR(<str>, <sub_str>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT CHARINDEX('cd', 'abcdef') AS pos;",
+            "sqlite": "SELECT INSTR('abcdef', 'cd') AS pos;"
+        }
+    },
+    {
+        "Desc": "REPLICATE_TO_REPEAT",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REPLICATE(<str: STRING>, <count: INT, [1,3]>)",
+        "TgtPattern": "REPLACE(HEX(ZEROBLOB(<count>)), '00', <str>)",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlserver": "SELECT REPLICATE('ab', 3) AS result;",
+            "sqlite": "SELECT REPLACE(HEX(ZEROBLOB(3)), '00', 'ab') AS result;"
+        }
+    },
+    {
+        "Desc": "SQUARE_TO_POW",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SQUARE(<num: DOUBLE>)",
+        "TgtPattern": "(<num> * <num>)",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT SQUARE(4) AS result;",
+            "sqlite": "SELECT (4 * 4) AS result;"
+        }
+    },
+    {
+        "Desc": "CHOOSE_TO_ELT",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CHOOSE(CASE WHEN <cond: BOOL> THEN 1 ELSE 0 END, <val1: STRING>, <val2: STRING>)",
+        "TgtPattern": "CASE (CASE WHEN <cond> THEN 1 ELSE 0 END) WHEN 1 THEN <val1> WHEN 2 THEN <val2> END",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "sqlserver": "SELECT CHOOSE(2, 'A', 'B', 'C') AS result;",
+            "sqlite": "SELECT CASE 2 WHEN 1 THEN 'A' WHEN 2 THEN 'B' WHEN 3 THEN 'C' END AS result;"
+        }
+    },
+    {
+        "Desc": "EOMONTH_TO_LAST_DAY",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EOMONTH(<date: DATE>)",
+        "TgtPattern": "date(<date>, 'start of month', '+1 month', '-1 day')",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlserver": "SELECT EOMONTH('2023-02-01') AS result;",
+            "sqlite": "SELECT date('2023-02-01', 'start of month', '+1 month', '-1 day') AS result;"
+        }
+    },
+    {
+        "Desc": "STDEV_TO_STDDEV_SAMP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STDEV(<col: DOUBLE>)",
+        "TgtPattern": "SQRT((SUM(<col> * <col>) - SUM(<col>) * SUM(<col>) * 1.0 / COUNT(<col>)) / (COUNT(<col>) - 1))",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT STDEV(val) AS result FROM (VALUES (1.0), (3.0), (5.0)) AS t(val);",
+            "sqlite": "SELECT SQRT((SUM(val * val) - SUM(val) * SUM(val) * 1.0 / COUNT(val)) / (COUNT(val) - 1)) AS result FROM (VALUES (1.0), (3.0), (5.0)) AS t(val);"
+        }
+    },
+    {
+        "Desc": "STDEVP_TO_STDDEV_POP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STDEVP(<col: DOUBLE>)",
+        "TgtPattern": "SQRT((SUM(<col> * <col>) - SUM(<col>) * SUM(<col>) * 1.0 / COUNT(<col>)) / COUNT(<col>))",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT STDEVP(val) AS result FROM (VALUES (1.0), (3.0), (5.0)) AS t(val);",
+            "sqlite": "SELECT SQRT((SUM(val * val) - SUM(val) * SUM(val) * 1.0 / COUNT(val)) / COUNT(val)) AS result FROM (VALUES (1.0), (3.0), (5.0)) AS t(val);"
+        }
+    },
+    {
+        "Desc": "VAR_TO_VAR_SAMP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "VAR(<col: DOUBLE>)",
+        "TgtPattern": "((SUM(<col> * <col>) - SUM(<col>) * SUM(<col>) * 1.0 / COUNT(<col>)) / (COUNT(<col>) - 1))",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT VAR(val) AS result FROM (VALUES (1.0), (3.0), (5.0)) AS t(val);",
+            "sqlite": "SELECT ((SUM(val * val) - SUM(val) * SUM(val) * 1.0 / COUNT(val)) / (COUNT(val) - 1)) AS result FROM (VALUES (1.0), (3.0), (5.0)) AS t(val);"
+        }
+    },
+    {
+        "Desc": "PLUS_TO_CONCAT",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str1: STRING> + <str2: STRING>",
+        "TgtPattern": "<str1> || <str2>",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlserver": "SELECT 'Hello' + 'World' AS result;",
+            "sqlite": "SELECT 'Hello' || 'World' AS result;"
+        }
+    },
+    {
+        "Desc": "VARP_TO_VAR_POP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "VARP(<col: DOUBLE>)",
+        "TgtPattern": "((SUM(<col> * <col>) - SUM(<col>) * SUM(<col>) * 1.0 / COUNT(<col>)) / COUNT(<col>))",
+        "Condition": null,
+        "Return": "DOUBLE",
+        "Demo": {
+            "sqlserver": "SELECT VARP(column1) AS result FROM (VALUES (1.0), (3.0), (5.0)) AS t(val);",
+            "sqlite": "SELECT ((SUM(val * val) - SUM(val) * SUM(val) * 1.0 / COUNT(val)) / COUNT(val)) AS result FROM (VALUES (1.0), (3.0), (5.0)) AS t(val);"
+        }
+    },
+    {
+        "Desc": "LEFT_SHIFT_TO_OP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LEFT_SHIFT(<val: INT, STRICT>, <n: INT, [2,4]>)",
+        "TgtPattern": "(<val> \\<\\< <n>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT LEFT_SHIFT(5, 2) AS result;",
+            "sqlite": "SELECT (5 << 2) AS result;"
+        }
+    },
+    {
+        "Desc": "RIGHT_SHIFT_TO_OP",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "RIGHT_SHIFT(<val: INT, STRICT>, <n: INT, [2,4]>)",
+        "TgtPattern": "(<val> \\>\\> <n>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlserver": "SELECT RIGHT_SHIFT(20, 2) AS result;",
+            "sqlite": "SELECT (20 >> 2) AS result;"
+        }
+    }
+]

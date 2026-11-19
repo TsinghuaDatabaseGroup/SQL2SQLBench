@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "GROUP_CONCAT NO DISTINCT",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "GROUP_CONCAT(<value: STRING, COLUMN>, ',' ORDER BY <value> ASC NULLS FIRST)",
+        "TgtPattern": "LISTAGG(<value>, ',') WITHIN GROUP (ORDER BY <value> ASC NULLS FIRST)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRINGAGG NO DISTINCT",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRING_AGG(<value: STRING, COLUMN>, ',' ORDER BY <value> ASC NULLS FIRST)",
+        "TgtPattern": "LISTAGG(<value>, ',') WITHIN GROUP (ORDER BY <value> ASC NULLS FIRST)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TOTAL",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "total(<value: NUMBER>)",
+        "TgtPattern": "COALESCE(SUM(<value>), 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

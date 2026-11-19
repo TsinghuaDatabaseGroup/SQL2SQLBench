@@ -1,0 +1,208 @@
+[
+    {
+        "Desc": "TO_TIMESTAMP1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<value: NUMBER>)",
+        "TgtPattern": "FROM_UNIXTIME(<value>)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "TO_TIMESTAMP2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<value: STRING, DATE>, <format: @OraPgGetFormat(<value>)>)",
+        "TgtPattern": "STR_TO_DATE(<value>, <tran_format: @TranPgDateFormatToMySQL(<format>)>)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "TO_DATE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DATE(<value: STRING, DATE>, <format: @OraPgGetFormat(<value>)>)",
+        "TgtPattern": "STR_TO_DATE(<value>, <tran_format: @TranPgDateFormatToMySQL(<format>)>)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "EXTRACT_CENTURY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(CENTURY FROM <value: TIMESTAMP>)",
+        "TgtPattern": "FLOOR(YEAR(<value>) / 100)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXTRACT_DECADE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(DECADE FROM <value: TIMESTAMP>)",
+        "TgtPattern": "FLOOR(YEAR(<value>) / 10)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXTRACT_DOW",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(DOW FROM <value: TIMESTAMP>)",
+        "TgtPattern": "MOD(DAYOFWEEK(<value>) + 6, 7)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXTRACT_DOY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(DOY FROM <value: TIMESTAMP>)",
+        "TgtPattern": "DAYOFYEAR(<value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXTRACT_EPOCH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(EPOCH FROM <value: TIMESTAMP>)",
+        "TgtPattern": "UNIX_TIMESTAMP(<value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_DATE1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('year', <value: TIMESTAMP>)",
+        "TgtPattern": "DATE(DATE_FORMAT(<value>, '%Y-01-01'))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_DATE2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('month', <value: TIMESTAMP>)",
+        "TgtPattern": "DATE(DATE_FORMAT(<value>, '%Y-%m-01'))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_DATE3",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('day', <value: TIMESTAMP>)",
+        "TgtPattern": "DATE(<value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_DATE5",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('hour', <value: TIMESTAMP>)",
+        "TgtPattern": "TIMESTAMP(DATE_FORMAT(<value>, '%Y-%m-%d %H:00:00'))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_DATE6",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('week', <value: TIMESTAMP>)",
+        "TgtPattern": "DATE(DATE_SUB(<value>, INTERVAL (DAYOFWEEK(<value>) - 2) DAY))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DATE_PARA_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE(<date_str: @GenPGDateParaStr('MDY')>)",
+        "TgtPattern": "DATE(<mysql_date: @GenStandardDate(<date_str>, 'MDY')>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "pg": {
+                    "datestyle": "MDY"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "DATE_PARA_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE(<date_str: @GenPGDateParaStr('DMY')>)",
+        "TgtPattern": "DATE(<mysql_date: @GenStandardDate(<date_str>, 'DMY')>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "pg": {
+                    "datestyle": "DMY"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "EXTRACT_YEAR_AGE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(YEAR FROM AGE(<date1: DATE>, <date2: DATE>))",
+        "TgtPattern": "TIMESTAMPDIFF(YEAR, <date2>, <date1>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

@@ -1,0 +1,97 @@
+{
+  "prog.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "source_dialect": "pg",
+        "target_dialect": "mysql",
+        "source_sql": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , EXTRACT( DOW FROM ho.order_date ) AS COL_ALIAS , STRPOS( l.street_address , ' R' ) AS STRPOSCOL , XPATH_EXISTS( '/Warehouse/RailAccess' , w.warehouse_spec ) AS XMLEXISTSCOL , STRPOS( hc.nls_territory , 'RI' ) AS STRPOSCOL_0 , EXTRACT( YEAR FROM DATE( '02/05/2006' ) ) - EXTRACT( YEAR FROM ho.order_date ) AS COL_ALIAS_0 , EXTRACT( YEAR FROM DATE( '05/09/2012' ) ) - EXTRACT( YEAR FROM ho.order_date ) AS COL_ALIAS_1 , ARRAY_LENGTH( hc.phone_numbers , 1 ) AS COL_ALIAS_2 , ST_X(w.wh_geo_location::geometry) AS GETXCOL FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000 UNION ALL SELECT t2.school , NULL , EXTRACT( YEAR FROM AGE( t2.opendate , t2.lastupdate ) ) AS COL_ALIAS , t1.avgscrwrite , NULL , t1.avgscrwrite AS STRPOSCOL , t1.numge1500 AS COL_ALIAS_0 , t1.enroll12 AS COL_ALIAS_1 , t1.numge1500 AS COL_ALIAS_2 , t1.numtsttakr AS GETXCOL FROM satscores AS t1 INNER JOIN schools AS t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+        "schema_info": "CREATE TABLE schools (\n\tadmemail1 TEXT,\n\tadmemail2 TEXT,\n\tadmemail3 TEXT,\n\tadmfname1 TEXT,\n\tadmfname2 TEXT,\n\tadmfname3 TEXT,\n\tadmlname1 TEXT,\n\tadmlname2 TEXT,\n\tadmlname3 TEXT,\n\tcdscode VARCHAR(256) NOT NULL,\n\tcharter INT,\n\tcharternum TEXT,\n\tcity TEXT,\n\tcloseddate DATE,\n\tcounty TEXT NOT NULL,\n\tdoc TEXT NOT NULL,\n\tdoctype TEXT NOT NULL,\n\tdistrict TEXT NOT NULL,\n\teilcode TEXT,\n\teilname TEXT,\n\tedopscode TEXT,\n\tedopsname TEXT,\n\text TEXT,\n\tfundingtype TEXT,\n\tgsoffered TEXT,\n\tgsserved TEXT,\n\tlastupdate DATE NOT NULL,\n\tlatitude DOUBLE PRECISION,\n\tlongitude DOUBLE PRECISION,\n\tmagnet INT,\n\tmailcity TEXT,\n\tmailstate TEXT,\n\tmailstrabr TEXT,\n\tmailstreet TEXT,\n\tmailzip TEXT,\n\tncesdist TEXT,\n\tncesschool TEXT,\n\topendate DATE,\n\tphone TEXT,\n\tsoc TEXT,\n\tsoctype TEXT,\n\tschool TEXT,\n\tstate TEXT,\n\tstatustype TEXT NOT NULL,\n\tstreet TEXT,\n\tstreetabr TEXT,\n\tvirtual TEXT,\n\twebsite TEXT,\n\tzip TEXT,\n\tCONSTRAINT PK_schools PRIMARY KEY (cdscode)\n);\nCREATE TABLE satscores (\n\tavgscrmath INT,\n\tavgscrread INT,\n\tavgscrwrite INT,\n\tnumge1500 INT,\n\tnumtsttakr INT NOT NULL,\n\tcds VARCHAR(256) NOT NULL,\n\tcname TEXT,\n\tdname TEXT,\n\tenroll12 INT NOT NULL,\n\trtype TEXT NOT NULL,\n\tsname TEXT,\n\tCONSTRAINT PK_satscores PRIMARY KEY (cds)\n);\nCREATE TABLE h_orders (\n\torder_id INT,\n\torder_date TIMESTAMP NOT NULL,\n\tmode VARCHAR(11),\n\tcustomer_id INT NOT NULL,\n\torder_status INT,\n\torder_total DECIMAL(8, 2),\n\tsales_rep_id INT,\n\tpromotion_id INT,\n\tCONSTRAINT h_orders_mode_check CHECK(mode IN ('direct', 'online')),\n\tCONSTRAINT PK_h_orders PRIMARY KEY (order_id)\n);\nCREATE TABLE warehouses (\n\twarehouse_id INT,\n\twarehouse_spec XML,\n\twarehouse_name VARCHAR(35),\n\tlocation_id INT,\n\twh_geo_location GEOGRAPHY,\n\tCONSTRAINT PK_warehouses PRIMARY KEY (warehouse_id)\n);\nCREATE TABLE locations (\n\tlocation_id INT,\n\tstreet_address VARCHAR(40),\n\tpostal_code VARCHAR(12),\n\tcity VARCHAR(30) NOT NULL,\n\tstate_province VARCHAR(25),\n\tcountry_id VARCHAR(2),\n\tCONSTRAINT PK_locations PRIMARY KEY (location_id)\n);\nCREATE TABLE h_customers (\n\tcustomer_id INT,\n\tcust_first_name VARCHAR(20) NOT NULL,\n\tcust_last_name VARCHAR(20) NOT NULL,\n\tcust_address JSONB NOT NULL,\n\tphone_numbers VARCHAR(25)[],\n\tnls_language VARCHAR(3),\n\tnls_territory VARCHAR(30),\n\tcredit_limit DECIMAL(9, 2),\n\tcust_email VARCHAR(40),\n\taccount_mgr_id INT,\n\tcust_geo_location GEOGRAPHY,\n\tCONSTRAINT PK_h_customers PRIMARY KEY (customer_id)\n);",
+        "db_param": {
+          "pg": {
+            "datestyle": "DMY"
+          },
+          "mysql": {}
+        },
+        "type_mapping": "{\n  \"UUID\": \"CHAR(36)\",\n  \"GEOGRAPHY\": \"POINT\",\n  \"JSONB\": \"JSON\",\n  \"XML\": \"TEXT\",\n  \"ARRAY\": \"JSON\"\n}",
+        "reasoning": "We are translating a PostgreSQL query to MySQL, focusing on replacing dialect-specific functions and handling type conversions.\n\nKey conversions:\n1. **Date functions**:\n   - `EXTRACT(DOW FROM ..)` → `DAYOFWEEK(..) - 1` (to get 0-based Sunday index)\n   - `EXTRACT(YEAR FROM DATE(...))` → `YEAR(STR_TO_DATE(...))` to handle DMY date format in PostgreSQL\n   - Direct `DATE` literals remain as-is where possible\n2. **String functions**:\n   - `STRPOS(a,b)` → `LOCATE(b,a)` (arguments reversed)\n3. **XML handling**:\n   - `XPATH_EXISTS` → `EXTRACTVALUE(...) IS NOT NULL` check\n4. **Array handling**:\n   - `ARRAY_LENGTH(array,1)` → `JSON_LENGTH(array)` (since arrays map to JSON in MySQL)\n5. **Geospatial functions**:\n   - `ST_X(geography::geometry)` → `ST_X(geography)` (direct access to POINT coordinates)\n6. **NULL handling**:\n   - `NOTNULL` → `IS NOT NULL`\n7. **UNION ALL typing**:\n   - Explicit `CAST` for NULLs to match union column types\n8. **Date arithmetic**:\n   - `AGE(a,b)` → `TIMESTAMPDIFF(YEAR, b, a)` computes year difference\n\nSchema considerations:\n- XML fields converted to TEXT via `EXTRACTVALUE`\n- Geography fields treated as POINTs with `ST_X`\n- JSON columns handled through MySQL JSON functions",
+        "target_sql": "SELECT \n    hc.cust_first_name AS first_name,\n    w.warehouse_name AS nearest_warehouse,\n    DAYOFWEEK(ho.order_date) - 1 AS COL_ALIAS,\n    LOCATE(' R', l.street_address) AS STRPOSCOL,\n    CASE \n        WHEN EXTRACTVALUE(w.warehouse_spec, '/Warehouse/RailAccess') IS NOT NULL THEN 1 \n        ELSE 0 \n    END AS XMLEXISTSCOL,\n    LOCATE('RI', hc.nls_territory) AS STRPOSCOL_0,\n    YEAR(STR_TO_DATE('02/05/2006', '%d/%m/%Y')) - YEAR(ho.order_date) AS COL_ALIAS_0,\n    YEAR(STR_TO_DATE('05/09/2012', '%d/%m/%Y')) - YEAR(ho.order_date) AS COL_ALIAS_1,\n    JSON_LENGTH(hc.phone_numbers) AS COL_ALIAS_2,\n    ST_X(w.wh_geo_location) AS GETXCOL\nFROM h_customers hc\nINNER JOIN h_orders ho ON hc.customer_id = ho.customer_id\nCROSS JOIN warehouses w\nLEFT JOIN locations l ON w.location_id = l.location_id\nWHERE ho.order_total > 10000\nUNION ALL\nSELECT \n    t2.school,\n    CAST(NULL AS CHAR) AS nearest_warehouse,\n    TIMESTAMPDIFF(YEAR, t2.lastupdate, t2.opendate) AS COL_ALIAS,\n    t1.avgscrwrite,\n    CAST(NULL AS SIGNED) AS COL_PLACEHOLDER,\n    t1.avgscrwrite AS STRPOSCOL,\n    t1.numge1500 AS COL_ALIAS_0,\n    t1.enroll12 AS COL_ALIAS_1,\n    t1.numge1500 AS COL_ALIAS_2,\n    t1.numtsttakr AS GETXCOL\nFROM satscores AS t1\nINNER JOIN schools AS t2 ON t1.cds = t2.cdscode\nWHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'"
+      },
+      {
+        "source_dialect": "pg",
+        "target_dialect": "oracle",
+        "source_sql": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , ST_Y( hc.cust_geo_location :: geometry ) GETYCOL , CASE WHEN hc.nls_language ~ '.*us.*' THEN 1 ELSE 0 END COL_ALIAS , @ l.location_id COL_ALIAS_0 , ho.order_date + INTERVAL '1 years 11 mons -23 days -8 hours 10 mins 40 secs ago' - ho.order_date COL_ALIAS_1 , ho.order_date::TEXT COL_ALIAS_2 FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000 AND w.wh_geo_location NOTNULL AND ( l.city LIKE '%Southlake%' ) = FALSE AND ho.order_date = '2007-11-21 11:22:33.000000' AND ho.order_date = '2007-11-21 11:22:33.000000' AND ho.order_date = '2007-11-21 11:22:33.000000'",
+        "schema_info": "CREATE TABLE h_orders (\n\torder_id INT,\n\torder_date TIMESTAMP NOT NULL,\n\tmode VARCHAR(11),\n\tcustomer_id INT NOT NULL,\n\torder_status INT,\n\torder_total DECIMAL(8, 2),\n\tsales_rep_id INT,\n\tpromotion_id INT,\n\tCONSTRAINT h_orders_mode_check CHECK(mode IN ('direct', 'online')),\n\tCONSTRAINT PK_h_orders PRIMARY KEY (order_id)\n);\nCREATE TABLE warehouses (\n\twarehouse_id INT,\n\twarehouse_spec XML,\n\twarehouse_name VARCHAR(35),\n\tlocation_id INT,\n\twh_geo_location GEOGRAPHY,\n\tCONSTRAINT PK_warehouses PRIMARY KEY (warehouse_id)\n);\nCREATE TABLE locations (\n\tlocation_id INT,\n\tstreet_address VARCHAR(40),\n\tpostal_code VARCHAR(12),\n\tcity VARCHAR(30) NOT NULL,\n\tstate_province VARCHAR(25),\n\tcountry_id VARCHAR(2),\n\tCONSTRAINT PK_locations PRIMARY KEY (location_id)\n);\nCREATE TABLE h_customers (\n\tcustomer_id INT,\n\tcust_first_name VARCHAR(20) NOT NULL,\n\tcust_last_name VARCHAR(20) NOT NULL,\n\tcust_address JSONB NOT NULL,\n\tphone_numbers VARCHAR(25)[],\n\tnls_language VARCHAR(3),\n\tnls_territory VARCHAR(30),\n\tcredit_limit DECIMAL(9, 2),\n\tcust_email VARCHAR(40),\n\taccount_mgr_id INT,\n\tcust_geo_location GEOGRAPHY,\n\tCONSTRAINT PK_h_customers PRIMARY KEY (customer_id)\n);",
+        "db_param": {
+          "pg": {},
+          "oracle": {
+            "NLS_TIMESTAMP_FORMAT": "DD-MON-RR HH.MI.SSXFF AM"
+          }
+        },
+        "target_sql": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , hc.cust_geo_location.SDO_POINT.Y GETYCOL , CASE WHEN REGEXP_LIKE( hc.nls_language , '.*us.*' ) THEN 1 ELSE 0 END COL_ALIAS , ABS( l.location_id ) COL_ALIAS_0 , ho.order_date + TO_YMINTERVAL( '-P1Y11M' ) + TO_DSINTERVAL( 'P23D7H49M20S' ) - ho.order_date COL_ALIAS_1 , CAST( ho.order_date AS CHAR ) COL_ALIAS_2 FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000 AND NOT w.wh_geo_location IS NULL AND not l.city LIKE '%Southlake%' AND ho.order_date = TO_TIMESTAMP( '2007-11-21 11:22:33.000000' , 'YYYY-MM-DD HH24:MI:SSXFF' ) AND ho.order_date = TO_TIMESTAMP( '2007-11-21 11:22:33.000000' , 'YYYY-MM-DD HH24:MI:SSXFF' ) AND ho.order_date = TO_TIMESTAMP( '2007-11-21 11:22:33.000000' , 'YYYY-MM-DD HH24:MI:SSXFF' )",
+        "type_mapping": "{\n  \"UUID\": \"CHAR(36)\",\n  \"GEOGRAPHY\": \"SDO_GEOMETRY\",\n  \"JSONB\": \"JSON\",\n  \"XML\": \"XMLType\",\n  \"ARRAY\": \"VARRAY\",\n  \"BOOL\": \"NUMBER(1)\"\n}"
+      },
+      {
+        "source_dialect": "oracle",
+        "target_dialect": "pg",
+        "source_sql": "SELECT hc.cust_first_name , hc.cust_last_name , hc.cust_email , w.warehouse_name , ho.order_total , INSTR( l.state_province , 'xa' , 1 ) INSTR3COL , ROUND( ho.order_date , 'MONTH' ) COL_ALIAS , TO_CHAR( ho.order_date ) COL_ALIAS_0 , TO_TIMESTAMP( 'Jul 07, 1971, 21:56:07' ) - ho.order_date COL_ALIAS_1 , EXISTSNODE( w.warehouse_spec , '/Warehouse/Area' ) EXISTSNODECOL , ho.order_date + NUMTOYMINTERVAL( 24 , 'year' ) - ho.order_date NUMTOYMINTERVALCOL , INSTR( w.warehouse_name , 'hla' , 3 ) INSTR3COL_0 , EXTRACT( YEAR FROM TO_TIMESTAMP( 'Jan 02, 2021, 19:16:04' ) ) - EXTRACT( YEAR FROM ho.order_date ) COL_ALIAS_2 , ROUND( ho.order_date , 'YEAR' ) COL_ALIAS_3 , EXTRACT( YEAR FROM ho.order_date + NUMTOYMINTERVAL( 30 , 'year' ) ) - EXTRACT( YEAR FROM ho.order_date ) NUMTOYMINTERVALCOL_0 , REPLACE(hc.cust_email, hc.cust_last_name) REPLACECOL FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w INNER JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 5000 AND l.country_id = 'US'",
+        "schema_info": "CREATE TABLE locations (\n\tlocation_id NUMBER ,\n\tstreet_address VARCHAR2(40) ,\n\tpostal_code VARCHAR2(12) ,\n\tcity VARCHAR2(30)  NOT NULL,\n\tstate_province VARCHAR2(25) ,\n\tcountry_id VARCHAR2(2) ,\n\tCONSTRAINT PK_locations PRIMARY KEY (location_id)\n);\nCREATE TABLE h_customers (\n\tcustomer_id NUMBER ,\n\tcust_first_name VARCHAR2(20)  NOT NULL,\n\tcust_last_name VARCHAR2(20)  NOT NULL,\n\tphone_numbers phone_numbers_varray_type ,\n\tnls_language VARCHAR2(3) ,\n\tnls_territory VARCHAR2(30) ,\n\tcredit_limit NUMBER(9, 2) ,\n\tcust_email VARCHAR2(40) ,\n\taccount_mgr_id NUMBER ,\n\tcust_geo_location SDO_GEOMETRY ,\n\tCONSTRAINT PK_h_customers PRIMARY KEY (customer_id)\n);\nCREATE TYPE phone_numbers_varray_type AS VARRAY(5) OF VARCHAR2(25);\nCREATE TABLE h_orders (\n\torder_id NUMBER ,\n\torder_date TIMESTAMP  NOT NULL,\n\t\"mode\" VARCHAR2(11) ,\n\tcustomer_id NUMBER  NOT NULL,\n\torder_status NUMBER ,\n\torder_total NUMBER(8, 2) ,\n\tsales_rep_id NUMBER ,\n\tpromotion_id NUMBER ,\n\tCONSTRAINT h_orders_mode_check CHECK(\"mode\" IN ('direct', 'online')),\n\tCONSTRAINT PK_h_orders PRIMARY KEY (order_id)\n);\nCREATE TABLE warehouses (\n\twarehouse_id NUMBER ,\n\twarehouse_spec XMLType ,\n\twarehouse_name VARCHAR2(35) ,\n\tlocation_id NUMBER ,\n\twh_geo_location SDO_GEOMETRY ,\n\tCONSTRAINT PK_warehouses PRIMARY KEY (warehouse_id)\n);",
+        "db_param": {
+          "oracle": {
+            "NLS_TIMESTAMP_FORMAT": "Mon dd, YYYY, HH24:MI:SS"
+          },
+          "pg": {}
+        },
+        "target_sql": "SELECT hc.cust_first_name , hc.cust_last_name , hc.cust_email , w.warehouse_name , ho.order_total , POSITION( 'xa' IN SUBSTRING( l.state_province FROM 1 ) ) + 1 - 1 instr3col , CASE WHEN EXTRACT( DAY FROM ho.order_date ) >= 16 THEN DATE_TRUNC( 'MONTH' , ho.order_date ) + INTERVAL '1 month' ELSE DATE_TRUNC( 'MONTH' , ho.order_date ) END col_alias , TO_CHAR( ho.order_date , 'DD-MON-YY' ) col_alias_0 , TO_TIMESTAMP( 'Jul 07, 1971, 21:56:07' , 'Mon dd, YYYY, HH24:MI:SS' ) :: timestamp - ho.order_date col_alias_1 , CASE WHEN XPATH_EXISTS( '/Warehouse/Area' , w.warehouse_spec ) THEN 1 ELSE 0 END existsnodecol , ho.order_date + INTERVAL '1 year' * 24 - ho.order_date numtoymintervalcol , POSITION( 'hla' IN SUBSTRING( w.warehouse_name FROM 3 ) ) + 3 - 1 instr3col_0 , EXTRACT( YEAR FROM TO_TIMESTAMP( 'Jan 02, 2021, 19:16:04' , 'Mon dd, YYYY, HH24:MI:SS' ) :: timestamp ) - EXTRACT( YEAR FROM ho.order_date ) col_alias_2 , CASE WHEN EXTRACT( MONTH FROM ho.order_date ) >= 7 THEN DATE_TRUNC( 'YEAR' , ho.order_date ) + INTERVAL '1 year' ELSE DATE_TRUNC( 'YEAR' , ho.order_date ) END col_alias_3 , EXTRACT( YEAR FROM ho.order_date + INTERVAL '1 year' * 30 ) - EXTRACT( YEAR FROM ho.order_date ) numtoymintervalcol_0 , REPLACE( hc.cust_email , hc.cust_last_name , '' ) replacecol FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w INNER JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 5000 AND l.country_id = 'US'",
+        "type_mapping": "{\n  \"SDO_GEOMETRY\": \"GEOGRAPHY\",\n  \"XMLType\": \"XML\",\n  \"VARRAY\": \"ARRAY\"\n}"
+      }
+    ],
+    "signature": {
+      "instructions": "Given the fields `source_dialect`, `target_dialect`, `source_sql`, `schema_info`, `db_param`, `type_mapping`, produce the fields `target_sql`.",
+      "fields": [
+        {
+          "prefix": "Source Dialect:",
+          "description": "Source dialect, e.g. MySQL, Oracle, SQL Server"
+        },
+        {
+          "prefix": "Target Dialect:",
+          "description": "Target dialect, e.g. PostgreSQL, Snowflake"
+        },
+        {
+          "prefix": "Source Sql:",
+          "description": "The source SQL to translate"
+        },
+        {
+          "prefix": "Schema Info:",
+          "description": "DDL/schema info for involved tables"
+        },
+        {
+          "prefix": "Db Param:",
+          "description": "The parameter of the source or target database"
+        },
+        {
+          "prefix": "Type Mapping:",
+          "description": "The type mapping policy between the source and target database"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Target Sql:",
+          "description": "Equivalent SQL in target dialect"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.10",
+      "dspy": "3.1.2",
+      "cloudpickle": "3.1"
+    }
+  }
+}

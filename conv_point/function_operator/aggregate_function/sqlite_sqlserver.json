@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "GROUP_CONCAT_SEPARATOR",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "GROUP_CONCAT(<value: STRING>, ',')",
+        "TgtPattern": "STRING_AGG(<value>, ',')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TOTAL",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "total(<value: NUMBER>)",
+        "TgtPattern": "COALESCE(SUM(CAST(<value> AS FLOAT)), 0.0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

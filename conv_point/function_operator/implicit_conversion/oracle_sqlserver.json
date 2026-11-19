@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "INT_TO_INTERVAL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date_value: DATE> + <int_value: INT, LITERAL>",
+        "TgtPattern": "DATEADD(day, <int_value>, <date_value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "STRING MINUS STRING",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "FUNCTION",
+        "SrcPattern": "<num1: STRING, NUMBER> - <num2: STRING, NUMBER>",
+        "TgtPattern": "CAST(<num1> AS DOUBLE PRECISION) - CAST(<num2> AS DOUBLE PRECISION)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

@@ -1,0 +1,134 @@
+[
+    {
+        "Desc": "STRFTIME",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', <value: DATE>)",
+        "TgtPattern": "TO_CHAR(<value>, 'YYYY')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', 'now')",
+        "TgtPattern": "TO_CHAR(CAST(SYSTIMESTAMP AT TIME ZONE 'UTC' AS DATE), 'YYYY')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME3",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', <date: TIMESTAMP, STRICT>, '+3 hours')",
+        "TgtPattern": "TO_CHAR(<date> + NUMTODSINTERVAL(3, 'HOUR'), 'YYYY-MM-DD HH24:MI:SS')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME4",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', 'now', '+3 hours')",
+        "TgtPattern": "TO_CHAR((SYSTIMESTAMP AT TIME ZONE 'UTC') + NUMTODSINTERVAL(3, 'HOUR'), 'YYYY-MM-DD HH24:MI:SS')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "FROM_UNIXTIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UNIXEPOCH(<value: TIMESTAMP>)",
+        "TgtPattern": "(CAST(<value> AS DATE) - DATE '1970-01-01') * 86400",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "FROM_UNIXTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<value: NUMBER>, 'unixepoch')",
+        "TgtPattern": "TIMESTAMP '1970-01-01 00:00:00' + NUMTODSINTERVAL(<value>, 'SECOND')",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATE_ADD1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day', 'start of month')",
+        "TgtPattern": "TRUNC(<date> + 1, 'MM')",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATE_ADD2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day')",
+        "TgtPattern": "<date> + 1",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATETIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>, '+1 day')",
+        "TgtPattern": "CAST(<date> + NUMTODSINTERVAL(1, 'DAY') AS TIMESTAMP)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATETIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>)",
+        "TgtPattern": "CAST(<date> AS TIMESTAMP)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "JULIANDAY",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JULIANDAY(<date1: DATE>) - JULIANDAY(<date2: DATE>)",
+        "TgtPattern": "TRUNC(<date1>) - TRUNC(<date2>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

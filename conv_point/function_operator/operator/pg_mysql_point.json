@@ -1,0 +1,146 @@
+[
+    {
+        "Desc": "ILIKE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str: STRING> ILIKE <pattern: @GenIlikePattern(<str>)>",
+        "TgtPattern": "LOWER(<str>) LIKE LOWER(<pattern>)",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "REGEXP_LIKE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str: STRING> ~ <pattern_str: @GenRegPattern(<str>)>",
+        "TgtPattern": "REGEXP_LIKE(<str>, <pattern_str>, 'c')",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "|/",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "|/<value: NUMBER>",
+        "TgtPattern": "SQRT(<value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXP",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> ^ <value2: NUMBER, LITERAL, [1, 5]>",
+        "TgtPattern": "POWER(<value1>, <value2>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "||/",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "||/<value: NUMBER>",
+        "TgtPattern": "POWER(<value>, 1/3)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "@",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "@ <value: NUMBER>",
+        "TgtPattern": "ABS(<value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "#",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> # <value2: NUMBER>",
+        "TgtPattern": "<value1> ^ <value2>",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DATE_MINUS_DATE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date1: DATE, STRICT> - <date2: DATE, STRICT>",
+        "TgtPattern": "DATEDIFF(<date1>, <date2>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "IS DISTINCT FROM",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: ANY_VALUE> IS DISTINCT FROM <value2: ANY_VALUE>",
+        "TgtPattern": "<value1> \\<=\\> <value2>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "IS NOT DISTINCT FROM",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: ANY_VALUE> IS NOT DISTINCT FROM <value2: ANY_VALUE>",
+        "TgtPattern": "NOT (<value1> \\<=\\> <value2>)",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "||",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "{for <str> in <str_list: LIST[STRING]> ADD ' || ': <str>}",
+        "TgtPattern": "CONCAT({for <str> in <str_list> ADD ', ': NULLIF(<str>, '')})",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "INTEGER DIV",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: INT, STRICT> / <value2: INT, STRICT>",
+        "TgtPattern": "<value1> DIV <value2>",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

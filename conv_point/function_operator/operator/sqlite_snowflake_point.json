@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "GLOB",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str1: STRING> GLOB <pattern: @GenGlobPattern(<str1>)>",
+        "TgtPattern": "<str1> LIKE <pattern1: @TranGlobPattern(<pattern>)>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "GETX",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<point: POINT>.SDO_POINT.X",
+        "TgtPattern": "ST_X(<point>::geometry)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GETY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<point: POINT>.SDO_POINT.Y",
+        "TgtPattern": "ST_Y(<point>::geometry)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ST_Distance",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SDO_GEOM.SDO_DISTANCE(<point1: POINT>, <point2: POINT>, 0.0001, 'unit=M')",
+        "TgtPattern": "ST_Distance(<point1>::geography, <point2>::geography)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "WITHIN_DISTANCE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SDO_WITHIN_DISTANCE(<point1: POINT>, <point2: POINT>, NULL, NULL),'distance=100000 unit=M') = 'TRUE'",
+        "TgtPattern": "ST_DWithin(<point1>, <point2>, 100000)",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

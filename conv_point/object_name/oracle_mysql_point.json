@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "MATCH_R",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "MATCH",
+        "TgtPattern": "`MATCH`",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "VIRTUAL_R",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "VIRTUAL",
+        "TgtPattern": "`VIRTUAL`",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "CROSS_R",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "CROSS",
+        "TgtPattern": "`CROSS`",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "RANK_R",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "RANK",
+        "TgtPattern": "`RANK`",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "QUOTE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "QUOTE",
+        "SrcPattern": "\"\"",
+        "TgtPattern": "``",
+        "Condition": null,
+        "Return": null
+    }
+]

@@ -1,0 +1,170 @@
+[
+    {
+        "Desc": "SINH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SINH(<value: NUMBER>)",
+        "TgtPattern": "(EXP(<value>) - EXP(-(<value>))) / 2",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "COSH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COSH(<value: NUMBER>)",
+        "TgtPattern": "(EXP(<value>) + EXP(-(<value>))) / 2",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TANH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TANH(<value: NUMBER>)",
+        "TgtPattern": "(EXP(<value>) - EXP(-(<value>))) / (EXP(<value>) + EXP(-(<value>)))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ASINH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ASINH(<value: NUMBER>)",
+        "TgtPattern": "LN(<value> + SQRT((<value>) * (<value>) + 1))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ACOSH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ACOSH(<value: NUMBER>)",
+        "TgtPattern": "LN(<value> + SQRT((<value>) * (<value>) - 1))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ATANH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ATANH(<value: NUMBER>)",
+        "TgtPattern": "0.5 * LN((1 + <value>) / (1 - <value>))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_NUM1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value: NUMBER>)",
+        "TgtPattern": "TRUNCATE(<value>, 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_NUM2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value: NUMBER>, <bits: INT, LITERAL, [-5, 5]>)",
+        "TgtPattern": "TRUNCATE(<value>, <bits>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "LOG",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LOG(<value: NUMBER>)",
+        "TgtPattern": "LOG(10, <value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TO_CHAR_INT1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM$99G999G999G999D00')",
+        "TgtPattern": "CONCAT('$', FORMAT(<value>, 2))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TO_CHAR_INT2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM99G999G999G999D000')",
+        "TgtPattern": "FORMAT(<value>, 3))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "WIDTH_BUCKET",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "WIDTH_BUCKET(<num: INT>, <low: INT, LITERAL>, <low> + <val: INT, LITERAL, [5, 30)>, <num_buckets: INT, LITERAL, [5, 15]>)",
+        "TgtPattern": "CASE WHEN <num> IS NOT NULL THEN CASE WHEN <num> \\< <low> THEN 0 WHEN <num> \\>= <low> + <val> THEN <num_buckets> + 1 ELSE FLOOR((<num> - <low>) / ((<val> * 1.0) / <num_buckets>)) + 1 END ELSE NULL END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "CBRT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CBRT(<value: NUMBER>)",
+        "TgtPattern": "POWER(<value>, 1/3)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DIV",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DIV(<value1: NUMBER>, NULLIF(<value2: NUMBER>, 0))",
+        "TgtPattern": "<value1> DIV <value2>",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

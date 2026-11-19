@@ -1,0 +1,166 @@
+[
+    {
+        "Desc": "STRFTIME",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', <value: DATE>)",
+        "TgtPattern": "TO_CHAR(TO_DATE(<value>), 'YYYY')",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlite": "SELECT STRFTIME('%Y', '2024-06-01');",
+            "snowflake": "SELECT TO_CHAR(TO_DATE('2024-06-01'), 'YYYY');"
+        }
+    },
+    {
+        "Desc": "STRFTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', 'now')",
+        "TgtPattern": "TO_CHAR(CURRENT_DATE(), 'YYYY')",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlite": "SELECT STRFTIME('%Y', 'now');",
+            "snowflake": "SELECT TO_CHAR(CURRENT_DATE(), 'YYYY');"
+        }
+    },
+    {
+        "Desc": "STRFTIME3",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', <date: TIMESTAMP, STRICT>, '+3 hours')",
+        "TgtPattern": "TO_CHAR(DATEADD(HOUR, 3, <date>), 'YYYY-MM-DD HH24:MI:SS')",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlite": "SELECT STRFTIME('%Y-%m-%d %H:%M:%S', '2024-06-01 10:20:30', '+3 hours');",
+            "snowflake": "SELECT TO_CHAR(DATEADD(HOUR, 3, TO_TIMESTAMP_NTZ('2024-06-01 10:20:30')), 'YYYY-MM-DD HH24:MI:SS');"
+        }
+    },
+    {
+        "Desc": "STRFTIME4",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', 'now', '+3 hours')",
+        "TgtPattern": "TO_CHAR(DATEADD(HOUR, 3, CURRENT_TIMESTAMP()), 'YYYY-MM-DD HH24:MI:SS')",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlite": "SELECT STRFTIME('%Y-%m-%d %H:%M:%S', 'now', '+3 hours');",
+            "snowflake": "SELECT TO_CHAR(DATEADD(HOUR, 3, CURRENT_TIMESTAMP()), 'YYYY-MM-DD HH24:MI:SS');"
+        }
+    },
+    {
+        "Desc": "FROM_UNIXTIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UNIXEPOCH(<value: TIMESTAMP>)",
+        "TgtPattern": "DATE_PART(EPOCH_SECOND, <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlite": "SELECT UNIXEPOCH('2024-06-01 10:20:30');",
+            "snowflake": "SELECT DATE_PART(EPOCH_SECOND, TO_TIMESTAMP_NTZ('2024-06-01 10:20:30'));"
+        }
+    },
+    {
+        "Desc": "FROM_UNIXTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<value: NUMBER>, 'unixepoch')",
+        "TgtPattern": "TO_TIMESTAMP_NTZ(<value>)",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Demo": {
+            "sqlite": "SELECT DATETIME(1717237230, 'unixepoch');",
+            "snowflake": "SELECT TO_TIMESTAMP_NTZ(1717237230);"
+        }
+    },
+    {
+        "Desc": "DATE_ADD1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day', 'start of month')",
+        "TgtPattern": "CAST(DATE_TRUNC('MONTH', DATEADD(DAY, 1, <date>)) AS DATE)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlite": "SELECT DATE('2024-01-31', '+1 day', 'start of month');",
+            "snowflake": "SELECT CAST(DATE_TRUNC('MONTH', DATEADD(DAY, 1, TO_DATE('2024-01-31'))) AS DATE);"
+        }
+    },
+    {
+        "Desc": "DATE_ADD2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day')",
+        "TgtPattern": "DATEADD(DAY, 1, <date>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlite": "SELECT DATE('2024-05-15', '+1 day');",
+            "snowflake": "SELECT DATEADD(DAY, 1, TO_DATE('2024-05-15'))"
+        }
+    },
+    {
+        "Desc": "DATETIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>, '+1 day')",
+        "TgtPattern": "DATEADD(DAY, 1, <date>)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATETIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>)",
+        "TgtPattern": "CAST(<date> AS TIMESTAMP_NTZ)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "JULIANDAY",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JULIANDAY(<date1: DATE>) - JULIANDAY(<date2: DATE>)",
+        "TgtPattern": "DATEDIFF(DAY, <date2>, <date1>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

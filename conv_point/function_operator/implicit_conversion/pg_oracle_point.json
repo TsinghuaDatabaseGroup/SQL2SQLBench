@@ -1,0 +1,40 @@
+[
+    {
+        "Desc": "STRING_TO_DATE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: DATE, STRICT> = <date_str: @SampleDate(<value>)>",
+        "TgtPattern": "<value> = TO_DATE(<date_str>, 'YYYY-MM-DD')",
+        "Return": "BOOL",
+        "Condition": null,
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "DD-MON-RR"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "STRING_TO_TIMESTAMP",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: TIMESTAMP, STRICT> = <date_str: @SampleTimeStamp(<value>)>",
+        "TgtPattern": "<value> = TO_TIMESTAMP(<date_str>, 'YYYY-MM-DD HH24:MI:SSXFF')",
+        "Return": "BOOL",
+        "Condition": null,
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_TIMESTAMP_FORMAT": "DD-MON-RR HH.MI.SSXFF AM"
+                }
+            }
+        }
+    }
+]

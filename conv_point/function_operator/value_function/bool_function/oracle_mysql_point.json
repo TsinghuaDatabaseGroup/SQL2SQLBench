@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "NVL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+        "TgtPattern": "IFNULL(<expr1>, <expr2>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "NVL2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+        "TgtPattern": "IF(<expr1> IS NOT NULL, <expr2>, <expr3>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DECODE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DECODE(<value: ANY_VALUE>, {for <value_ele>, <res_ele> in <value_list: @gen_decode_values(<value>)>, <res_list: LIST[ANY_VALUE]> ADD ',': <value_ele>, <res_ele>} <default_value: ANY_VALUE>)",
+        "TgtPattern": "<case_when: @gen_case_when(<value>, <value_list>, <res_list>, <default_value>)>",
+        "Condition": null,
+        "Return": "ANY_VALUE"
+    }
+]

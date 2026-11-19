@@ -1,0 +1,86 @@
+[
+    {
+        "Desc": "INTERVAL_PG_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<interval_literal: @GenPGOriIntervalLiteral()>::interval",
+        "TgtPattern": "<interval: @GenPGMySQLInterval(<interval_literal>, 'PG')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_ISO8601_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<interval_literal: @GenISOIntervalLiteral()>::interval",
+        "TgtPattern": "<interval: @GenPGMySQLInterval(<interval_literal>, 'ISO8601')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_SQL_Standard_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<interval_literal: @GenPGSQLStandardLiteral()>::interval",
+        "TgtPattern": "<interval: @GenPGMySQLInterval(<interval_literal>, 'STANDARD')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_PG_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <interval_literal: @GenPGOriIntervalLiteral()>",
+        "TgtPattern": "<interval: @GenPGMySQLInterval(<interval_literal>, 'PG')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_ISO8601_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <interval_literal: @GenISOIntervalLiteral()>",
+        "TgtPattern": "<interval: @GenPGMySQLInterval(<interval_literal>, 'ISO8601')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_SQL_Standard_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <interval_literal: @GenPGSQLStandardLiteral()>",
+        "TgtPattern": "<interval: @GenPGMySQLInterval(<interval_literal>, 'STANDARD')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "E escape",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "E<string: STRING, LITERAL>",
+        "TgtPattern": "<string>",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

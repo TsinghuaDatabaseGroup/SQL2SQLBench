@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "CAST_NUMBER",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: ANY_VALUE, NUMBER> AS NUMBER(<precision: INT_LITERAL, [1, 15]>, <scale: INT_LITERAL, [2, 3]>))",
+        "TgtPattern": "CAST(<value> AS DECIMAL(<precision>, <scale>))",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

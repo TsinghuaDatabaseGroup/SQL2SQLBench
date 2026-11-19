@@ -1,0 +1,122 @@
+[
+    {
+        "Desc": "MOD",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: INT> % <mod: INT>",
+        "TgtPattern": "MOD(<value>, <mod>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "&",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> & <value2: NUMBER>",
+        "TgtPattern": "BITAND(<value1>, <value2>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "|",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> | <value2: NUMBER>",
+        "TgtPattern": "<value1> + <value2> - BITAND(<value1>, <value2>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "^",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> ^ <value2: NUMBER>",
+        "TgtPattern": "BITAND(<value1>, -(<value2>) - 1) + BITAND(-(<value1>) - 1, <value2>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "~",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "~ <value1: NUMBER>",
+        "TgtPattern": "-(<value1>) - 1",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "<<",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> \\<\\< <bits: INT, LITERAL, [1, 10]>",
+        "TgtPattern": "<value1> * POWER(2, <bits>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": ">>",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> \\>\\> <bits: INT, LITERAL, [1, 4]>",
+        "TgtPattern": "FLOOR(<value1> / POWER(2, <bits>))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DIV",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> DIV <value2: NUMBER>",
+        "TgtPattern": "<value1> /  NULLIF(<value2>, 0)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "<=>",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: ANY_VALUE> \\<=\\> <value2: ANY_VALUE>",
+        "TgtPattern": "((a = b) OR (a IS NULL AND b IS NULL))",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "REGEXP",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: STRING> REGEXP <pattern: @GenRegPattern(<value>)>",
+        "TgtPattern": "REGEXP_LIKE(<value>, <pattern>)",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

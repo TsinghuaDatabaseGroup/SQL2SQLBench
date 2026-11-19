@@ -1,0 +1,178 @@
+[
+    {
+        "Desc": "STRFTIME",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', <value: DATE>)",
+        "TgtPattern": "CAST(DATEPART(YEAR, <value>) AS VARCHAR(4))",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlite": "SELECT STRFTIME('%Y', '2024-08-15');",
+            "sqlserver": "SELECT CAST(DATEPART(YEAR, CAST('2024-08-15' AS DATE)) AS VARCHAR(4));"
+        }
+    },
+    {
+        "Desc": "STRFTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', 'now')",
+        "TgtPattern": "CAST(DATEPART(YEAR, GETUTCDATE()) AS VARCHAR(4))",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlite": "SELECT STRFTIME('%Y', 'now');",
+            "sqlserver": "SELECT CAST(DATEPART(YEAR, GETUTCDATE()) AS VARCHAR(4));"
+        }
+    },
+    {
+        "Desc": "STRFTIME3",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', <date: TIMESTAMP, STRICT>, '+3 hours')",
+        "TgtPattern": "CONVERT(VARCHAR(19), DATEADD(HOUR, 3, <date>), 120)",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlite": "SELECT STRFTIME('%Y-%m-%d %H:%M:%S', '2024-08-15 10:20:30', '+3 hours');",
+            "sqlserver": "SELECT CONVERT(VARCHAR(19), DATEADD(HOUR, 3, CAST('2024-08-15 10:20:30' AS DATETIME2)), 120);"
+        }
+    },
+    {
+        "Desc": "STRFTIME4",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', 'now', '+3 hours')",
+        "TgtPattern": "CONVERT(VARCHAR(19), DATEADD(HOUR, 3, GETUTCDATE()), 120)",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "sqlite": "SELECT STRFTIME('%Y-%m-%d %H:%M:%S', 'now', '+3 hours');",
+            "sqlserver": "SELECT CONVERT(VARCHAR(19), DATEADD(HOUR, 3, GETUTCDATE()), 120);"
+        }
+    },
+    {
+        "Desc": "FROM_UNIXTIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UNIXEPOCH(<value: TIMESTAMP>)",
+        "TgtPattern": "DATEDIFF(SECOND, '1970-01-01 00:00:00', <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlite": "SELECT UNIXEPOCH('1970-01-02 00:00:00');",
+            "sqlserver": "SELECT DATEDIFF(SECOND, CAST('1970-01-01 00:00:00' AS DATETIME2), CAST('1970-01-02 00:00:00' AS DATETIME2));"
+        }
+    },
+    {
+        "Desc": "FROM_UNIXTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<value: NUMBER>, 'unixepoch')",
+        "TgtPattern": "DATEADD(SECOND, <value>, CAST('1970-01-01 00:00:00' AS DATETIME2))",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlite": "SELECT DATETIME(86400, 'unixepoch');",
+            "sqlserver": "SELECT DATEADD(SECOND, 86400, CAST('1970-01-01 00:00:00' AS DATETIME2));"
+        }
+    },
+    {
+        "Desc": "DATE_ADD1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day', 'start of month')",
+        "TgtPattern": "DATEFROMPARTS(YEAR(DATEADD(DAY, 1, <date>)), MONTH(DATEADD(DAY, 1, <date>)), 1)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlite": "SELECT DATE('2024-08-31', '+1 day', 'start of month');",
+            "sqlserver": "SELECT DATEFROMPARTS(YEAR(DATEADD(DAY, 1, CAST('2024-08-31' AS DATE))), MONTH(DATEADD(DAY, 1, CAST('2024-08-31' AS DATE))), 1);"
+        }
+    },
+    {
+        "Desc": "DATE_ADD2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day')",
+        "TgtPattern": "CAST(DATEADD(DAY, 1, <date>) AS DATE)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "sqlite": "SELECT DATE('2024-08-15', '+1 day');",
+            "sqlserver": "SELECT CAST(DATEADD(DAY, 1, CAST('2024-08-15' AS DATE)) AS DATE);"
+        }
+    },
+    {
+        "Desc": "DATETIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>, '+1 day')",
+        "TgtPattern": "CAST(DATEADD(DAY, 1, <date>) AS DATETIME2)",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Demo": {
+            "sqlite": "SELECT DATETIME('2024-08-15 10:20:30', '+1 day');",
+            "sqlserver": "SELECT CAST(DATEADD(DAY, 1, CAST('2024-08-15 10:20:30' AS DATETIME2)) AS DATETIME2);"
+        }
+    },
+    {
+        "Desc": "DATETIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>)",
+        "TgtPattern": "CAST(<date> AS DATETIME2)",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Demo": {
+            "sqlite": "SELECT DATETIME('2024-08-15 10:20:30');",
+            "sqlserver": "SELECT CAST('2024-08-15 10:20:30' AS DATETIME2);"
+        }
+    },
+    {
+        "Desc": "JULIANDAY",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JULIANDAY(<date1: DATE>) - JULIANDAY(<date2: DATE>)",
+        "TgtPattern": "DATEDIFF(DAY, <date2>, <date1>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "sqlite": "SELECT JULIANDAY('2024-08-15') - JULIANDAY('2024-08-10');",
+            "sqlserver": "SELECT DATEDIFF(DAY, CAST('2024-08-10' AS DATE), CAST('2024-08-15' AS DATE));"
+        }
+    }
+]

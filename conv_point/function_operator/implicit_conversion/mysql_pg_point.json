@@ -1,0 +1,110 @@
+[
+    {
+        "Desc": "BOOL_TO_INT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUM(<bool: BOOL>)",
+        "TgtPattern": "SUM(CASE WHEN <bool> THEN 1 ELSE 0 END)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DATE LIKE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date_value: DATE> LIKE <str: @GenDateLikePat(<date_value>)>",
+        "TgtPattern": "TO_CHAR(<date_value>, 'YYYY-MM-DD') LIKE <str>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "STRING MINUS STRING",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "FUNCTION",
+        "SrcPattern": "<num1: STRING, NUMBER> - <num2: STRING, NUMBER>",
+        "TgtPattern": "CAST(<num1> AS INT) - CAST(<num2> AS INT)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TEXT_TO_NUM_1",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "FUNCTION",
+        "SrcPattern": "SUM(<value: STRING, NUMBER>)",
+        "TgtPattern": "SUM(CAST (<value> AS DOUBLE PRECISION))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TEXT_TO_NUM_AVG",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "FUNCTION",
+        "SrcPattern": "AVG(<value: STRING, NUMBER>)",
+        "TgtPattern": "AVG(CAST (<value> AS DOUBLE PRECISION))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+       "Desc": "TEXT_TO_NUM_2",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUM(CASE WHEN <cond: BOOL> THEN <value1: STRING, NUMBER> ELSE <value2: NUMBER> END)",
+        "TgtPattern": "SUM(CASE WHEN <cond> THEN CAST(<value1> AS DOUBLE PRECISION) ELSE <value2> END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DATE_TO_STR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTR(<date: DATE>, <start: INT, LITERAL, [1,2]>, <end: INT, LITERAL, [3,4]>)",
+        "TgtPattern": "SUBSTRING(TO_CHAR(<date>, 'YYYY-MM-DD'), <start>, <end>)",
+        "Return": "STRING",
+        "Condition": null
+    },
+    {
+        "Desc": "TEXT_TO_NUM_3",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: STRING, NUMBER> / <value2: NUMBER>",
+        "TgtPattern": "CAST(<value1> AS DOUBLE PRECISION) / NULLIF(<value2>, 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TEXT_TO_NUM_4",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: STRING, NUMBER> <op: OPTION['=', '<', '>', '<=', '>=']> <value2: INT, LITERAL, [50, 500]>",
+        "TgtPattern": "CAST(<value1> AS DOUBLE PRECISION) <op> <value2>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

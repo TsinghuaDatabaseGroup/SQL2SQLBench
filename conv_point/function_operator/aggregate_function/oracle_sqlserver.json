@@ -1,0 +1,86 @@
+[
+    {
+        "Desc": "COVAR_POP",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COVAR_POP(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x>*<y> END)\n  -\n  SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> END)\n  *\n  SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END)\n  /\n  NULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)\n)\n/\nNULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_AVGY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGY(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_AVGX",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGX(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_COUNT",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_COUNT(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_SXX",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXX(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "CAST(SUM(IIF(<x> + <y> IS NOT NULL, <x> * <x>, 0)) - POWER(SUM(IIF(<x> + <y> IS NOT NULL, <x>, 0)), 2) AS FLOAT) / COUNT(IIF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_SYY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SYY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "CAST(SUM(IIF(<x> + <y> IS NOT NULL, <y> * <y>, 0)) - POWER(SUM(IIF(<x> + <y> IS NOT NULL, <y>, 0)), 2) AS FLOAT) / COUNT(IIF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_SXY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "CAST(SUM(IIF(<x> + <y> IS NOT NULL, <x> * <y>, 0)) - SUM(IIF(<x> + <y> IS NOT NULL, <y>, 0)) * SUM(IIF(<x> + <y> IS NOT NULL, <x>, 0)) AS FLOAT) / COUNT(IIF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

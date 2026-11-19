@@ -1,0 +1,98 @@
+[
+    {
+        "Desc": "SUBSTR_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTR(<value: STRING>, <start: INT, LITERAL, [1, 5], [-5, -1]> , <len: INT, LITERAL, [1, 10]>)",
+        "TgtPattern": "SUBSTRING( <value> FROM <start> FOR <len>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "SUBSTR_2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTR(<value: STRING>, 0 , <len: INT, LITERAL, [1,10]>)",
+        "TgtPattern": "SUBSTRING( <value> FROM 1 FOR <len>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "INSTR2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, 1, 1)>)",
+        "TgtPattern": "POSITION(<sub_str> IN <str>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "INSTR3",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, <start_pos: INT, LITERAL, [1,3]>, 1)>, <start_pos>)",
+        "TgtPattern": "POSITION(<sub_str> IN SUBSTRING(<str> FROM <start_pos>)) + <start_pos> - 1",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "INSTR4",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, <start_pos: INT, LITERAL, [1,3]>, 2)>, <start_pos>, 2)",
+        "TgtPattern": "POSITION(<sub_str> IN SUBSTRING(<str> FROM (POSITION(<sub_str> IN SUBSTRING(<str> FROM <start_pos>)) + <start_pos>))) + (POSITION(<sub_str> IN SUBSTRING(<str> FROM <start_pos>)) + <start_pos> - 1))",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "LENGTHB",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LENGTHB(<str: NVARCHAR>)",
+        "TgtPattern": "OCTET_LENGTH(<str>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "REPLACE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REPLACE(<string: STRING>, <substr: STRING>)",
+        "TgtPattern": " REPLACE(<string>, <substr>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGEXP_LIKE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGEXP_LIKE(<str: STRING>, <pattern_str: @GenRegPattern(<str>)>)",
+        "TgtPattern": "<str> ~ <pattern_str>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

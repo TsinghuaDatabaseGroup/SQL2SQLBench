@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "USER_R",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "USER",
+        "TgtPattern": "\"USER[",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "END_R",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "END",
+        "TgtPattern": "\"END[",
+        "Condition": null,
+        "Return": null
+    }
+]

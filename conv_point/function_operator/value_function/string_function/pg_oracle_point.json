@@ -1,0 +1,158 @@
+[
+    {
+        "Desc": "SUBSTRING_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTRING( <value: STRING> FROM <start: INT, LITERAL, [1, 5], [-5, -1]> FOR <len: INT, LITERAL, [1, 50]>)",
+        "TgtPattern": "SUBSTR(<value>,  <start>, <len>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "SUBSTRING_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTRING( <value: STRING> FROM 0 FOR <len: INT, LITERAL>)",
+        "TgtPattern": "SUBSTR(<value>, 1, <len> - 1 )",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "CONCAT_WS",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CONCAT_WS(<seperator: OPTION['\\', \\'', '\\';\\'', '\\' \\'', '\\' || \\'']>, <first_str: STRING>{for <str> in <str_list: LIST[STRING]> ADD '':, <str>})",
+        "TgtPattern": "<first_str> {for <str> in <str_list> ADD ' ': || <seperator> || <str>}",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TRIM_BOTH_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRIM(<trim_str: @GenTrim(<str: STRING>, 'BOTH')> FROM <str>)",
+        "TgtPattern": "REGEXP_REPLACE(REGEXP_REPLACE(<str>, <ltrim_reg: @LtrimReg(<trim_str>)>, ''), <rtrim_reg: @RtrimReg(<trim_str>)>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TRIM_BOTH_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRIM(BOTH <trim_str: @GenTrim(<str: STRING>, 'BOTH')> FROM <str>)",
+        "TgtPattern": "REGEXP_REPLACE(REGEXP_REPLACE(<str>, <ltrim_reg: @LtrimReg(<trim_str>)>, ''), <rtrim_reg: @RtrimReg(<trim_str>)>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TRIM_LEFT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRIM(LEADING <trim_str: @GenTrim(<str: STRING>, 'LEFT')> FROM <str>)",
+        "TgtPattern": "REGEXP_REPLACE(<str>, <ltrim_reg: @LtrimReg(<trim_str>)>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TRIM_RIGHT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRIM(TRAILING <trim_str: @GenTrim(<str: STRING>, 'RIGHT')> FROM <str>)",
+        "TgtPattern": "REGEXP_REPLACE(<str>, <rtrim_reg: @RtrimReg(<trim_str>)>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "CHAR_LENGTH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CHAR_LENGTH(<value: STRING>)",
+        "TgtPattern": "LENGTH(<value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "CHARACTER_LENGTH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CHARACTER_LENGTH(<value: STRING>)",
+        "TgtPattern": "LENGTH(<value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "OCTE_LENGTH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "OCTET_LENGTH(<value: STRING>)",
+        "TgtPattern": "LENGTHB(<value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "LEFT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LEFT(<str: STRING>, <pos: INT, LITERAL, [3,5]>)",
+        "TgtPattern": "SUBSTR(<str>, 1, <pos>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "RIGHT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "RIGHT(<str: STRING>, <pos: INT, LITERAL, [3,5]>)",
+        "TgtPattern": "SUBSTR(<str>, -(<pos>))",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "STRPOS",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRPOS(<str: STRING>, <substr: @GenSubString(<str>, 1, 1)>)",
+        "TgtPattern": "INSTR(<str>, <substr>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

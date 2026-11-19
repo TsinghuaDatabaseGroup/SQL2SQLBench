@@ -1,0 +1,262 @@
+[
+    {
+        "Desc": "ROUND_YEAR",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ROUND(<value:DATE>, '<options:OPTION['YEAR', 'YYYY']>')",
+        "TgtPattern": "DATEADD(year, IFF(MONTH(<value>) >= 7, 1, 0), DATE_TRUNC('year', <value>))",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "ROUND_MONTH",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ROUND(<value:DATE>, '<options:OPTION['MONTH', 'MON']>')",
+        "TgtPattern": "CASE\n    WHEN <value> IS NULL THEN NULL\n    WHEN DAY(<value>) >= 16\n      THEN DATE_TRUNC('month', DATEADD('month', 1, <value>))\n    ELSE DATE_TRUNC('month', <value>)\n  END",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "ROUND_DAY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ROUND(<value:TIMESTAMP>, '<options:OPTION['DDD', 'DD']>')",
+        "TgtPattern": "CASE WHEN HOUR(<value>) \\>= 12 THEN DATE(<value>) + INTERVAL '1 DAY' ELSE DATE(<value>) END",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TRUNC_DEFAULT",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value:TIMESTAMP>)",
+        "TgtPattern": "TRUNC(<value>, 'day')",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TRUNC_IW",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value:TIMESTAMP>, 'IW')",
+        "TgtPattern": "TRUNC(<value>, 'WEEK')",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TRUNC_DAY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value:TIMESTAMP>, 'DAY')",
+        "TgtPattern": "TRUNC(<value>, 'WEEK') - 1",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TO_DSINTERVAL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DSINTERVAL('<sign:OPTION['+', '-', '']>P<days:INT_LITERAL,[0, 10]>D')",
+        "TgtPattern": "<sign>INTERVAL '<days> day'",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "TO_YMINTERVAL_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_YMINTERVAL('P<sign:OPTION['+', '-', '']><years:INT_LITERAL,[0,10]>Y')",
+        "TgtPattern": "<sign>INTERVAL '<years> year'",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "NUMTOYMINTERVAL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NUMTOYMINTERVAL(<value:INT,LITERAL,[1, 100]>, '<unit: OPTION['year', 'month']>')",
+        "TgtPattern": "INTERVAL '<value> <unit>'",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "TO_CHAR_PARAM_AMER",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<date_value:DATE>)",
+        "TgtPattern": "UPPER(TO_CHAR(<date_value>, 'DD-MON-YY'))",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_LANGUAGE": "AMERICAN"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_CHAR_PARAM_GERMAN",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<date_value:DATE>)",
+        "TgtPattern": "TO_CHAR(<date_value>, CONCAT(DAY(<date_value>), '-', DECODE(MONTH(<date_value>),  1, 'JAN',  2, 'FEB',  3, 'MRZ',  4, 'APR',  5, 'MAI',  6, 'JUN',  7, 'JUL',  8, 'AUG',  9, 'SEP',  10,'OKT',  11,'NOV',  12,'DEZ') , '-YY'))",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_LANGUAGE": "GERMAN"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_TIMESTAMP_R1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<timestamp_str: @GenTimestampOracleStr('DD-MON-RR HH.MI.SSXFF AM')>)",
+        "TgtPattern": "TIMESTAMP <mysql_timestamp: @TranToStandardTimeFormat(<timestamp_str>, 'DD-MON-RR HH.MI.SSXFF AM')>",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_TIMESTAMP_FORMAT": "DD-MON-RR HH.MI.SSXFF AM"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_TIMESTAMP_R2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<timestamp_str: @GenTimestampOracleStr('Mon dd, YYYY, HH24:MI:SS')>)",
+        "TgtPattern": "TIMESTAMP <mysql_timestamp: @TranToStandardTimeFormat(<timestamp_str>, 'Mon dd, YYYY, HH24:MI:SS')>",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_TIMESTAMP_FORMAT": "Mon dd, YYYY, HH24:MI:SS"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_DATE_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DATE(<date_str: @GenTimestampOracleStr('DD-MON-RR')>)",
+        "TgtPattern": "DATE(<mysql_date: @TranToStandardTimeFormat(<date_str>, 'DD-MON-RR')>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "DD-MON-RR"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_DATE_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DATE(<timestamp_str: @GenTimestampOracleStr('Mon dd, YYYY')>)",
+        "TgtPattern": "DATE(<mysql_date: @TranToStandardTimeFormat(<timestamp_str>, 'Mon dd, YYYY')>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "Mon dd, YYYY"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "CAST_DATE_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<date_str: @GenTimestampOracleStr('DD-MON-RR')> AS DATE)",
+        "TgtPattern": "DATE(<mysql_date: @TranToStandardTimeFormat(<date_str>, 'DD-MON-RR')>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "DD-MON-RR"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "CAST_DATE_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<timestamp_str: @GenTimestampOracleStr('Mon dd, YYYY')> AS DATE)",
+        "TgtPattern": "DATE(<mysql_date: @TranToStandardTimeFormat(<timestamp_str>, 'Mon dd, YYYY')>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "Mon dd, YYYY"
+                }
+            }
+        }
+    }
+]

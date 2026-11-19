@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "XMLEXISTS",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "XPATH_EXISTS(<xpath: @GenXmlPath(<xml: XML>)>, <xml>)",
+        "TgtPattern": "XMLEXISTS(<xpath> PASSING <xml>)",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

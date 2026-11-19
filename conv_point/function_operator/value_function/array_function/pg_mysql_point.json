@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "ARRAY CONCATENATE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<ary1: ARRAY> || <ary2: ARRAY>",
+        "TgtPattern": "JSON_MERGE_PRESERVE(<ary1>, <ary2>)",
+        "Condition": null,
+        "Return": "ARRAY"
+    },
+    {
+        "Desc": "ARRAY_LENGTH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ARRAY_LENGTH(<ary: ARRAY>, 1)",
+        "TgtPattern": "JSON_LENGTH(<ary>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "STR_ARY_0",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str_ary: ARRAY[STRING]>[0]",
+        "TgtPattern": "JSON_UNQUOTE(JSON_EXTRACT(<str_ary>, '$[0]'))",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

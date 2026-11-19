@@ -1,0 +1,218 @@
+[
+    {
+        "Desc": "FILTER_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUM(<value: NUMBER>) FILTER(WHERE <condition: BOOL>)",
+        "TgtPattern": "SUM(CASE WHEN <condition> THEN <value> ELSE 0 END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "FILTER_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COUNT(*) FILTER(WHERE <condition: BOOL>)",
+        "TgtPattern": "SUM(CASE WHEN <condition> THEN 1 ELSE 0 END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CORR",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CORR(<value1: NUMBER>, <value2: NUMBER>)",
+        "TgtPattern": "(SUM(<value1> * <value2>) - SUM(<value1>) * SUM(<value2>) / COUNT(*)) / (SQRT(SUM(<value1> * <value1>) - SUM(<value1>) * SUM(<value1>) / COUNT(*)) * SQRT(SUM(<value2> * <value2>) - SUM(<value2>) * SUM(<value2>) / COUNT(*)))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GROUP_CONCAT NO DISTINCT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRING_AGG(<value: STRING, COLUMN>, <sep: OPTION['\\', \\'', '\\';\\'']> ORDER BY <value> <order_rule: OPTION['ASC NULLS FIRST': 'ASC', 'DESC NULLS LAST': 'DESC']>)",
+        "TgtPattern": "GROUP_CONCAT(<value> ORDER BY <value> <order_rule> SEPARATOR <sep>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "GROUP_CONCAT DISTINCT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRING_AGG(DISTINCT <value: STRING, COLUMN>, <sep: OPTION['\\', \\'', '\\';\\'']> ORDER BY <value> <order_rule: OPTION['ASC NULLS FIRST': 'ASC', 'DESC NULLS LAST': 'DESC']>)",
+        "TgtPattern": "GROUP_CONCAT(DISTINCT <value> ORDER BY <value> <order_rule> SEPARATOR <sep>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "COVAR_POP",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COVAR_POP(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(<x> * <y>) - SUM(<x>) * SUM(<y>) / COUNT(*)) / COUNT(*)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_SLOPE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SLOPE(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(IF(<x> + <y> IS NOT NULL, <x> * <y>, 0)) - COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL)) * AVG(IF(<x> + <y> IS NOT NULL, <x>, NULL)) * AVG(IF(<x> + <y> IS NOT NULL, <y>, NULL))) / (SUM(IF(<x> + <y> IS NOT NULL, <y> * <y>, 0)) - COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL)) * POW(AVG(IF(<x> + <y> IS NOT NULL, <y>, NULL)), 2))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_AVGY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGY(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_AVGX",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGX(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_COUNT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_COUNT(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_SXX",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXX(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <x> * <x>, 0)) - POWER(SUM(IF(<x> + <y> IS NOT NULL, <x>, 0)), 2) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_SYY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SYY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <y> * <y>, 0)) - POWER(SUM(IF(<x> + <y> IS NOT NULL, <y>, 0)), 2) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REGR_SXY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <x> * <y>, 0)) - SUM(IF(<x> + <y> IS NOT NULL, <y>, 0)) * SUM(IF(<x> + <y> IS NOT NULL, <x>, 0)) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "JSON_ARRAYAGG",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JSON_AGG(<value: ANY_VALUE>) OVER(ORDER BY <value> <order_rule: OPTION['ASC NULLS FIRST': 'ASC', 'DESC NULLS LAST': 'DESC']>)",
+        "TgtPattern": "JSON_ARRAYAGG(<value>) OVER(ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "JSON"
+    },
+    {
+        "Desc": "JSON_OBJECTAGG",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JSON_OBJECT_AGG(<key: STRING>, <value: ANY_VALUE>) OVER(ORDER BY <value> <order_rule: OPTION['ASC NULLS FIRST': 'ASC', 'DESC NULLS LAST': 'DESC']>)",
+        "TgtPattern": "JSON_OBJECTAGG(<key>, <value>) OVER(ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "JSON"
+    },
+    {
+        "Desc": "EVERY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EVERY(<value: BOOL>)",
+        "TgtPattern": "CASE WHEN MIN(value) = 0 THEN 0 WHEN MIN(value) = 1 THEN 1\n    ELSE NULL\nEND",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "BOOL_AND",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "BOOL_AND(<value: BOOL>)",
+        "TgtPattern": "CASE WHEN MIN(value) = 0 THEN 0 WHEN MIN(value) = 1 THEN 1 ELSE NULL END",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "BOOL_OR",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "BOOL_OR(<value: BOOL>)",
+        "TgtPattern": "CASE WHEN MAX(value) = 0 THEN 0 WHEN MAX(value) = 1 THEN 1 ELSE NULL END",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

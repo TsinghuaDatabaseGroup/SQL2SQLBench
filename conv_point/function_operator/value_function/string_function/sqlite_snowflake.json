@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "LIKE",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LIKE(<str: STRING>, <pattern: @GenIlikePattern(<str>)>)",
+        "TgtPattern": "<str> LIKE <pattern>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

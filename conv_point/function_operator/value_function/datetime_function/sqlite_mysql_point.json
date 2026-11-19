@@ -1,0 +1,134 @@
+[
+    {
+        "Desc": "STRFTIME",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', <value: DATE>)",
+        "TgtPattern": "DATE_FORMAT(<value>, '%Y')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', 'now')",
+        "TgtPattern": "DATE_FORMAT(CURRENT_DATE(), '%Y')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME3",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', <date: TIMESTAMP, STRICT>, '+3 hours')",
+        "TgtPattern": "DATE_FORMAT(DATE_ADD(<date>, INTERVAL 3 HOUR), '%Y-%m-%d %H:%i:%s')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME4",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', 'now', '+3 hours')",
+        "TgtPattern": "DATE_FORMAT(DATE_ADD(CURRENT_DATE(), INTERVAL 3 HOUR), '%Y-%m-%d %H:%i:%s')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "FROM_UNIXTIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UNIXEPOCH(<value: TIMESTAMP>)",
+        "TgtPattern": "UNIX_TIMESTAMP(<value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "FROM_UNIXTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<value: NUMBER>, 'unixepoch')",
+        "TgtPattern": "FROM_UNIXTIME(<value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATE_ADD1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day', 'start of month')",
+        "TgtPattern": "DATE_FORMAT(DATE_ADD(<date>, INTERVAL 1 DAY), '%Y-%m-01')",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATE_ADD2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day')",
+        "TgtPattern": "DATE_ADD(<date>, INTERVAL 1 DAY)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATETIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>, '+1 day')",
+        "TgtPattern": "CAST(DATE_ADD(<date>, INTERVAL 1 DAY) AS DATETIME)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATETIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>)",
+        "TgtPattern": "CAST(<date> AS DATETIME)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "JULIANDAY",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JULIANDAY(<date1: DATE>) - JULIANDAY(<date2: DATE>)",
+        "TgtPattern": "TIMESTAMPDIFF(DAY, <date2>, <date1>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

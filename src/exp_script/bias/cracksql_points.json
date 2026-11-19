@@ -1,0 +1,1044 @@
+{
+    "mysql_pg": [
+        {
+            "point": {
+                "Desc": "ADDDATEcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ADDDATE(<date_value: DATE>, <interval_value: INTERVAL>)",
+                "TgtPattern": "<date_value> + <interval_value>",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t1.q1 , ADDDATE(t2.dob, INTERVAL '1' MONTH) AS ADDDATECOL FROM qualifying AS t1 INNER JOIN drivers AS t2 ON t2.driverid = t1.driverid WHERE t1.raceid = 354 AND t2.forename = 'Bruno' AND t2.surname = 'Senna'",
+                "pg": "SELECT t1.q1 , t2.dob + INTERVAL '1' MONTH AS adddatecol FROM qualifying AS t1 INNER JOIN drivers AS t2 ON t2.driverid = t1.driverid WHERE t1.raceid = 354 AND t2.forename = 'Bruno' AND t2.surname = 'Senna'",
+                "points": [
+                    {
+                        "point": "ADDDATE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DATABASEcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DATABASE()",
+                "TgtPattern": "current_database()",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.atom_id , t2.atom_id2 , DATABASE() AS DATABASECOL FROM atom AS t1 INNER JOIN connected AS t2 ON t1.atom_id = t2.atom_id INNER JOIN bond AS t3 ON t2.bond_id = t3.bond_id WHERE t3.bond_type = '#' AND t3.molecule_id = 'TR041'",
+                "pg": "SELECT t2.atom_id , t2.atom_id2 , current_database( ) AS databasecol FROM atom AS t1 INNER JOIN connected AS t2 ON t1.atom_id = t2.atom_id INNER JOIN bond AS t3 ON t2.bond_id = t3.bond_id WHERE t3.bond_type = '#' AND t3.molecule_id = 'TR041'",
+                "points": [
+                    {
+                        "point": "DATABASE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DATE_SUBcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DATE_SUB(<date: DATE>, <interval: INTERVAL>)",
+                "TgtPattern": "<date> - <interval>",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT e.first_name , e.last_name , e.job_id , jh.department_id , DATE_SUB(e.hire_date, INTERVAL '3' DAY) AS COL_ALIAS FROM employees e INNER JOIN job_history jh ON e.employee_id = jh.employee_id WHERE jh.department_id BETWEEN 50 AND 100 AND e.hire_date < DATE '2020-01-01' ;",
+                "pg": "SELECT e.first_name , e.last_name , e.job_id , jh.department_id , e.hire_date - INTERVAL '3' DAY AS col_alias FROM employees e INNER JOIN job_history jh ON e.employee_id = jh.employee_id WHERE jh.department_id BETWEEN 50 AND 100 AND e.hire_date < DATE '2020-01-01' ;",
+                "points": [
+                    {
+                        "point": "DATE_SUB",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DATEDIFFcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DATEDIFF(<date1: DATE>, <date2: DATE>)",
+                "TgtPattern": "(<date1> - <date2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT CASE WHEN t2.closeddate IS NULL THEN 'NOT well-finished' ELSE 'well-finished' END AS resylt , DATEDIFF(t2.communityowneddate, t2.closeddate) AS DATEDIFFCOL FROM comments AS t1 INNER JOIN posts AS t2 ON t1.postid = t2.id WHERE t1.userid = 23853 AND t1.creationdate = '2013-07-12 09:08:18.0'",
+                "pg": "SELECT CASE WHEN t2.closeddate IS NULL THEN 'NOT well-finished' ELSE 'well-finished' END AS resylt , ( t2.communityowneddate - t2.closeddate ) AS datediffcol FROM comments AS t1 INNER JOIN posts AS t2 ON t1.postid = t2.id WHERE t1.userid = 23853 AND t1.creationdate = '2013-07-12 09:08:18.0'",
+                "points": [
+                    {
+                        "point": "DATEDIFF",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAY(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DAY FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DAY(t1.birth_date) AS DAYCOL FROM client AS t1 INNER JOIN district AS t2 ON t1.district_id = t2.district_id WHERE t1.gender = 'M' AND t2.a3 = 'north Bohemia' AND t2.a11 > 8000",
+                "pg": "SELECT EXTRACT( DAY FROM t1.birth_date ) AS daycol FROM client AS t1 INNER JOIN district AS t2 ON t1.district_id = t2.district_id WHERE t1.gender = 'M' AND t2.a3 = 'north Bohemia' AND t2.a11 > 8000",
+                "points": [
+                    {
+                        "point": "DAY",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFMONTHcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFMONTH(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DAY FROM <date_value>)::INT",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT EXTRACT( YEAR FROM t2.date ) - EXTRACT( YEAR FROM t1.birthday ) AS age_difference , t1.diagnosis , DAYOFMONTH(t1.description) AS DAYOFMONTHCOL FROM patient AS t1 INNER JOIN laboratory AS t2 ON t1.id = t2.id WHERE t2.hgb IS NOT NULL",
+                "pg": "SELECT EXTRACT( YEAR FROM t2.date ) - EXTRACT( YEAR FROM t1.birthday ) AS age_difference , t1.diagnosis , EXTRACT( DAY FROM t1.description ) :: INT AS dayofmonthcol FROM patient AS t1 INNER JOIN laboratory AS t2 ON t1.id = t2.id WHERE t2.hgb IS NOT NULL",
+                "points": [
+                    {
+                        "point": "DAYOFMONTH",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFWEEKcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFWEEK(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DOW FROM <date_value>) + 1",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.number , DAYOFWEEK(t2.dob) AS DAYOFWEEKCOL FROM qualifying AS t1 INNER JOIN drivers AS t2 ON t2.driverid = t1.driverid WHERE t1.raceid = 903 AND t1.q3 LIKE '1:54%'",
+                "pg": "SELECT t2.number , EXTRACT( DOW FROM t2.dob ) + 1 AS dayofweekcol FROM qualifying AS t1 INNER JOIN drivers AS t2 ON t2.driverid = t1.driverid WHERE t1.raceid = 903 AND t1.q3 LIKE '1:54%'",
+                "points": [
+                    {
+                        "point": "DAYOFWEEK",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFYEARcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFYEAR(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DOY FROM <date_value>)::INT",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.language , DAYOFYEAR(t1.releasedate) AS DAYOFYEARCOL FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "pg": "SELECT t2.language , EXTRACT( DOY FROM t1.releasedate ) :: INT AS dayofyearcol FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "points": [
+                    {
+                        "point": "DAYOFYEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "HOURcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "HOUR(<datetime_value: TIMESTAMP>)",
+                "TgtPattern": "EXTRACT(HOUR FROM <datetime_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT HOUR(t2.lasteditdate) AS HOURCOL FROM comments AS t1 INNER JOIN posts AS t2 ON t1.postid = t2.id WHERE t2.commentcount = 1 AND t2.score = 0",
+                "pg": "SELECT EXTRACT( HOUR FROM t2.lasteditdate ) AS hourcol FROM comments AS t1 INNER JOIN posts AS t2 ON t1.postid = t2.id WHERE t2.commentcount = 1 AND t2.score = 0",
+                "points": [
+                    {
+                        "point": "HOUR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "IFcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "IF(<condition: BOOL>, <value_if_true: ANY_VALUE>, <value_if_false: ANY_VALUE>)",
+                "TgtPattern": "CASE WHEN <condition> THEN <value_if_true> ELSE <value_if_false> END",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DISTINCT t2.molecule_id , IF(t1.bond_id LIKE '%TR041_7_10%', t1.bond_type, t2.label) AS IFCOL FROM bond AS t1 INNER JOIN molecule AS t2 ON t1.molecule_id = t2.molecule_id WHERE t1.bond_type = '#' AND t2.label = '+'",
+                "pg": "SELECT DISTINCT t2.molecule_id , CASE WHEN t1.bond_id LIKE '%TR041_7_10%' THEN t1.bond_type ELSE t2.label END AS ifcol FROM bond AS t1 INNER JOIN molecule AS t2 ON t1.molecule_id = t2.molecule_id WHERE t1.bond_type = '#' AND t2.label = '+'",
+                "points": [
+                    {
+                        "point": "IF",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "IFNULLcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "IFNULL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "COALESCE(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.bond_id , IFNULL(t2.atom_id2, t2.bond_id) AS IFNULLCOL FROM atom AS t1 INNER JOIN connected AS t2 ON t1.atom_id = t2.atom_id WHERE t2.bond_id IN ( SELECT t3.bond_id FROM connected AS t3 INNER JOIN atom AS t4 ON t3.atom_id = t4.atom_id WHERE t4.element = 'p' ) AND t1.element = 'n'",
+                "pg": "SELECT t2.bond_id , COALESCE( t2.atom_id2 , t2.bond_id ) AS ifnullcol FROM atom AS t1 INNER JOIN connected AS t2 ON t1.atom_id = t2.atom_id WHERE t2.bond_id IN ( SELECT t3.bond_id FROM connected AS t3 INNER JOIN atom AS t4 ON t3.atom_id = t4.atom_id WHERE t4.element = 'p' ) AND t1.element = 'n'",
+                "points": [
+                    {
+                        "point": "IFNULL",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "INET_NTOAcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "INET_NTOA(<num: INT>)",
+                "TgtPattern": "host(inet '0.0.0.0' + <num>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT INET_NTOA(t1.height_cm) AS COL_ALIAS FROM superhero AS t1 INNER JOIN publisher AS t2 ON t1.publisher_id = t2.id",
+                "pg": "SELECT host( inet '0.0.0.0' + t1.height_cm ) AS col_alias FROM superhero AS t1 INNER JOIN publisher AS t2 ON t1.publisher_id = t2.id",
+                "points": [
+                    {
+                        "point": "INET_NTOA",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "ISNULLcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ISNULL(<value: ANY_VALUE>)",
+                "TgtPattern": "(<value> IS NULL)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT ISNULL(t2.a2) AS ISNULLCOL FROM client AS t1 INNER JOIN district AS t2 ON t1.district_id = t2.district_id WHERE t1.gender = 'F' AND t2.a11 BETWEEN 6000 AND 10000",
+                "pg": "SELECT ( t2.a2 IS NULL ) AS isnullcol FROM client AS t1 INNER JOIN district AS t2 ON t1.district_id = t2.district_id WHERE t1.gender = 'F' AND t2.a11 BETWEEN 6000 AND 10000",
+                "points": [
+                    {
+                        "point": "ISNULL",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "MINUTEcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "MINUTE(<datetime: TIMESTAMP>)",
+                "TgtPattern": "EXTRACT(MINUTE FROM <datetime>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , MINUTE(ho.order_date) AS MINUTECOL FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000",
+                "pg": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , EXTRACT( MINUTE FROM ho.order_date ) AS minutecol FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000",
+                "points": [
+                    {
+                        "point": "MINUTE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "MONTHcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "MONTH(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(MONTH FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.language , MONTH(t1.releasedate) AS MONTHCOL FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "pg": "SELECT t2.language , EXTRACT( MONTH FROM t1.releasedate ) AS monthcol FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "points": [
+                    {
+                        "point": "MONTH",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "QUARTERcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "QUARTER(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(QUARTER FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT EXTRACT( YEAR FROM t2.date ) - EXTRACT( YEAR FROM t1.birthday ) AS age_difference , t1.diagnosis , QUARTER(t1.description) AS QUARTERCOL FROM patient AS t1 INNER JOIN laboratory AS t2 ON t1.id = t2.id WHERE t2.hgb IS NOT NULL",
+                "pg": "SELECT EXTRACT( YEAR FROM t2.date ) - EXTRACT( YEAR FROM t1.birthday ) AS age_difference , t1.diagnosis , EXTRACT( QUARTER FROM t1.description ) AS quartercol FROM patient AS t1 INNER JOIN laboratory AS t2 ON t1.id = t2.id WHERE t2.hgb IS NOT NULL",
+                "points": [
+                    {
+                        "point": "QUARTER",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "SPACEcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "SPACE(<count: INT>)",
+                "TgtPattern": "REPEAT(' ', <count>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t1.superhero_name , SPACE(t1.height_cm) AS SPACECOL FROM superhero AS t1 INNER JOIN hero_power AS t2 ON t1.id = t2.hero_id INNER JOIN superpower AS t3 ON t2.power_id = t3.id WHERE t3.power_name = 'Death Touch'",
+                "pg": "SELECT t1.superhero_name , REPEAT( ' ' , t1.height_cm ) AS spacecol FROM superhero AS t1 INNER JOIN hero_power AS t2 ON t1.id = t2.hero_id INNER JOIN superpower AS t3 ON t2.power_id = t3.id WHERE t3.power_name = 'Death Touch'",
+                "points": [
+                    {
+                        "point": "SPACE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "UNIX_TIMESTAMPcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "UNIX_TIMESTAMP(<timestamp: TIMESTAMP>)",
+                "TgtPattern": "EXTRACT(EPOCH FROM <timestamp>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t1.q1 , UNIX_TIMESTAMP(t2.dob) AS COL_ALIAS FROM qualifying AS t1 INNER JOIN drivers AS t2 ON t2.driverid = t1.driverid WHERE t1.raceid = 354 AND t2.forename = 'Bruno' AND t2.surname = 'Senna'",
+                "pg": "SELECT t1.q1 , EXTRACT( EPOCH FROM t2.dob ) AS col_alias FROM qualifying AS t1 INNER JOIN drivers AS t2 ON t2.driverid = t1.driverid WHERE t1.raceid = 354 AND t2.forename = 'Bruno' AND t2.surname = 'Senna'",
+                "points": [
+                    {
+                        "point": "UNIX_TIMESTAMP",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "WEEKOFYEARcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "WEEKOFYEAR(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(WEEK FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT e.first_name , e.last_name , e.job_id , jh.department_id , WEEKOFYEAR(e.hire_date) AS WEEKOFYEARCOL FROM employees e INNER JOIN job_history jh ON e.employee_id = jh.employee_id WHERE jh.department_id BETWEEN 50 AND 100 AND e.hire_date < DATE '2020-01-01' ;",
+                "pg": "SELECT e.first_name , e.last_name , e.job_id , jh.department_id , EXTRACT( WEEK FROM e.hire_date ) AS weekofyearcol FROM employees e INNER JOIN job_history jh ON e.employee_id = jh.employee_id WHERE jh.department_id BETWEEN 50 AND 100 AND e.hire_date < DATE '2020-01-01' ;",
+                "points": [
+                    {
+                        "point": "WEEKOFYEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "YEARcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "YEAR(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(YEAR FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.language , YEAR(t1.releasedate) AS YEARCOL FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.block = 'Ravnica' AND t1.basesetsize = 180",
+                "pg": "SELECT t2.language , EXTRACT( YEAR FROM t1.releasedate ) AS yearcol FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.block = 'Ravnica' AND t1.basesetsize = 180",
+                "points": [
+                    {
+                        "point": "YEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ],
+    "mysql_oracle": [
+        {
+            "point": {
+                "Desc": "ADDDATEcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ADDDATE(<date: DATE>, <interval: INTERVAL>)",
+                "TgtPattern": "<date> + <interval>",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t1.name , ADDDATE(t3.dob, INTERVAL '2' DAY) ADDDATECOL FROM races t1 INNER JOIN driverstandings t2 ON t2.raceid = t1.raceid INNER JOIN drivers t3 ON t3.driverid = t2.driverid WHERE t3.forename = 'Alex' AND t3.surname = 'Yoong' AND t2.position < 20",
+                "oracle": "SELECT t1.name , t3.dob + INTERVAL '2' DAY adddatecol FROM races t1 INNER JOIN driverstandings t2 ON t2.raceid = t1.raceid INNER JOIN drivers t3 ON t3.driverid = t2.driverid WHERE t3.forename = 'Alex' AND t3.surname = 'Yoong' AND t2.position < 20",
+                "points": [
+                    {
+                        "point": "ADDDATE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAY(<date: DATE>)",
+                "TgtPattern": "EXTRACT(DAY FROM <date>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.body , DAY(t2.lasactivitydate) DAYCOL FROM tags t1 INNER JOIN posts t2 ON t2.id = t1.excerptpostid WHERE t1.tagname = 'bayesian'",
+                "oracle": "SELECT t2.body , EXTRACT( DAY FROM t2.lasactivitydate ) daycol FROM tags t1 INNER JOIN posts t2 ON t2.id = t1.excerptpostid WHERE t1.tagname = 'bayesian'",
+                "points": [
+                    {
+                        "point": "DAY",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFMONTHcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFMONTH(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DAY FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DISTINCT t1.id , EXTRACT( YEAR FROM CURRENT_TIMESTAMP ) - EXTRACT( YEAR FROM t1.birthday ) age , DAYOFMONTH(t1.birthday) DAYOFMONTHCOL FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t1.id IN ( SELECT id FROM laboratory WHERE hct >= 52 GROUP BY id HAVING COUNT( id ) >= 2 )",
+                "oracle": "SELECT DISTINCT t1.id , EXTRACT( YEAR FROM CURRENT_TIMESTAMP ) - EXTRACT( YEAR FROM t1.birthday ) age , EXTRACT( DAY FROM t1.birthday ) dayofmonthcol FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t1.id IN ( SELECT id FROM laboratory WHERE hct >= 52 GROUP BY id HAVING COUNT( id ) >= 2 )",
+                "points": [
+                    {
+                        "point": "DAYOFMONTH",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFWEEKcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFWEEK(<date_value: DATE>)",
+                "TgtPattern": "TO_NUMBER(TO_CHAR(<date_value>, 'D'))",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DAYOFWEEK(t1.releasedate) DAYOFWEEKCOL FROM sets t1 INNER JOIN set_translations t2 ON t1.code = t2.setcode WHERE t2.language = 'Portuguese (Brazil)' AND t1.block = 'Commander'",
+                "oracle": "SELECT TO_NUMBER( TO_CHAR( t1.releasedate , 'D' ) ) dayofweekcol FROM sets t1 INNER JOIN set_translations t2 ON t1.code = t2.setcode WHERE t2.language = 'Portuguese (Brazil)' AND t1.block = 'Commander'",
+                "points": [
+                    {
+                        "point": "DAYOFWEEK",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFYEARcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFYEAR(<date_value: DATE>)",
+                "TgtPattern": "TO_NUMBER(TO_CHAR(<date_value>, 'DDD'))",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DAYOFYEAR(schools.opendate) DAYOFYEARCOL FROM schools WHERE doc = '52' AND county = 'Alameda' AND EXTRACT( YEAR FROM opendate ) = 1980",
+                "oracle": "SELECT TO_NUMBER( TO_CHAR( schools.opendate , 'DDD' ) ) dayofyearcol FROM schools WHERE doc = '52' AND county = 'Alameda' AND EXTRACT( YEAR FROM opendate ) = 1980",
+                "points": [
+                    {
+                        "point": "DAYOFYEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "IFcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "IF(<condition: BOOL>, <value_if_true: ANY_VALUE>, <value_if_false: ANY_VALUE>)",
+                "TgtPattern": "CASE WHEN <condition> THEN <value_if_true> ELSE <value_if_false> END",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t1.name , t1.artist , t1.ispromo , IF(t1.colors LIKE '%B,G%', t1.printings, t1.flavorname) IFCOL FROM cards t1 INNER JOIN rulings t2 ON t1.uuid = t2.uuid WHERE t1.ispromo = 1 AND t1.artist = ( SELECT artist FROM cards WHERE ispromo = 1 GROUP BY artist HAVING COUNT( DISTINCT uuid ) = ( SELECT MAX( count_uuid ) FROM ( SELECT COUNT( DISTINCT uuid ) count_uuid FROM cards WHERE ispromo = 1 GROUP BY artist ) subquery ) )",
+                "oracle": "SELECT t1.name , t1.artist , t1.ispromo , CASE WHEN t1.colors LIKE '%B,G%' THEN t1.printings ELSE t1.flavorname END ifcol FROM cards t1 INNER JOIN rulings t2 ON t1.uuid = t2.uuid WHERE t1.ispromo = 1 AND t1.artist = ( SELECT artist FROM cards WHERE ispromo = 1 GROUP BY artist HAVING COUNT( DISTINCT uuid ) = ( SELECT MAX( count_uuid ) FROM ( SELECT COUNT( DISTINCT uuid ) count_uuid FROM cards WHERE ispromo = 1 GROUP BY artist ) subquery ) )",
+                "points": [
+                    {
+                        "point": "IF",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "IFNULLcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "IFNULL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "NVL(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT IFNULL(t1.full_name, t1.weight_kg) IFNULLCOL FROM superhero t1 INNER JOIN colour t2 ON t1.eye_colour_id = t2.id WHERE t1.weight_kg = 0 OR t1.weight_kg IS NULL",
+                "oracle": "SELECT NVL( t1.full_name , t1.weight_kg ) ifnullcol FROM superhero t1 INNER JOIN colour t2 ON t1.eye_colour_id = t2.id WHERE t1.weight_kg = 0 OR t1.weight_kg IS NULL",
+                "points": [
+                    {
+                        "point": "IFNULL",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "ISNULLcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ISNULL(<expr: ANY_VALUE>)",
+                "TgtPattern": "CASE WHEN <expr> IS NULL THEN 1 ELSE 0 END",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , ISNULL(ho.order_total) ISNULLCOL FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000",
+                "oracle": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , CASE WHEN ho.order_total IS NULL THEN 1 ELSE 0 END isnullcol FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000",
+                "points": [
+                    {
+                        "point": "ISNULL",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "MONTHcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "MONTH(<date: DATE>)",
+                "TgtPattern": "EXTRACT(MONTH FROM <date>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT hc.cust_first_name , hc.cust_last_name , hc.cust_email , w.warehouse_name , ho.order_total , MONTH(ho.order_date) MONTHCOL FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w INNER JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 5000 AND l.country_id = 'US'",
+                "oracle": "SELECT hc.cust_first_name , hc.cust_last_name , hc.cust_email , w.warehouse_name , ho.order_total , EXTRACT( MONTH FROM ho.order_date ) monthcol FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w INNER JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 5000 AND l.country_id = 'US'",
+                "points": [
+                    {
+                        "point": "MONTH",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "PIcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "PI()",
+                "TgtPattern": "ACOS(-1)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DISTINCT t1.superhero_name , PI() PICOL FROM superhero t1 INNER JOIN colour t2 ON t1.eye_colour_id = t2.id WHERE t1.height_cm BETWEEN 170 AND 190 AND t2.colour = 'No Colour'",
+                "oracle": "SELECT DISTINCT t1.superhero_name , ACOS( - 1 ) picol FROM superhero t1 INNER JOIN colour t2 ON t1.eye_colour_id = t2.id WHERE t1.height_cm BETWEEN 170 AND 190 AND t2.colour = 'No Colour'",
+                "points": [
+                    {
+                        "point": "PI",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "QUARTERcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "QUARTER(<date_value: DATE>)",
+                "TgtPattern": "TO_NUMBER(TO_CHAR(<date_value>, 'Q'))",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.school , t1.avgscrwrite , QUARTER(t2.closeddate) QUARTERCOL FROM satscores t1 INNER JOIN schools t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+                "oracle": "SELECT t2.school , t1.avgscrwrite , TO_NUMBER( TO_CHAR( t2.closeddate , 'Q' ) ) quartercol FROM satscores t1 INNER JOIN schools t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+                "points": [
+                    {
+                        "point": "QUARTER",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "WEEKDAYcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "WEEKDAY(<date: DATE>)",
+                "TgtPattern": "MOD(TO_NUMBER(TO_CHAR(<date>, 'D')) - 2, 7)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT WEEKDAY(t1.releasedate) WEEKDAYCOL FROM sets t1 INNER JOIN set_translations t2 ON t1.code = t2.setcode WHERE t2.language = 'Portuguese (Brazil)' AND t1.block = 'Commander'",
+                "oracle": "SELECT MOD( TO_NUMBER( TO_CHAR( t1.releasedate , 'D' ) ) - 2 , 7 ) weekdaycol FROM sets t1 INNER JOIN set_translations t2 ON t1.code = t2.setcode WHERE t2.language = 'Portuguese (Brazil)' AND t1.block = 'Commander'",
+                "points": [
+                    {
+                        "point": "WEEKDAY",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "WEEKOFYEARcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "WEEKOFYEAR(<date_value: DATE>)",
+                "TgtPattern": "TO_NUMBER(TO_CHAR(<date_value>, 'IW'))",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT WEEKOFYEAR(t1.description) WEEKOFYEARCOL FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.plt > 400 AND t1.diagnosis = 'SLE' AND t1.sex = 'F'",
+                "oracle": "SELECT TO_NUMBER( TO_CHAR( t1.description , 'IW' ) ) weekofyearcol FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.plt > 400 AND t1.diagnosis = 'SLE' AND t1.sex = 'F'",
+                "points": [
+                    {
+                        "point": "WEEKOFYEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "YEARcracksql",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "YEAR(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(YEAR FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT hc.cust_first_name , hc.cust_last_name , hc.cust_email , w.warehouse_name , ho.order_total , YEAR(ho.order_date) YEARCOL FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w INNER JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 5000 AND l.country_id = 'US'",
+                "oracle": "SELECT hc.cust_first_name , hc.cust_last_name , hc.cust_email , w.warehouse_name , ho.order_total , EXTRACT( YEAR FROM ho.order_date ) yearcol FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w INNER JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 5000 AND l.country_id = 'US'",
+                "points": [
+                    {
+                        "point": "YEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ],
+    "pg_mysql": [
+        {
+            "point": {
+                "Desc": "quote_literal(value anyelement)cracksql",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "quote_literal(<value: ANY_VALUE>)",
+                "TgtPattern": "QUOTE(<value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "pg": "SELECT CASE WHEN t3.event_name = 'Women''s Soccer' THEN 'YES' END AS result , quote_literal(t1.email) AS COL_ALIAS FROM member AS t1 INNER JOIN attendance AS t2 ON t1.member_id = t2.link_to_member INNER JOIN event AS t3 ON t2.link_to_event = t3.event_id WHERE t1.first_name = 'Maya' AND t1.last_name = 'Mclean'",
+                "mysql": "SELECT CASE WHEN t3.event_name = 'Women''s Soccer' THEN 'YES' END AS result , QUOTE( t1.email ) AS col_alias FROM member AS t1 INNER JOIN attendance AS t2 ON t1.member_id = t2.link_to_member INNER JOIN event AS t3 ON t2.link_to_event = t3.event_id WHERE t1.first_name = 'Maya' AND t1.last_name = 'Mclean'",
+                "points": [
+                    {
+                        "point": "quote_literal(value anyelement)",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "quote_nullable(value anyelement)cracksql",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "quote_nullable(<value: ANY_VALUE>)",
+                "TgtPattern": "IF(<value> IS NULL, NULL, QUOTE(<value>))",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "pg": "SELECT t.molecule_id , quote_nullable(t.molecule_id) AS COL_ALIAS FROM ( SELECT t1.molecule_id , COUNT( t2.atom_id ) AS col_0 FROM molecule AS t1 INNER JOIN atom AS t2 ON t1.molecule_id = t2.molecule_id WHERE t1.label = '-' GROUP BY t1.molecule_id HAVING COUNT( t2.atom_id ) > 5 ) AS t",
+                "mysql": "SELECT t.molecule_id , IF( t.molecule_id IS NULL , NULL , QUOTE( t.molecule_id ) ) AS col_alias FROM ( SELECT t1.molecule_id , COUNT( t2.atom_id ) AS col_0 FROM molecule AS t1 INNER JOIN atom AS t2 ON t1.molecule_id = t2.molecule_id WHERE t1.label = '-' GROUP BY t1.molecule_id HAVING COUNT( t2.atom_id ) > 5 ) AS t",
+                "points": [
+                    {
+                        "point": "quote_nullable(value anyelement)",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "current_database()cracksql",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "current_database()",
+                "TgtPattern": "DATABASE()",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "pg": "SELECT current_database() AS COL_ALIAS FROM ( SELECT t1.atom_id , t1.element FROM atom AS t1 INNER JOIN molecule AS t2 ON t1.molecule_id = t2.molecule_id INNER JOIN bond AS t3 ON t2.molecule_id = t3.molecule_id WHERE t3.bond_type = '-' ) AS t",
+                "mysql": "SELECT DATABASE( ) AS col_alias FROM ( SELECT t1.atom_id , t1.element FROM atom AS t1 INNER JOIN molecule AS t2 ON t1.molecule_id = t2.molecule_id INNER JOIN bond AS t3 ON t2.molecule_id = t3.molecule_id WHERE t3.bond_type = '-' ) AS t",
+                "points": [
+                    {
+                        "point": "current_database()",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ],
+    "oracle_mysql": [
+        {
+            "point": {
+                "Desc": "NVL2cracksql",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+                "TgtPattern": "IF(ISNULL(<expr1>), <expr3>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT t2.major_name , NVL2(t1.link_to_major, t2.major_name, t1.member_id) NVL2COL FROM member t1 INNER JOIN major t2 ON t1.link_to_major = t2.major_id WHERE t1.first_name = 'Brent' AND t1.last_name = 'Thomason'",
+                "mysql": "SELECT t2.major_name , IF( ISNULL( t1.link_to_major ) , t1.member_id , t2.major_name ) nvl2col FROM member t1 INNER JOIN major t2 ON t1.link_to_major = t2.major_id WHERE t1.first_name = 'Brent' AND t1.last_name = 'Thomason'",
+                "points": [
+                    {
+                        "point": "NVL2",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "NVLcracksql",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "IFNULL(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT d.department_name , j.job_title , AVG( e.salary ) AS avg_salary , NVL(d.department_name, j.job_title) NVLCOL FROM employees e INNER JOIN departments d ON e.department_id = d.department_id INNER JOIN jobs j ON e.job_id = j.job_id GROUP BY d.department_name , j.job_title HAVING COUNT( e.employee_id ) > 1 ;",
+                "mysql": "SELECT d.department_name , j.job_title , AVG( e.salary ) AS avg_salary , IFNULL( d.department_name , j.job_title ) nvlcol FROM employees e INNER JOIN departments d ON e.department_id = d.department_id INNER JOIN jobs j ON e.job_id = j.job_id GROUP BY d.department_name , j.job_title HAVING COUNT( e.employee_id ) > 1 ;",
+                "points": [
+                    {
+                        "point": "NVL",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ],
+    "oracle_pg": [
+        {
+            "point": {
+                "Desc": "LAST_DAYcracksql",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "LAST_DAY(<date_value: DATE>)",
+                "TgtPattern": "(date_trunc('MONTH', <date_value>) + INTERVAL '1 MONTH' - INTERVAL '1 DAY')::DATE",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT LAST_DAY(schools.opendate) COL_ALIAS FROM schools WHERE doc = '52' AND county = 'Alameda' AND EXTRACT( YEAR FROM opendate ) = 1980",
+                "pg": "SELECT ( date_trunc( 'MONTH' , schools.opendate ) + INTERVAL '1 MONTH' - INTERVAL '1 DAY' ) :: DATE col_alias FROM schools WHERE doc = '52' AND county = 'Alameda' AND EXTRACT( YEAR FROM opendate ) = 1980",
+                "points": [
+                    {
+                        "point": "LAST_DAY",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "NVL2cracksql",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+                "TgtPattern": "CASE WHEN <expr1> IS NOT NULL THEN <expr2> ELSE <expr3> END",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT NVL2(t1.keyrunecode, t1.type, t2.language) NVL2COL FROM sets t1 INNER JOIN set_translations t2 ON t1.code = t2.setcode WHERE t2.language = 'Portuguese (Brazil)' AND t1.block = 'Commander'",
+                "pg": "SELECT CASE WHEN t1.keyrunecode IS NOT NULL THEN t1.type ELSE t2.language END nvl2col FROM sets t1 INNER JOIN set_translations t2 ON t1.code = t2.setcode WHERE t2.language = 'Portuguese (Brazil)' AND t1.block = 'Commander'",
+                "points": [
+                    {
+                        "point": "NVL2",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "NULLIFcracksql",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NULLIF(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "NULLIF(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT DISTINCT t2.name , CASE WHEN t1.status = 'Legal' THEN t1.format ELSE NULL END , NULLIF(t2.printings, t2.keywords) NULLIFCOL FROM legalities t1 INNER JOIN cards t2 ON t2.uuid = t1.uuid WHERE t2.setcode IN ( SELECT code FROM sets WHERE name = 'Hour of Devastation' )",
+                "pg": "SELECT DISTINCT t2.name , CASE WHEN t1.status = 'Legal' THEN t1.format ELSE NULL END , NULLIF( t2.printings , t2.keywords ) nullifcol FROM legalities t1 INNER JOIN cards t2 ON t2.uuid = t1.uuid WHERE t2.setcode IN ( SELECT code FROM sets WHERE name = 'Hour of Devastation' )",
+                "points": [
+                    {
+                        "point": "NULLIF",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "NVLcracksql",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "COALESCE(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT t2.\"school name\" , NVL(t1.dname, t1.rtype) NVLCOL FROM satscores t1 INNER JOIN frpm t2 ON t1.cds = t2.cdscode WHERE CAST( t2.\"free meal count (k-12)\" AS DOUBLE PRECISION ) / NULLIF( t2.\"enrollment (k-12)\" , 0 ) > 0.1 AND t1.numge1500 > 0",
+                "pg": "SELECT t2.\"school name\" , COALESCE( t1.dname , t1.rtype ) nvlcol FROM satscores t1 INNER JOIN frpm t2 ON t1.cds = t2.cdscode WHERE CAST( t2.\"free meal count (k-12)\" AS DOUBLE PRECISION ) / NULLIF( t2.\"enrollment (k-12)\" , 0 ) > 0.1 AND t1.numge1500 > 0",
+                "points": [
+                    {
+                        "point": "NVL",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ]
+}

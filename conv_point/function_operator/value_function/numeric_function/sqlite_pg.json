@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "MAX",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MAX(<val1: NUMBER>, <val2: NUMBER>)",
+        "TgtPattern": "CASE WHEN <val1> IS NULL OR <val2> IS NULL THEN NULL ELSE GREATEST(<val1>, <val2>) END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "MAX2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MAX(<val1: NUMBER>, <val2: NUMBER>, <val3: NUMBER>)",
+        "TgtPattern": "CASE WHEN <val1> IS NULL OR <val2> IS NULL OR <val3> IS NULL THEN NULL ELSE GREATEST(<val1>, <val2>, <val3>) END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "MIN1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MIN(<val1: NUMBER>, <val2: NUMBER>)",
+        "TgtPattern": "CASE WHEN <val1> IS NULL OR <val2> IS NULL THEN NULL ELSE LEAST(<val1>, <val2>) END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "MIN2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MIN(<val1: NUMBER>, <val2: NUMBER>, <val3: NUMBER>)",
+        "TgtPattern": "CASE WHEN <val1> IS NULL OR <val2> IS NULL OR <val3> IS NULL THEN NULL ELSE LEAST(<val1>, <val2>, <val3>) END",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

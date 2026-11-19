@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "USER_R",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "USER",
+        "TgtPattern": "\"USER\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "QUOTE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "QUOTE",
+        "SrcPattern": "``",
+        "TgtPattern": "\"\"",
+        "Condition": null,
+        "Return": null
+    }
+]

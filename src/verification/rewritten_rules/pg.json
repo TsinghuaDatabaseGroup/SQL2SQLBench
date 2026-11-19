@@ -1,0 +1,98 @@
+[
+    {
+        "Type": "ORDER_BY_CLAUSE",
+        "SrcPattern": "ORDER BY <col_list: LIST[ORDER_BY_ELEMENT]>",
+        "TgtPattern": "ORDER BY <rev_col_list: @PgMySQLOrderBy(<col_list>)>",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUM(<value: NUMBER>) FILTER(WHERE <condition: BOOL>)",
+        "TgtPattern": "SUM(CASE WHEN <condition> THEN <value> ELSE 0 END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "COUNT(*) FILTER(WHERE <condition: BOOL>)",
+        "TgtPattern": "SUM(CASE WHEN <condition> THEN 1 ELSE 0 END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "COVAR_POP(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(<x> * <y>) - SUM(<x>) * SUM(<y>) / COUNT(*)) / COUNT(*)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SLOPE(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)) / (SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END) * POW(AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END), 2))",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGY(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGX(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_COUNT(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXX(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <x> ELSE 0 END) - POWER(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END), 2) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SYY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - POWER(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END), 2) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END) * SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 ELSE NULL END)",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "EVERY(<value: BOOL>)",
+        "TgtPattern": "CASE WHEN MIN(value) = 0 THEN 0 WHEN MIN(value) = 1 THEN 1 ELSE NULL END",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "BOOL_AND(<value: BOOL>)",
+        "TgtPattern": "CASE WHEN MIN(value) = 0 THEN 0 WHEN MIN(value) = 1 THEN 1 ELSE NULL END",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "BOOL_OR(<value: BOOL>)",
+        "TgtPattern": "CASE WHEN MAX(value) = 0 THEN 0 WHEN MAX(value) = 1 THEN 1 ELSE NULL END",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "@ <value: NUMBER>",
+        "TgtPattern": "CASE WHEN <value> < 0 THEN -1 * <value> ELSE <value> END",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "~ <value1: NUMBER>",
+        "TgtPattern": "-(<value1>) - 1",
+        "Condition": null
+    }
+]

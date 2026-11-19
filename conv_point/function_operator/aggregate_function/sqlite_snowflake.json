@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "GROUP_CONCAT_SEPARATOR",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "GROUP_CONCAT(<value: STRING>, ',')",
+        "TgtPattern": "LISTAGG(<value>, ',')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRING_AGG",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRING_AGG(<value: STRING>, ',')",
+        "TgtPattern": "LISTAGG(<value>, ',')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TOTAL",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "total(<value: NUMBER>)",
+        "TgtPattern": "COALESCE(SUM(TO_DOUBLE(<value>)), 0.0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

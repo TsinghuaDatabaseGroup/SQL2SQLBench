@@ -1,0 +1,7 @@
+{
+  "mode": "random",
+  "src_dialect": "mysql",
+  "tgt_dialect": "pg",
+  "point_num": "The point number to generate",
+  "output_path": "The path to save the generated SQL files"
+}

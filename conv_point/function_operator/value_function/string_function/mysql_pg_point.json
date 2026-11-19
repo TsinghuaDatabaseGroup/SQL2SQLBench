@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "LENGTH",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LENGTH(<value: NVARCHAR>)",
+        "TgtPattern": "OCTET_LENGTH(<value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "REGEXP_LIKE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGEXP_LIKE(<str: STRING>, <pattern_str: @GenRegPattern(<str>)>, 'c')",
+        "TgtPattern": "<str> ~ <pattern_str>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "INSTR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <substr: @GenSubString(<str>, 1, 1)>)",
+        "TgtPattern": "STRPOS(<str>, <substr>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

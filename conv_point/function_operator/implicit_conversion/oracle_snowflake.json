@@ -1,0 +1,40 @@
+[
+    {
+        "Desc": "STRING_TO_DATE_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date_value: DATE> = <date_str: @SampleDateOra(<date_value>, 'DD-MON-RR')>",
+        "TgtPattern": "<date_value> = TO_DATE(<date_str_tran: @TranToStandardTimeFormat(<date_str>, 'DD-MON-RR')>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "BOOL",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "DD-MON-RR"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "STRING_TO_DATE_2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date_value: DATE> = <date_str: @SampleDateOra(<date_value>, 'Mon dd, YYYY')>",
+        "TgtPattern": "<date_value> = TO_DATE(<date_str_tran: @TranToStandardTimeFormat(<date_str>, 'Mon dd, YYYY')>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "BOOL",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "Mon dd, YYYY"
+                }
+            }
+        }
+    }
+]

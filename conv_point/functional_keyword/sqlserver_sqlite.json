@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "GROUP_BY_CUBE_1",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <ele_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY CUBE(<all_cols: LIST[ANY_VALUE]>)",
+        "TgtPattern": "{for <cols> in <cols_list: @EnumCube(<all_cols>)> ADD '\\n UNION ALL \\n':SELECT <revised_ele_list: @ReviseSelectList(<ele_list>, <cols>, <all_cols>)> FROM <tbl_list> WHERE <cond> GROUP BY <cols>} \n UNION ALL \n SELECT <re_last_ele_list: @ReviseSelectList(<ele_list>, [], <all_cols>)> FROM <tbl_list> WHERE <cond>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "GROUP_BY_CUBE_2",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <ele_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> GROUP BY CUBE(<all_cols: LIST[ANY_VALUE]>)",
+        "TgtPattern": "{for <cols> in <cols_list: @EnumCube(<all_cols>)> ADD '\\n UNION ALL \\n':SELECT <revised_ele_list: @ReviseSelectList(<ele_list>, <cols>, <all_cols>)> FROM <tbl_list> GROUP BY <cols>} \n UNION ALL \n SELECT <re_last_ele_list: @ReviseSelectList(<ele_list>, [], <all_cols>)> FROM <tbl_list>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "GROUP_BY_GROUPING_SETS_1",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <ele_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY GROUPING SETS({for <sets_elements> in <sets_elements_list: LIST[LIST[ANY_VALUE]]> ADD ',': (<sets_elements>)})",
+        "TgtPattern": "{for <sets_elements> in <sets_elements_list> ADD '\\n UNION ALL \\n':SELECT <revised_ele_list: @ReviseSelectListSets(<ele_list>, <sets_elements>, <sets_elements_list>)> FROM <tbl_list> WHERE <cond> GROUP BY <sets_elements>}",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "GROUP_BY_GROUPING_SETS_2",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <ele_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> GROUP BY GROUPING SETS({for <sets_elements> in <sets_elements_list: LIST[LIST[ANY_VALUE]]> ADD ',': (<sets_elements>)})",
+        "TgtPattern": "{for <sets_elements> in <sets_elements_list> ADD '\\n UNION ALL \\n':SELECT <revised_ele_list: @ReviseSelectListSets(<ele_list>, <sets_elements>, <sets_elements_list>)> FROM <tbl_list> GROUP BY <sets_elements>}",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "GROUP_BY_GROUPING_SETS_HAVING",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "sqlite"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <ele_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY GROUPING SETS({for <sets_elements> in <sets_elements_list: LIST[LIST[ANY_VALUE]]> ADD ',': (<sets_elements>)}) HAVING <having_cond: ANY_VALUE>",
+        "TgtPattern": "{for <sets_elements> in <sets_elements_list> ADD '\\n UNION All \\n':SELECT <revised_ele_list: @ReviseSelectListSets(<ele_list>, <sets_elements>, <sets_elements_list>)> FROM <tbl_list> WHERE <cond: ANY_VALUE> GROUP BY <sets_elements> HAVING <having_cond>}",
+        "Condition": null,
+        "Return": null
+    }
+]

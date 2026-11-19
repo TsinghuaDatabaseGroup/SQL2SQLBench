@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "INSTR3",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, <start_pos: INT, LITERAL, [1,3]>, 1)>, <start_pos>)",
+        "TgtPattern": "CHARINDEX(<sub_str>, <str>, <start_pos>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "INSTR4",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, <start_pos: INT, LITERAL, [1,3]>, 2)>, <start_pos>, 2)",
+        "TgtPattern": "CHARINDEX(<sub_str>, <str>, CHARINDEX(<sub_str>, <str>, <start_pos>) + 1)",
+        "Condition": null,
+        "Return": "INT"
+    },
+     {
+        "Desc": "INSTR2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, 1, 1)>)",
+        "TgtPattern": "CHARINDEX(<sub_str>, <str>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "SUBSTR_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTR(<value: STRING>, <start: INT, LITERAL, [1, 5], [-5, -1]> , <len: INT, LITERAL, [1, 10]>)",
+        "TgtPattern": "SUBSTRING( <value>, <start>, <len>)",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

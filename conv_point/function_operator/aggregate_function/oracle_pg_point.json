@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "LISTAGG NO DISTINCT",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LISTAGG(<value: STRING, COLUMN>, <sep: OPTION['\\', \\'', '\\';\\'']>) WITHIN GROUP (ORDER BY <value> <order_rule: OPTION['ASC', 'DESC']>)",
+        "TgtPattern": "STRING_AGG(<value>, <sep> ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STATS_MODE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STATS_MODE(<value: ANY_VALUE>)",
+        "TgtPattern": "MODE() WITHIN GROUP(ORDER BY <value>)",
+        "Condition": null,
+        "Return": "ANY_VALUE"
+    },
+    {
+        "Desc": "DENSE_RANK_FIRST_LAST",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <group_by_cols: LIST[ANY_VALUE]>,  \n{for <aggr_function>,<value>,<first_last>,<order_column> in <aggr_functions: LIST[OPTION['MIN', 'MAX', 'SUM', 'AVG', 'COUNT', 'VARIANCE', 'STDDEV']]>, <values:  LIST[NUMBER]>,  <first_lasts: LIST[OPTION['FIRST': 'ASC','LAST': 'DESC']]>, <order_columns: LIST[ANY_VALUE]> ADD ',':\n            <aggr_function>(<value>) KEEP (DENSE_RANK <first_last> ORDER BY <order_column> ASC)\n}\n  FROM <tables: LIST[TABLE]>\n  WHERE <cond: ANY_VALUE>\n  GROUP BY <group_by_cols>",
+        "TgtPattern": "WITH <alias1: ALIAS> AS (\n    SELECT {for <g_col>, <g_alias> in <group_by_cols>, <g_alias_list: LIST[ALIAS]> ADD ',': <g_col> AS <g_alias>}, \n{for <value>, <alias> in <values>, <value_aliases: LIST[ALIAS]> ADD ',':<value> AS <alias>},\n{for <order_column>, <first_last>, <alias> in <order_columns>, <first_lasts>, <aliases: LIST[ALIAS]> ADD ',':\nDENSE_RANK() OVER (PARTITION BY {for <col> in <group_by_cols> ADD ',': <col>} ORDER BY <order_column> <first_last>) AS <alias>}\n      FROM <tables>      \n      WHERE <cond>\n)\nSELECT <g_alias_list>,\n        {for <aggr_function>, <value_alias>, <alias> in <aggr_functions>, <value_aliases>, <aliases> ADD ',':\n       <aggr_function>(CASE WHEN <alias> = 1 THEN <value_alias> END)}\n  FROM <alias1>\n GROUP BY <g_alias_list>",
+        "Condition": null,
+        "Return": null
+    }
+]

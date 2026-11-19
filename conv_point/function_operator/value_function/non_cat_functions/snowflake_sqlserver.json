@@ -1,0 +1,370 @@
+[
+    {
+        "Desc": "DATEPART_YEAR",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('year', <value: DATE>)",
+        "TgtPattern": "DATEPART(year, <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('year', TO_DATE('2024-05-17'));",
+            "sqlserver": "SELECT DATEPART(year, CAST('2024-05-17' AS DATE));"
+        }
+    },
+    {
+        "Desc": "DATEPART_MONTH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('month', <value: DATE>)",
+        "TgtPattern": "DATEPART(month, <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('month', TO_DATE('2024-05-17'));",
+            "sqlserver": "SELECT DATEPART(month, CAST('2024-05-17' AS DATE));"
+        }
+    },
+    {
+        "Desc": "DATEPART_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('day', <value: DATE>)",
+        "TgtPattern": "DATEPART(day, <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('day', TO_DATE('2024-05-17'));",
+            "sqlserver": "SELECT DATEPART(day, CAST('2024-05-17' AS DATE));"
+        }
+    },
+    {
+        "Desc": "DATE_TRUNC_MONTH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('month', <value: DATE>)",
+        "TgtPattern": "DATEFROMPARTS(YEAR(<value>), MONTH(<value>), 1)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATE_TRUNC('month', TO_DATE('2024-05-17'));",
+            "sqlserver": "SELECT DATEFROMPARTS(YEAR(CAST('2024-05-17' AS DATE)), MONTH(CAST('2024-05-17' AS DATE)), 1);"
+        }
+    },
+    {
+        "Desc": "DATE_TRUNC_YEAR",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('year', <value: DATE>)",
+        "TgtPattern": "DATEFROMPARTS(YEAR(<value>), 1, 1)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATE_TRUNC('year', TO_DATE('2024-05-17'));",
+            "sqlserver": "SELECT DATEFROMPARTS(YEAR(CAST('2024-05-17' AS DATE)), 1, 1);"
+        }
+    },
+    {
+        "Desc": "ADD_MONTHS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADD_MONTHS(<value: DATE>, <n: INT>)",
+        "TgtPattern": "DATEADD(month, <n>, <value>)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT ADD_MONTHS(TO_DATE('2024-05-17'), 2);",
+            "sqlserver": "SELECT DATEADD(month, 2, CAST('2024-05-17' AS DATE));"
+        }
+    },
+    {
+        "Desc": "NVL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+        "TgtPattern": "ISNULL(<expr1>, <expr2>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "snowflake": "SELECT NVL(NULL, 'fallback');",
+            "sqlserver": "SELECT ISNULL(NULL, 'fallback');"
+        }
+    },
+    {
+        "Desc": "NVL2",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <expr1> IS NOT NULL THEN <expr2> ELSE <expr3> END",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "snowflake": "SELECT NVL2(NULL, 'not_null', 'is_null');",
+            "sqlserver": "SELECT CASE WHEN NULL IS NOT NULL THEN 'not_null' ELSE 'is_null' END;"
+        }
+    },
+    {
+        "Desc": "ZEROIFNULL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ZEROIFNULL(<expr: INT>)",
+        "TgtPattern": "ISNULL(<expr>, 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT ZEROIFNULL(NULL);",
+            "sqlserver": "SELECT ISNULL(NULL, 0);"
+        }
+    },
+    {
+        "Desc": "NULLIFZERO",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NULLIFZERO(<expr: INT>)",
+        "TgtPattern": "NULLIF(<expr>, 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT NULLIFZERO(0);",
+            "sqlserver": "SELECT NULLIF(0, 0);"
+        }
+    },
+    {
+        "Desc": "STARTSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STARTSWITH(<str: STRING>, <prefix: STRING>)",
+        "TgtPattern": "CASE WHEN LEFT(<str>, LEN(<prefix>)) = <prefix> THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT STARTSWITH('abcdef', 'abc');",
+            "sqlserver": "SELECT CASE WHEN LEFT('abcdef', LEN('abc')) = 'abc' THEN 1 ELSE 0 END;"
+        }
+    },
+    {
+        "Desc": "ENDSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ENDSWITH(<str: STRING>, <suffix: STRING>)",
+        "TgtPattern": "CASE WHEN RIGHT(<str>, LEN(<suffix>)) = <suffix> THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT ENDSWITH('abcdef', 'def');",
+            "sqlserver": "SELECT CASE WHEN RIGHT('abcdef', LEN('def')) = 'def' THEN 1 ELSE 0 END;"
+        }
+    },
+    {
+        "Desc": "CONTAINS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CONTAINS(<str: STRING>, <substr: STRING>)",
+        "TgtPattern": "CASE WHEN CHARINDEX(<substr>, <str>) > 0 THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT CONTAINS('abcdef', 'cd');",
+            "sqlserver": "SELECT CASE WHEN CHARINDEX('cd', 'abcdef') > 0 THEN 1 ELSE 0 END;"
+        }
+    },
+    {
+        "Desc": "POSITION",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "POSITION(<substr: STRING>, <str: STRING>)",
+        "TgtPattern": "CHARINDEX(<substr>, <str>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT POSITION('cd', 'abcdef');",
+            "sqlserver": "SELECT CHARINDEX('cd', 'abcdef');"
+        }
+    },
+    {
+        "Desc": "DIV0",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DIV0(<dividend: DOUBLE>, <divisor: DOUBLE>)",
+        "TgtPattern": "CASE WHEN <divisor> = 0 THEN 0 ELSE <dividend> / <divisor> END",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT DIV0(10, 0);",
+            "sqlserver": "SELECT CASE WHEN 0 = 0 THEN 0 ELSE 10.0 / 0 END;"
+        }
+    },
+    {
+        "Desc": "COVAR_POP",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COVAR_POP(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> END) - SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> END) * SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END) / NULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)) / NULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT COVAR_POP(1.0, 2.0);",
+            "sqlserver": "SELECT (SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 * 2.0 END) - SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 END) * SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 2.0 END) / NULLIF(SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1 END), 0)) / NULLIF(SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1 END), 0);"
+        }
+    },
+    {
+        "Desc": "REGR_SLOPE",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SLOPE(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END)) / (SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END) * POWER(AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END), 2))",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_SLOPE(1.0, 2.0);",
+            "sqlserver": "SELECT (SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 * 2.0 ELSE 0 END) - COUNT(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1 END) * AVG(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 END) * AVG(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 2.0 END)) / (SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 2.0 * 2.0 ELSE 0 END) - COUNT(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1 END) * POWER(AVG(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 2.0 END), 2));"
+        }
+    },
+    {
+        "Desc": "REGR_AVGY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGY(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_AVGY(1.0, 2.0);",
+            "sqlserver": "SELECT AVG(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 ELSE NULL END);"
+        }
+    },
+    {
+        "Desc": "REGR_AVGX",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGX(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_AVGX(1.0, 2.0);",
+            "sqlserver": "SELECT AVG(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 2.0 ELSE NULL END);"
+        }
+    },
+    {
+        "Desc": "REGR_COUNT",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_COUNT(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_COUNT(1.0, 2.0);",
+            "sqlserver": "SELECT COUNT(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1 END);"
+        }
+    },
+    {
+        "Desc": "REGR_SXX",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXX(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <x> ELSE 0 END) - POWER(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END), 2) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_SXX(2.0, 1.0);",
+            "sqlserver": "SELECT SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 * 1.0 ELSE 0 END) - POWER(SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 ELSE 0 END), 2) / COUNT(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1 END);"
+        }
+    },
+    {
+        "Desc": "REGR_SYY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SYY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - POWER(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END), 2) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_SYY(2.0, 1.0);",
+            "sqlserver": "SELECT SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 2.0 * 2.0 ELSE 0 END) - POWER(SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 2.0 ELSE 0 END), 2) / COUNT(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1 END);"
+        }
+    },
+    {
+        "Desc": "REGR_SXY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END) * SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END) / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_SXY(2.0, 1.0);",
+            "sqlserver": "SELECT SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 * 2.0 ELSE 0 END) - SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 2.0 ELSE 0 END) * SUM(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1.0 ELSE 0 END) / COUNT(CASE WHEN 1.0 + 2.0 IS NOT NULL THEN 1 END);"
+        }
+    }
+]

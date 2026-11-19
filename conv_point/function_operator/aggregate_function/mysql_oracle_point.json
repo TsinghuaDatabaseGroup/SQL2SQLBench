@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "STDDEV",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STD(<value:NUMBER>)",
+        "TgtPattern": "STDDEV(<value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GROUP_CONCAT NO DISTINCT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "GROUP_CONCAT(<value: STRING, COLUMN> ORDER BY <value> <order_rule: OPTION['ASC': 'ASC NULLS FIRST', 'DESC': 'DESC NULLS LAST']> SEPARATOR <sep: OPTION['\\', \\'', '\\';\\'']>)",
+        "TgtPattern": "LISTAGG(<value>, <sep>) WITHIN GROUP (ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "GROUP_CONCAT DISTINCT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <group_by: LIST[ANY_VALUE]>, GROUP_CONCAT(DISTINCT <value: STRING, COLUMN> ORDER BY <value> <order_rule: OPTION['ASC': 'ASC NULLS FIRST', 'DESC': 'DESC NULLS LAST']> SEPARATOR <sep: OPTION['\\', \\'', '\\';\\'']>) FROM <tables: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY <group_by>",
+        "TgtPattern": "SELECT <alias_list: LIST[ALIAS]>, LISTAGG(<value_alias: ALIAS>, <sep>) WITHIN GROUP (ORDER BY <value_alias> <order_rule>) FROM ( SELECT DISTINCT {for <group_col>, <alias> in <group_by>, <alias_list> ADD ',': <group_col> AS <alias>}, <value> AS <value_alias> FROM <tables> WHERE <cond>) GROUP BY <alias_list>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "BIT_AND",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <group_by: LIST[ANY_VALUE, GROUP_BY]>, BIT_AND(<bit_and_value: INT, STRICT>) FROM <tables:LIST[TABLE]> GROUP BY <group_by>",
+        "TgtPattern": "WITH <alias1: ALIAS> AS (\n    SELECT {for <ele>, <alias> in <group_by>, <alias_list: LIST[ALIAS]> ADD ',': <ele> AS <alias>}, <bit_and_value> AS <alias_value: ALIAS>, ROW_NUMBER() OVER (PARTITION BY <group_by> ORDER BY <bit_and_value>) AS <alias3: ALIAS>\n    FROM <tables>\n),\n<alias2: ALIAS> (<alias_list>, <alias4: ALIAS>, <alias3>) AS (\n    SELECT <alias_list>, <alias_value>, <alias3>\n    FROM <alias1>\n    WHERE <alias3> = 1\n    UNION ALL\n    SELECT {for <alias> in <alias_list> ADD ',': g.<alias>}, CASE WHEN g.<alias_value> IS NOT NULL THEN BITAND(r.<alias4>, g.<alias_value>) ELSE r.<alias4> END, g.<alias3>\n    FROM <alias1> g\n    JOIN <alias2> r\n      ON {for <alias> in <alias_list> ADD 'AND': g.<alias> = r.<alias>} AND g.<alias3> = r.<alias3> + 1\n)\nSELECT <alias_list>, <alias4>\nFROM <alias2> r\nWHERE <alias3> = (SELECT MAX(<alias3>) FROM <alias1> g WHERE {for <alias> in <alias_list> ADD 'AND': g.<alias> = r.<alias>})",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "BIT_OR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <group_by: LIST[ANY_VALUE, GROUP_BY]>, BIT_OR(<bit_value: INT, STRICT>)\nFROM <tables: LIST[TABLE]>\nGROUP BY <group_by>",
+        "TgtPattern": "WITH <alias1: ALIAS> AS (\n    SELECT {for <ele>, <alias> in <group_by>, <alias_list: LIST[ALIAS]> ADD ',': <ele> AS <alias>}, <bit_value> AS <alias_value: ALIAS>, ROW_NUMBER() OVER (PARTITION BY <group_by> ORDER BY <bit_value>) AS <alias3: ALIAS>\n    FROM <tables>\n),\n<alias2: ALIAS> (<alias_list>, <alias4: ALIAS>, <alias3>) AS (\n    SELECT <alias_list>, <alias_value>, <alias3>\n    FROM <alias1>\n    WHERE <alias3> = 1\n    UNION ALL\n    SELECT {for <alias> in <alias_list> ADD ',': g.<alias>}, CASE WHEN g.<alias_value> IS NOT NULL THEN r.<alias4> + g.<alias_value> - BITAND(r.<alias4>, g.<alias_value>) ELSE r.<alias4> END, g.<alias3>\n    FROM <alias1> g\n    JOIN <alias2> r\n      ON {for <alias> in <alias_list> ADD 'AND': g.<alias> = r.<alias>} AND g.<alias3> = r.<alias3> + 1\n)\nSELECT <alias_list>, <alias4>\nFROM <alias2> r\nWHERE <alias3> = (SELECT MAX(<alias3>) FROM <alias1> g WHERE {for <alias> in <alias_list> ADD 'AND': g.<alias> = r.<alias>})",
+        "Condition": null,
+        "Return": null
+    }
+]

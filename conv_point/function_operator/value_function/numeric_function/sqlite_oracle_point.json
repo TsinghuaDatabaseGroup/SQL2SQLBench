@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "MAX",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MAX(<val1: NUMBER>, <val2: NUMBER>)",
+        "TgtPattern": "GREATEST(<val1>, <val2>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "MAX2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MAX(<val1: NUMBER>, <val2: NUMBER>, <val3: NUMBER>)",
+        "TgtPattern": "GREATEST(<val1>, <val2>, <val3>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "MIN1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MIN(<val1: NUMBER>, <val2: NUMBER>)",
+        "TgtPattern": "LEAST(<val1>, <val2>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "MIN2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MIN(<val1: NUMBER>, <val2: NUMBER>, <val3: NUMBER>)",
+        "TgtPattern": "LEAST(<val1>, <val2>, <val3>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

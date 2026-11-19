@@ -1,0 +1,506 @@
+[
+  {
+    "Desc": "Convert MySQL IF function to PostgreSQL CASE expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "IF ( <condition: BOOL> , <true_value: ANY_VALUE> , <false_value: ANY_VALUE> )",
+    "TgtPattern": "CASE WHEN <condition> THEN <true_value> ELSE <false_value> END",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL FROM_DAYS function to PostgreSQL date calculation",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "FROM_DAYS ( <days: INT> )",
+    "TgtPattern": "(DATE '0001-01-01' + (<days> - 367))",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL UTC_DATE function to PostgreSQL equivalent for current UTC date",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "UTC_DATE ( )",
+    "TgtPattern": "( CURRENT_TIMESTAMP AT TIME ZONE 'UTC' ) :: DATE",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL LAST_DAY function to PostgreSQL equivalent expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "LAST_DAY ( <expr: ANY_VALUE> )",
+    "TgtPattern": "( date_trunc ( 'month' , <expr> ) + INTERVAL '1 month' - INTERVAL '1 day' ) :: DATE",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL DATE_ADD function to PostgreSQL using addition operator with interval",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "DATE_ADD ( <date_expr: DATE> , <interval_val: INTERVAL> )",
+    "TgtPattern": "<date_expr> + <interval_val>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL DATE_SUB function to PostgreSQL subtraction operator for date and interval",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "DATE_SUB ( <date_expr: ANY_VALUE> , <interval_expr: INTERVAL> )",
+    "TgtPattern": "<date_expr> - <interval_expr>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL DATEDIFF function to PostgreSQL equivalent using date subtraction",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "DATEDIFF ( <date1: ANY_VALUE> , <date2: ANY_VALUE> )",
+    "TgtPattern": "( CAST ( <date1> AS DATE ) - CAST ( <date2> AS DATE ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL DAY function to PostgreSQL EXTRACT(DAY FROM ...)",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "DAY( <expr: DATE> )",
+    "TgtPattern": "EXTRACT( DAY FROM <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL DAYOFMONTH function to PostgreSQL EXTRACT(DAY FROM ...)",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "DAYOFMONTH ( <date_expr: DATE> )",
+    "TgtPattern": "EXTRACT ( DAY FROM <date_expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL DAYOFYEAR function to PostgreSQL EXTRACT(DOY FROM ...)",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "DAYOFYEAR( <date_expr: DATE> )",
+    "TgtPattern": "EXTRACT(DOY FROM <date_expr>)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL STR_TO_DATE function to PostgreSQL TO_DATE function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "STR_TO_DATE( <str: STRING> , <format: STRING> )",
+    "TgtPattern": "TO_DATE( <str> , REPLACE(REPLACE(REPLACE(<format>, '%Y', 'YYYY'), '%m', 'MM'), '%d', 'DD') )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Handle MySQL-specific date format specifiers conversion",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "TO_DATE( <str: STRING> , <format: STRING> )",
+    "TgtPattern": "TO_DATE( <str> , TRANSLATE(<format>, '%Y%m%d', 'YYYYMMDD') )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert CURRENT_TIMESTAMP() function call without arguments to CURRENT_TIMESTAMP without parentheses for PostgreSQL compatibility",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "CURRENT_TIMESTAMP()",
+    "TgtPattern": "CURRENT_TIMESTAMP",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL YEAR function to PostgreSQL EXTRACT function for year extraction",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "YEAR(<expr: DATE>)",
+    "TgtPattern": "EXTRACT(YEAR FROM <expr>)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL INSTR function to PostgreSQL STRPOS function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "INSTR ( <str: STRING> , <substr: STRING> )",
+    "TgtPattern": "STRPOS ( <str> , <substr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL TRUNCATE function to PostgreSQL TRUNC function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "TRUNCATE ( <value: ANY_VALUE> , <decimals: INT> )",
+    "TgtPattern": "TRUNC ( <value> , <decimals> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL LOG function with single argument (natural logarithm) to PostgreSQL LN function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "LOG ( <x: DOUBLE> )",
+    "TgtPattern": "LN ( <x> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL CAST to DOUBLE to PostgreSQL CAST to DOUBLE PRECISION",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "CAST( <expr: ANY_VALUE> AS DOUBLE )",
+    "TgtPattern": "CAST( <expr> AS DOUBLE PRECISION )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL UNSIGNED cast to PostgreSQL BIGINT cast",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "CAST( <value: ANY_VALUE> AS UNSIGNED )",
+    "TgtPattern": "CAST( <value> AS BIGINT )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL DIV integer division operator to PostgreSQL using numeric casting and truncation",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<expr1: ANY_VALUE> DIV <expr2: ANY_VALUE>",
+    "TgtPattern": "TRUNC( CAST( <expr1> AS numeric ) / CAST( <expr2> AS numeric ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL REGEXP operator to PostgreSQL ~ operator for regular expression matching",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<expr: ANY_VALUE> REGEXP <pattern: STRING>",
+    "TgtPattern": "<expr> ~ <pattern>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert non-string expressions in LIKE conditions to explicit text cast for PostgreSQL compatibility",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<expr: ANY_VALUE> LIKE <pattern: ANY_VALUE>",
+    "TgtPattern": "CAST(<expr> AS TEXT) LIKE <pattern>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert non-string expressions in NOT LIKE conditions to explicit text cast for PostgreSQL compatibility",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<expr: ANY_VALUE> NOT LIKE <pattern: ANY_VALUE>",
+    "TgtPattern": "CAST(<expr> AS TEXT) NOT LIKE <pattern>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert string subtraction to explicit numeric cast in PostgreSQL since MySQL allows implicit string-to-number conversion",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<expr1: STRING> - <expr2: STRING>",
+    "TgtPattern": "CAST ( <expr1> AS NUMERIC ) - CAST ( <expr2> AS NUMERIC )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "In MySQL, AVG can implicitly convert string values to numbers during aggregation, while PostgreSQL requires explicit casting for non-numeric types. This rule adds a CAST to DOUBLE PRECISION to preserve MySQL's numeric aggregation behavior.",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "AVG ( <expr: ANY_VALUE> )",
+    "TgtPattern": "AVG ( CAST ( <expr> AS DOUBLE PRECISION ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert division operator to cast both operands to double precision to mimic MySQL's implicit numeric conversion",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "<left: ANY_VALUE> / <right: ANY_VALUE>",
+    "TgtPattern": "(CAST(<left> AS DOUBLE PRECISION) / CAST(<right> AS DOUBLE PRECISION))",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL STD function to PostgreSQL stddev_pop function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "STD ( <expr: ANY_VALUE> )",
+    "TgtPattern": "stddev_pop ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert MySQL composite interval unit DAY_HOUR to PostgreSQL equivalent using separate interval components",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "mysql",
+      "Tgt": "pg"
+    },
+    "SrcPattern": "INTERVAL <str_val: STRING> DAY_HOUR",
+    "TgtPattern": "(split_part(trim(both '''' from <str_val>), ' ', 1) || ' days')::interval + (split_part(trim(both '''' from <str_val>), ' ', 2) || ' hours')::interval",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "mysql": {},
+        "pg": {}
+      }
+    }
+  }
+]

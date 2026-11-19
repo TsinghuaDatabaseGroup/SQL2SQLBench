@@ -1,0 +1,200 @@
+[
+    {
+        "Desc": "SINH",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SINH(<value: NUMBER>)",
+        "TgtPattern": "(EXP(<value>) - EXP(-(<value>))) / 2",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "COSH",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COSH(<value: NUMBER>)",
+        "TgtPattern": "(EXP(<value>) + EXP(-(<value>))) / 2",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TANH",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TANH(<value: NUMBER>)",
+        "TgtPattern": "(EXP(<value>) - EXP(-(<value>))) / (EXP(<value>) + EXP(-(<value>)))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REMAINDER",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REMAINDER(<value1: INT>, <value2: INT>)",
+        "TgtPattern": "<value1> - (<value2> * ROUND(<value1> / <value2>))",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "TRUNC_NUMBER1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value: NUMBER>)",
+        "TgtPattern": "TRUNCATE(<value>, 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_NUMBER2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value: NUMBER>, <bits: INT, LITERAL, [-5, 5]>)",
+        "TgtPattern": "TRUNCATE(<value>, <bits>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "WIDTH_BUCKET",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CASE WHEN <num: INT> IS NOT NULL THEN WIDTH_BUCKET(NVL(<num>,0), <low: INT, LITERAL>, <low> + <val: INT, LITERAL, [5, 30)>, <num_buckets: INT, LITERAL, [5, 15]>) ELSE NULL END",
+        "TgtPattern": "CASE WHEN <num> IS NOT NULL THEN CASE WHEN <num> \\< <low> THEN 0 WHEN <num> \\>= <low> + <val> THEN <num_buckets> + 1 ELSE FLOOR((<num> - <low>) / ((<val> * 1.0) / <num_buckets>)) + 1 END ELSE NULL END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "TO_CHAR_$_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM$99G999G999G999D00')",
+        "TgtPattern": "CONCAT('$', FORMAT(<value>, 2))",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ".,"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_CHAR_$_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM$99G999G999G999D00')",
+        "TgtPattern": "REPLACE(REPLACE(REPLACE(CONCAT('$', FORMAT(<value>, 2)), '.', '|'), ',', '.'), '|', ',')",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_CHAR_NUM_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM99G999G999G999D00')",
+        "TgtPattern": "FORMAT(<value>, 2)",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ".,"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_CHAR_NUM_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM99G999G999G999D00')",
+        "TgtPattern": "REPLACE(REPLACE(REPLACE(FORMAT(<value>, 2), '.', '|'), ',', '.'), '|', ',')",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_NUMBER_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_NUMBER(<value: @GenOracleStrNumber('.,')>, 'FM99G999G999G999D99')",
+        "TgtPattern": "<num: @GenNumber(<value>, '.,')>",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ".,"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_NUMBER_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_NUMBER(<value:  @GenOracleStrNumber(',.')>, 'FM99G999G999G999D99')",
+        "TgtPattern": "<num: @GenNumber(<value>, ',.')>",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    }
+]

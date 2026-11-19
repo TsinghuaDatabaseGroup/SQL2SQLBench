@@ -1,0 +1,126 @@
+[
+    {
+        "Desc": "REMAINDER",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REMAINDER(<value1: INT>, <value2: INT, [2,3]>)",
+        "TgtPattern": "<value1> % <value2>",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "WIDTH_BUCKET",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CASE WHEN <num: INT> IS NOT NULL THEN WIDTH_BUCKET(NVL(<num>,0), <low: INT, LITERAL>, <low> + <val: INT, LITERAL, [5, 30)>, <num_buckets: INT, LITERAL, [5, 15]>) ELSE NULL END",
+        "TgtPattern": "CASE WHEN <num> IS NOT NULL THEN CASE WHEN <num> \\< <low> THEN 0 WHEN <num> \\>= <low> + <val> THEN <num_buckets> + 1 ELSE FLOOR((<num> - <low>) / ((<val> * 1.0) / <num_buckets>)) + 1 END ELSE NULL END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "TO_CHAR_$_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM$99G999G999G999D00')",
+        "TgtPattern": "'$' + FORMAT(<value>, 'N2', 'en-US')",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ".,"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_CHAR_$_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM$99G999G999G999D00')",
+        "TgtPattern": "'$' + FORMAT(<value>, 'N2', 'de-DE')",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_NUMBER_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_NUMBER(<value: @GenOracleStrNumber('.,')>, 'FM99G999G999G999D99')",
+        "TgtPattern": "<num: @GenNumber(<value>, '.,')>",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ".,"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_NUMBER_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_NUMBER(<value:  @GenOracleStrNumber(',.')>, 'FM99G999G999G999D99')",
+        "TgtPattern": "<num: @GenNumber(<value>, ',.')>",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TRUNC_NUMBER1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value: NUMBER>)",
+        "TgtPattern": "ROUND(<value>, 0, 1)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_NUMBER2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value: NUMBER>, <bits: INT, LITERAL, [-5, 5]>)",
+        "TgtPattern": "ROUND(<value>, <bits>, 1)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

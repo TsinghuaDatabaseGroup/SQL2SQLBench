@@ -1,0 +1,86 @@
+[
+    {
+        "Desc": "SUBSTRING",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTRING( <value: STRING> FROM 0 FOR <len: INT, LITERAL>)",
+        "TgtPattern": "SUBSTRING(<value>, 1 , <len> - 1 )",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "LPAD",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LPAD(<str: STRING>, <len: INT, LITERAL, [1, 10]>)",
+        "TgtPattern": " LPAD(<str>, <len>, ' ')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "RPAD",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "RPAD(<str: STRING>, <len: INT, LITERAL, [1, 10]>)",
+        "TgtPattern": " RPAD(<str>, <len>, ' ')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "RTRIM",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "RTRIM(<str: STRING>, <chars: STRING>)",
+        "TgtPattern": " REGEXP_REPLACE(<str>, <rem_str: @RtrimReg(<chars>)>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "LTRIM",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LTRIM(<str: STRING>, <chars: STRING>)",
+        "TgtPattern": " REGEXP_REPLACE(<str>, <rem_str: @LtrimReg(<chars>)>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TO_CHAR_DATE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<date: DATE>, <format: @GenOraPgTimeFormat()>)",
+        "TgtPattern": "DATE_FORMAT(<date>, <fmt1: @TranPgDateFormatToMySQL(<format>)>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRPOS",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRPOS(<str: STRING>, <substr: @GenSubString(<str>, 1, 1)>)",
+        "TgtPattern": "INSTR(<str>, <substr>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

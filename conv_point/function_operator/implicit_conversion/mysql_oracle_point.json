@@ -1,0 +1,88 @@
+[
+    {
+        "Desc": "BOOL_TO_INT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUM(<bool: BOOL>)",
+        "TgtPattern": "SUM(CASE WHEN <bool> THEN 1 ELSE 0 END)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "STRING_TO_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: DATE, STRICT> = <date_str: @SampleDate(<value>)>",
+        "TgtPattern": "<value> = TO_DATE(<date_str>, 'YYYY-MM-DD')",
+        "Return": "BOOL",
+        "Condition": null,
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "DD-MON-RR"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "STRING_TO_TIMESTAMP",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: TIMESTAMP, STRICT> = <date_str: @SampleTimeStamp(<value>)>",
+        "TgtPattern": "<value> = TO_TIMESTAMP(<date_str>, 'YYYY-MM-DD HH24:MI:SSXFF')",
+        "Return": "BOOL",
+        "Condition": null,
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_TIMESTAMP_FORMAT": "DD-MON-RR HH.MI.SSXFF AM"
+                }
+            }
+        }
+    },
+    {
+       "Desc": "TEXT_TO_NUM",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUM(CASE WHEN <cond: BOOL> THEN <value1: STRING, NUMBER> ELSE <value2: NUMBER> END )",
+        "TgtPattern": "SUM(CASE WHEN <cond> THEN CAST(<value1> AS BINARY_DOUBLE) ELSE <value2> END)",
+        "Return": "NUMBER",
+        "Condition": null
+    },
+    {
+        "Desc": "DATE LIKE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date_value: DATE> LIKE <str: @GenDateLikePat(<date_value>)>",
+        "TgtPattern": "TO_CHAR(<date_value>, 'YYYY-MM-DD') LIKE <str>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "DATE_TO_STR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTR(<date: DATE>, <start: INT, LITERAL, [1,2]>, <end: INT, LITERAL, [3,4]>)",
+        "TgtPattern": "SUBSTR(TO_CHAR(<date>, 'YYYY-MM-DD'), <start>, <end>)",
+        "Return": "STRING",
+        "Condition": null
+    }
+]

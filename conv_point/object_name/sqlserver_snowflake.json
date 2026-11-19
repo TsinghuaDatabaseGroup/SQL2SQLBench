@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "ORGANIZATION_R",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "snowflake"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "ORGANIZATION",
+        "TgtPattern": "[ORGANIZATION\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_R",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "snowflake"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "START",
+        "TgtPattern": "[START\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "ACCOUNT_R",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "snowflake"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "ACCOUNT",
+        "TgtPattern": "[ACCOUNT\"",
+        "Condition": null,
+        "Return": null
+    }
+]

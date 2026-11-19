@@ -1,0 +1,578 @@
+# -*- coding: utf-8 -*-
+# @Project: SQL2SQL_Bench
+# @Module: sqline_translate$
+
+# @Time: 2025/3/20 17:01
+import json
+import os
+import re
+import subprocess
+
+import sqlglot
+
+from db_builder.schema_builder import create_table, schema_build
+from model.model_init import parse_llm_answer, init_model
+from transpiler.cracksql_driver.cracksql_driver import trans_func
+from transpiler.dspy.dspy_impl import SQLTranslator
+from transpiler.model_prompt import LLM_REWRITE_SYS_PROMPT, LLM_REWRITE_USER_PROMPT, LLM_FEED_BACK_SYS_PROMPT, \
+    LLM_FEED_BACK_USER_PROMPT, DB_PARAM_SYS_PROMPT, DB_PARAM_USER_PROMPT, TYPE_MAPPING_SYS_PROMPT, \
+    TYPE_MAPPING_USER_PROMPT, TRAN_HISTORY_SYS_PROMPT, TRAN_HISTORY_USER_PROMPT
+from transpiler.tool import create_stmt_fetch
+from utils.db_connector import sql_dependent_execute
+from utils.tools import get_proj_root_path, load_config, get_all_db_name, get_db_ids
+from verification.verify import post_process_for_reserved_keyword
+
+config = load_config()
+
+
+def normalize_whitespace(text):
+    return re.sub(r'\s+', ' ', text).strip()
+
+
+def transfer_sql_sqline(sql: str, src_dialect: str, tgt_dialect: str, tid: int = 0):
+    if not config['cloud_mode']:
+        sqlines_path = os.path.join(get_proj_root_path(), 'src', 'transpiler', 'sqlines-3.3.133', 'sqlines-3.3.133',
+                                    'sqlines.exe')
+        input_file = os.path.join(get_proj_root_path(), 'src', 'transpiler', 'sqlines-3.3.133', f'script_{tid}.sql')
+        output_file = os.path.join(get_proj_root_path(), 'src', 'transpiler', 'sqlines-3.3.133',
+                                   f'sqlines_res_{tid}.sql')
+    else:
+        sqlines_path = os.path.join(get_proj_root_path(), 'src', 'transpiler', 'sqlines', 'sqlines')
+        input_file = os.path.join(get_proj_root_path(), 'src', 'transpiler', 'sqlines', f'script_{tid}.sql')
+        output_file = os.path.join(get_proj_root_path(), 'src', 'transpiler', 'sqlines', f'sqlines_res_{tid}.sql')
+    sql = sql.strip(';').strip() + ';'
+    with open(input_file, 'w') as file:
+        file.write(sql + '\n')
+    sqlines_dialect_map = {
+        "pg": "postgresql",
+        "mysql": "mysql",
+        "oracle": "oracle",
+        'sqlserver': "sql"
+    }
+    cnt = 0
+    while True:
+        command = (f"{sqlines_path} -in={input_file} -s={sqlines_dialect_map[src_dialect]} "
+                   f"-out={output_file} -t={sqlines_dialect_map[tgt_dialect]}")
+
+        os.system(
+            command + f" > {os.path.join(get_proj_root_path(), 'src', 'transpiler', f'sqlines_cmd_out_{tid}.txt')}")
+        if os.path.exists(output_file) or cnt >= 5:
+            break
+        cnt += 1
+    if cnt >= 5:
+        return True, 'Wrong Sqlines'
+    with open(output_file, 'r') as file:
+        out_sqls = file.readlines()
+    flag = True
+    out_sql = '\n'.join(out_sqls[1:])
+    out_sql = normalize_whitespace(out_sql)
+    folder_path = os.path.join(get_proj_root_path(), 'src', 'transpiler')
+    for file_name in os.listdir(folder_path):
+        if not file_name.startswith('sqlines'):
+            continue
+        file_path = os.path.join(folder_path, file_name)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+    return flag, out_sql.strip()
+
+
+def make_db_para(db_para: dict):
+    res = {}
+    for dialect, params in db_para.items():
+        if dialect == 'pg':
+            db_used_name = 'Postgres Database Parameter'
+        elif dialect == 'mysql':
+            db_used_name = 'MySQL Database Parameter'
+        elif dialect == 'oracle':
+            db_used_name = 'Oracle Database Parameter'
+        elif dialect == 'sqlserver':
+            db_used_name = 'SQL Server Database Parameter'
+        elif dialect == 'snowflake':
+            db_used_name = 'snowflake Database Parameter'
+        else:
+            raise ValueError("Unsupported dialect")
+        new_params = {}
+        for key, value in params.items():
+            assert key in para_description
+            new_params[key] = {
+                "value": value,
+                "description": para_description[key]
+            }
+        if len(params) != 0:
+            res[db_used_name] = new_params
+    return res
+
+
+def translate_sqlglot(sql: str, src_dialect: str, tgt_dialect: str):
+    sqlglot_dialect_map = {
+        "pg": "postgres",
+        "mysql": "mysql",
+        "oracle": "oracle",
+        'sqlserver': "tsql",
+        "snowflake": "snowflake",
+        'sqlite': "sqlite"
+    }
+    src_dialect = sqlglot_dialect_map[src_dialect]
+    tgt_dialect = sqlglot_dialect_map[tgt_dialect]
+    try:
+        sql = sqlglot.transpile(sql, src_dialect, tgt_dialect)
+    except Exception as e:
+        return False, str(e)
+    return True, sql[0].strip()
+
+
+type_mapping_table = {
+    "mysql": {
+        "pg": {
+            "YEAR": "SMALLINT",
+            "POINT": "GEOGRAPHY",
+            "BLOB": "BYTEA"
+        },
+        "oracle": {
+            "YEAR": "NUMBER(4)",
+            "POINT": "SDO_GEOMETRY",
+            "BOOL": "NUMBER(1)"
+        },
+        "snowflake": {
+            "YEAR": "NUMBER(4)",
+            "POINT": "GEOGRAPHY",
+            "BOOL": "BOOLEAN",
+            "BLOB": "BINARY"
+        },
+        "sqlserver": {
+            "YEAR": "SMALLINT",
+            "POINT": "GEOGRAPHY",
+            "BOOL": "BIT",
+            "BLOB": "varbinary(max)"
+        },
+        "sqlite": {
+            "YEAR": "INTEGER",
+            "BOOL": "INTEGER",
+            "BLOB": "BLOB"
+        },
+    },
+    "pg": {
+        "mysql": {
+            "UUID": "CHAR(36)",
+            "GEOGRAPHY": "POINT",
+            "JSONB": "JSON",
+            "XML": "TEXT",
+            "ARRAY": "JSON",
+        },
+        "oracle": {
+            "UUID": "CHAR(36)",
+            "GEOGRAPHY": "SDO_GEOMETRY",
+            "JSONB": "JSON",
+            "XML": "XMLType",
+            "ARRAY": "VARRAY",
+            "BOOL": "NUMBER(1)"
+            },
+            "snowflake": {
+                "UUID": "VARCHAR(36)",
+                "JSONB": "VARIANT",
+                "XML": "VARIANT",
+                "BOOL": "BOOLEAN",
+                "BYTEA": "BINARY"
+            },
+            "sqlserver": {
+                "UUID": "VARCHAR(36)",
+                "JSONB": "NVARCHAR(MAX)",
+                "ARRAY": "NVARCHAR(MAX)",
+                "BOOL": "BIT",
+                "BYTEA": "varbinary(max)"
+            },
+            "sqlite": {
+                "UUID": "TEXT",
+                "JSONB": "TEXT",
+                "XML": "TEXT",
+                "ARRAY": "TEXT",
+                "BOOL": "INTEGER",
+                "BYTEA": "BLOB"
+        }
+    },
+    "oracle": {
+        "mysql": {
+            "SDO_GEOMETRY": "POINT",
+            "XMLType": "XML",
+            "VARRAY": "JSON",
+            "NUMBER(1)": "BOOL",
+            "BLOB": "BLOB",
+        },
+        "pg": {
+            "SDO_GEOMETRY": "GEOGRAPHY",
+            "XMLType": "XML",
+            "VARRAY": "ARRAY",
+            "NUMBER(1)": "BOOL",
+            "BLOB": "BYTEA"
+        },
+        "snowflake": {
+            "SDO_GEOMETRY": "GEOGRAPHY",
+            "XMLType": "VARIANT",
+            "VARRAY": "ARRAY",
+            "NUMBER(1)": "BOOLEAN",
+            "BLOB": "BINARY",
+        },
+        "sqlserver": {
+            "SDO_GEOMETRY": "GEOGRAPHY",
+            "XMLType": "XML",
+            "VARRAY": "NVARCHAR(MAX)",
+            "NUMBER(1)": "BIT",
+            "BLOB": "varbinary(max)",
+        },
+        "sqlite": {
+            "XMLType": "TEXT",
+            "VARRAY": "TEXT",
+            "NUMBER(1)": "INTEGER",
+            "BLOB": "BLOB"
+        }
+    },
+    "sqlserver": {
+        "mysql": {
+            "GEOGRAPHY": "POINT",
+            "XML": "TEXT",
+            "BIT": "BOOL",
+            "varbinary(max)": "BLOB"
+        },
+        "pg": {
+            "XML": "XML",
+            "BIT": "BOOL",
+            "varbinary(max)": "BYTEA"
+        },
+        "oracle": {
+            "GEOGRAPHY": "SDO_GEOMETRY",
+            "XML": "XMLType",
+            "NVARCHAR(MAX)": "VARRAY",
+            "BIT": "NUMBER(1)",
+            "varbinary(max)": "BLOB"
+        },
+        "snowflake": {
+            "XML": "VARIANT",
+            "NVARCHAR(MAX)": "ARRAY",
+            "BIT": "BOOLEAN",
+            "varbinary(max)": "BINARY"
+        },
+        "sqlite": {
+            "XML": "TEXT",
+            "NVARCHAR(MAX)": "TEXT",
+            "BIT": "INTEGER",
+            "varbinary(max)": "BLOB"
+        }
+    },
+    "snowflake": {
+        "mysql": {
+            "GEOGRAPHY": "POINT",
+            "VARIANT": "JSON",
+            "ARRAY": "JSON",
+            "BOOLEAN": "BOOL",
+            "BINARY": "BLOB"
+        },
+        "pg": {
+            "VARIANT": "JSONB",
+            "BOOLEAN": "BOOL",
+            "BINARY": "BYTEA"
+        },
+        "oracle": {
+            "GEOGRAPHY": "SDO_GEOMETRY",
+            "VARIANT": "XMLType",
+            "ARRAY": "VARRAY",
+            "BOOLEAN": "NUMBER(1)",
+            "BINARY": "BLOB"
+        },
+        "sqlserver": {
+            "VARIANT": "NVARCHAR(MAX)",
+            "ARRAY": "NVARCHAR(MAX)",
+            "BOOLEAN": "BIT",
+            "BINARY": "varbinary(max)"
+        },
+        "sqlite": {
+            "VARIANT": "TEXT",
+            "ARRAY": "TEXT",
+            "BOOLEAN": "INTEGER",
+            "BINARY": "BLOB"
+        }
+    },
+    "sqlite": {
+        "mysql": {},
+        "pg": {},
+        "oracle": {},
+        "sqlserver": {},
+        "snowflake": {}
+    }
+}
+
+
+def get_type_mapping(src_dialect: str, tgt_dialect: str) -> dict:
+    # SQLite source type names are often affinity-based and ambiguous, so missing pairs fallback to no hint.
+    return type_mapping_table.get(src_dialect, {}).get(tgt_dialect, {})
+
+para_description = {
+    "NLS_DATE_FORMAT": "NLS_DATE_FORMAT specifies the default date format to use with the TO_CHAR and TO_DATE functions. The default value of this parameter is determined by NLS_TERRITORY. The value of this parameter can be any valid date format mask, and the value must be surrounded by double quotation marks. For example: NLS_DATE_FORMAT = \"MM/DD/YYYY\"",
+    "NLS_TIMESTAMP_FORMAT": "NLS_TIMESTAMP_FORMAT defines the datetime format model to use with the TO_CHAR and TO_TIMESTAMP functions.",
+    "NLS_DATE_LANGUAGE": "NLS_DATE_LANGUAGE specifies the language to use for the spelling of day and month names and date abbreviations (a.m., p.m., AD, BC) returned by the TO_DATE and TO_CHAR functions.",
+    "datestyle": "Sets the display format for date and time values, as well as the rules for interpreting ambiguous date input values. For historical reasons, this variable contains two independent components: the output format specification (ISO, Postgres, SQL, or German) and the input/output specification for year/month/day ordering (DMY, MDY, or YMD). These can be set separately or together. The keywords Euro and European are synonyms for DMY; the keywords US, NonEuro, and NonEuropean are synonyms for MDY. See Section 8.5 for more information. The built-in default is ISO, MDY, but initdb will initialize the configuration file with a setting that corresponds to the behavior of the chosen lc_time locale.",
+    "NLS_NUMERIC_CHARACTERS": "NLS_NUMERIC_CHARACTERS specifies the characters to use as the group separator and decimal character."
+}
+
+
+def make_no_feedback_prompt(sql: dict, src_dialect: str, tgt_dialect: str, db_param: dict):
+    model_dialect_map = {
+        "pg": "PostgreSQL",
+        "mysql": "MySQL",
+        "oracle": "Oracle",
+        'sqlserver': "SQL Server",
+        "snowflake": "Snowflake",
+        "sqlite": "SQLite",
+    }
+    ddl = create_stmt_fetch(sql['tables'], src_dialect)
+    ddls = '\n'.join(ddl)
+
+    sql_input = sql[src_dialect]
+    type_mapping = get_type_mapping(src_dialect, tgt_dialect)
+
+    prompt_src_dialect = model_dialect_map[src_dialect]
+    prompt_tgt_dialect = model_dialect_map[tgt_dialect]
+    if len(db_param[src_dialect]) == 0 and len(db_param[tgt_dialect]) == 0:
+        db_param_sys = ''
+        db_param_usr = ''
+    else:
+        db_param_sys = DB_PARAM_SYS_PROMPT
+        parameter = json.dumps(make_db_para(db_param), indent=2)
+        db_param_usr = DB_PARAM_USER_PROMPT.format(parameter=parameter,
+                                                   src_dialect=prompt_src_dialect, tgt_dialect=prompt_tgt_dialect)
+
+    if len(type_mapping) == 0:
+        type_mapping_sys = ""
+        type_mapping_usr = ""
+    else:
+        type_mapping_sys = TYPE_MAPPING_SYS_PROMPT.format(src_dialect=prompt_src_dialect,
+                                                          tgt_dialect=prompt_tgt_dialect)
+        type_mapping_usr = TYPE_MAPPING_USER_PROMPT.format(type_mapping=json.dumps(type_mapping, indent=2),
+                                                           src_dialect=prompt_src_dialect,
+                                                           tgt_dialect=prompt_tgt_dialect)
+
+    sys_prompt = LLM_REWRITE_SYS_PROMPT.format(src_dialect=prompt_src_dialect, tgt_dialect=prompt_tgt_dialect,
+                                               db_param_sys=db_param_sys, type_mapping_sys=type_mapping_sys)
+    user_prompt = LLM_REWRITE_USER_PROMPT.format(src_dialect=prompt_src_dialect, tgt_dialect=prompt_tgt_dialect,
+                                                 sql=sql_input,
+                                                 db_param_stmt=db_param_usr, type_mapping_stmt=type_mapping_usr,
+                                                 ddl=ddls)
+    return sys_prompt, user_prompt
+
+
+def make_feedback_prompt(sql: dict, src_dialect: str, tgt_dialect: str, db_param: dict,
+                         tran_history: list[dict]):
+    model_dialect_map = {
+        "pg": "PostgreSQL",
+        "mysql": "MySQL",
+        "oracle": "Oracle",
+        'sqlserver': "SQL Server",
+        "snowflake": "Snowflake",
+        "sqlite": "SQLite",
+    }
+    prompt_src_dialect = model_dialect_map[src_dialect]
+    prompt_tgt_dialect = model_dialect_map[tgt_dialect]
+    if len(db_param[src_dialect]) == 0 and len(db_param[tgt_dialect]) == 0:
+        db_param_sys = ''
+        db_param_usr = ''
+    else:
+        db_param_sys = DB_PARAM_SYS_PROMPT
+        parameter = json.dumps(make_db_para(db_param), indent=2)
+        db_param_usr = DB_PARAM_USER_PROMPT.format(parameter=parameter,
+                                                   src_dialect=prompt_src_dialect, tgt_dialect=prompt_tgt_dialect)
+    type_mapping = get_type_mapping(src_dialect, tgt_dialect)
+    if len(type_mapping) == 0:
+        type_mapping_sys = ""
+        type_mapping_usr = ""
+    else:
+        type_mapping_sys = TYPE_MAPPING_SYS_PROMPT.format(src_dialect=prompt_src_dialect,
+                                                          tgt_dialect=prompt_tgt_dialect)
+        type_mapping_usr = TYPE_MAPPING_USER_PROMPT.format(type_mapping=json.dumps(type_mapping, indent=2),
+                                                           src_dialect=prompt_src_dialect,
+                                                           tgt_dialect=prompt_tgt_dialect)
+    tran_history_sys_prompt = TRAN_HISTORY_SYS_PROMPT.format(src_dialect=prompt_src_dialect,
+                                                             tgt_dialect=prompt_tgt_dialect)
+    tran_history_usr_prompt = TRAN_HISTORY_USER_PROMPT.format(history=json.dumps(tran_history, indent=2))
+    ddl = create_stmt_fetch(sql['tables'], src_dialect)
+    ddls = '\n'.join(ddl)
+
+    sql_input = sql[src_dialect]
+
+    sys_prompt = LLM_FEED_BACK_SYS_PROMPT.format(src_dialect=prompt_src_dialect, tgt_dialect=prompt_tgt_dialect,
+                                                 db_param_sys=db_param_sys, type_mapping_sys=type_mapping_sys,
+                                                 history_sys=tran_history_sys_prompt)
+    user_prompt = LLM_FEED_BACK_USER_PROMPT.format(src_dialect=prompt_src_dialect, tgt_dialect=prompt_tgt_dialect,
+                                                   sql=sql_input, db_param_stmt=db_param_usr,
+                                                   type_mapping_stmt=type_mapping_usr,
+                                                   ddl=ddls, history_stmt=tran_history_usr_prompt)
+    return sys_prompt, user_prompt
+
+
+def model_translate(sql: dict, src_dialect: str, tgt_dialect: str, model_id: str, db_param: dict, tid: str = '0'):
+    translator = init_model(model_id)
+    sys_prompt, user_prompt = make_no_feedback_prompt(sql, src_dialect, tgt_dialect, db_param)
+    answer_raw = translator.trans_func([], sys_prompt, user_prompt)
+    pattern = r'"Answer":\s*(.*?)\s*,\s*"Reasoning":\s*(.*?)'
+    # pattern = r'"SQL Snippet":\s*(.*?)\s*,\s*"Reasoning":\s*(.*?),\s*"Confidence":\s*(.*?)\s'
+    res = parse_llm_answer(translator.model_id, answer_raw, pattern)
+    folder_path = os.path.join(get_proj_root_path(), 'src', 'transpiler')
+    if os.path.exists(os.path.join(folder_path, f'{model_id}_llm_ans_{tid}.json')):
+        with open(os.path.join(folder_path, f'{model_id}_llm_ans_{tid}.json'), 'r') as file:
+            data = json.load(file)
+    else:
+        data = []
+    data.append(answer_raw)
+    with open(os.path.join(folder_path, f'{model_id}_llm_ans_{tid}.json'), 'w') as file:
+        json.dump(data, file)
+    return res
+
+
+def feed_back_model(sql: dict, src_dialect, tgt_dialect, db_para: dict, max_retry_time: int, model_id: str,
+                    tid: int = 0):
+    ori_sql = sql[src_dialect]
+    translator = init_model(model_id)
+    sys_prompt, user_prompt = make_no_feedback_prompt(sql, src_dialect, tgt_dialect, db_para)
+    answer_raw = translator.trans_func([], sys_prompt, user_prompt)
+    pattern = r'"Answer":\s*(.*?)\s*,\s*"Reasoning":\s*(.*?)'
+    res_sql = parse_llm_answer(translator.model_id, answer_raw, pattern)
+    folder_path = os.path.join(get_proj_root_path(), 'src', 'transpiler')
+    if os.path.exists(os.path.join(folder_path, f'{model_id}_feed_back_llm_ans_{tid}.json')):
+        with open(os.path.join(folder_path, f'{model_id}_feed_back_llm_ans_{tid}.json'), 'r') as file:
+            data = json.load(file)
+    else:
+        data = []
+    data.append(answer_raw)
+    with open(os.path.join(folder_path, f'{model_id}_feed_back_llm_ans_{tid}.json'), 'w') as file:
+        json.dump(data, file, indent=4)
+    retry_time = 0
+    history = []
+    last_success_sql = None
+    if res_sql != "Answer not returned in the given format!":
+        last_success_sql = res_sql
+    while retry_time < max_retry_time:
+        if res_sql == "Answer not returned in the given format!":
+            history.append({
+                "OriginalSQL": ori_sql,
+                "AttemptedTranslation": 'You give translation in the wrong format, Please follow the format!',
+                "Issue": 'Answer not returned in the given format!',
+            })
+        else:
+            res_sql = post_process_for_reserved_keyword(res_sql, src_dialect, tgt_dialect)
+            if tgt_dialect == 'oracle':
+                explain_sql = f"EXPLAIN PLAN FOR {res_sql}"
+            else:
+                explain_sql = f"EXPLAIN {res_sql}"
+            flag, res = sql_dependent_execute(tgt_dialect, get_all_db_name(tgt_dialect),
+                                              explain_sql, db_para.get(tgt_dialect, {}))
+            if flag:
+                break
+            else:
+                history.append({
+                    "OriginalSQL": ori_sql,
+                    "AttemptedTranslation": res_sql,
+                    "Issue": res,
+                })
+        retry_time += 1
+        sys_prompt, user_prompt = make_feedback_prompt(sql, src_dialect, tgt_dialect, db_para, history)
+        answer_raw = translator.trans_func([], sys_prompt, user_prompt)
+        pattern = r'"Answer":\s*(.*?)\s*,\s*"Reasoning":\s*(.*?)'
+        res_sql = parse_llm_answer(translator.model_id, answer_raw, pattern)
+        if res_sql != 'Answer not returned in the given format!':
+            last_success_sql = res_sql
+        folder_path = os.path.join(get_proj_root_path(), 'src', 'transpiler')
+        with open(os.path.join(folder_path, f'{model_id}_feed_back_llm_ans_{tid}.json'), 'r') as file:
+            data = json.load(file)
+        data.append(answer_raw)
+        with open(os.path.join(folder_path, f'{model_id}_feed_back_llm_ans_{tid}.json'), 'w') as file:
+            json.dump(data, file, indent=4)
+    if last_success_sql is None:
+        last_success_sql = "Answer not returned in the given format!"
+    return last_success_sql
+
+
+def ora2pg_tran(sql: str, src_dialect: str, tgt_dialect: str, db_name, ora_id: str = '0'):
+    assert tgt_dialect == 'pg'
+    root_path = os.path.join(get_proj_root_path(), 'src', 'transpiler')
+    input_path = os.path.join(root_path, f'input_{ora_id}.sql')
+    output_path = os.path.join(root_path, f'output_{ora_id}.sql')
+    with open(input_path, 'w') as file:
+        file.write(sql.strip().strip(';') + ';')
+    config_path = os.path.join(root_path, 'ora2pg.conf')
+    ora2pg_env = os.environ.copy()
+    # TODO: replace with your perl_root_path
+    perl_root = os.path.join(get_proj_root_path(), 'perl5')
+    perl_lib = os.path.join(perl_root, 'lib', 'perl5')
+    ora2pg_env["PATH"] = ora2pg_env.get("PATH", "") + f":{os.path.join(perl_root, 'bin')}"
+    ora2pg_env['PERL5LIB'] = f'{perl_lib}:{perl_lib}'
+    ora2pg_env['PERL_MB_OPT'] = f'--install_base "{perl_root}"'
+    ora2pg_env['PERL_MM_OPT'] = f'INSTALL_BASE={perl_root}'
+    ora2pg_env['PERL_LOCAL_LIB_ROOT'] = f'{perl_root}:{perl_root}'
+    if src_dialect == 'oracle':
+        cmd = ["ora2pg", "-i", input_path, "-o", output_path, "-c", config_path]
+    elif src_dialect == 'sqlserver':
+        cmd = ["ora2pg", "-M", "-i", input_path, "-o", output_path, "-c", config_path]
+    else:
+        cmd = ["ora2pg", "-m", "-i", input_path, "-o", output_path, "-c", config_path]
+    result = subprocess.run(cmd, env=ora2pg_env, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"Command failed with exit code {result.returncode}")
+    with open(output_path, 'r') as file:
+        content = file.read().splitlines()
+        i = 0
+        for i in range(len(content)):
+            if content[i] == '\\set ON_ERROR_STOP ON':
+                break
+        res = ''
+        i = i + 1
+        while i < len(content):
+            res = res + content[i] + ' '
+            i = i + 1
+        res = res.strip()
+        return res
+
+
+import dspy
+
+config = load_config()
+
+lm = dspy.LM(
+    "openai/deepseek-r1-250528",
+    api_base=config['deepseek_r1_api_base'],
+    api_key=config['deepseek_r1_api_key'],
+    model_type="chat",
+)
+dspy.configure(lm=lm)
+translator = SQLTranslator()
+file_path = os.path.join(get_proj_root_path(), 'src', 'transpiler', 'dspy', 'compiled_sql_translator.json')
+translator.load(file_path)
+
+
+def translate_dspy(sql: dict, src_dialect: str, tgt_dialect: str, db_param: dict, tid: str = '0'):
+    if 'Dialect' in sql:
+        tables = sql['SQL']['tables']
+        used_sql = sql['SQL'][src_dialect]
+    else:
+        tables = sql['tables']
+        used_sql = sql[src_dialect]
+    schema_info = '\n'.join(create_stmt_fetch(tables, src_dialect))
+    type_mapping_str = json.dumps(get_type_mapping(src_dialect, tgt_dialect), indent=2)
+    prediction = translator(
+        source_dialect=src_dialect,
+        target_dialect=tgt_dialect,
+        source_sql=used_sql,
+        schema_info=schema_info,
+        db_param=db_param,
+        type_mapping=type_mapping_str
+    )
+
+    return prediction.target_sql
+
+
+def cracksql_translate(sql: dict, src_dialect: str, tgt_dialect: str, db_name,
+                       model_id: str = 'deepseek-r1', out_dir='./', tid = 0):
+    if src_dialect in ['snowflake', 'sqlite', 'sqlserver'] or tgt_dialect in ['snowflake', 'sqlite', 'sqlserver']:
+        translated_sql = feed_back_model(sql, src_dialect, tgt_dialect, {src_dialect: {}, tgt_dialect: {}}, 3, model_id, tid)
+        return True, translated_sql, [], []
+    flag, translated_sql, model_ans_list, used_pieces, lift_histories = trans_func(sql, src_dialect, tgt_dialect,
+                                                                                   db_name,
+                                                                                   model_id, None, out_dir)
+    return flag, translated_sql, lift_histories, used_pieces

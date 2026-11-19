@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "GETX",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<point: POINT>.SDO_POINT.X",
+        "TgtPattern": "ST_X(<point>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GETY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<point: POINT>.SDO_POINT.Y",
+        "TgtPattern": "ST_Y(<point>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "END_R",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "END",
+        "TgtPattern": "\"END\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "VIRTUAL_R",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "VIRTUAL",
+        "TgtPattern": "\"VIRTUAL\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "MATCH_R",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "MATCH",
+        "TgtPattern": "\"MATCH\"",
+        "Condition": null,
+        "Return": null
+    }
+]

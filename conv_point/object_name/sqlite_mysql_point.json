@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "RANK_R",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "mysql"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "RANK",
+        "TgtPattern": "`RANK`",
+        "Condition": null,
+        "Return": null
+    }
+]

@@ -1,0 +1,398 @@
+[
+    {
+        "Desc": "DATEPART_YEAR",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('year', <value: DATE>)",
+        "TgtPattern": "EXTRACT(YEAR FROM <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('year', TO_DATE('2024-05-17'));",
+            "mysql": "SELECT EXTRACT(YEAR FROM CAST('2024-05-17' AS DATE));"
+        }
+    },
+    {
+        "Desc": "DATEPART_MONTH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('month', <value: DATE>)",
+        "TgtPattern": "EXTRACT(MONTH FROM <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('month', TO_DATE('2024-05-17'));",
+            "mysql": "SELECT EXTRACT(MONTH FROM CAST('2024-05-17' AS DATE));"
+        }
+    },
+    {
+        "Desc": "DATEPART_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('day', <value: DATE>)",
+        "TgtPattern": "EXTRACT(DAY FROM <value>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('day', TO_DATE('2024-05-17'));",
+            "mysql": "SELECT EXTRACT(DAY FROM CAST('2024-05-17' AS DATE));"
+        }
+    },
+    {
+        "Desc": "DATE_TRUNC_MONTH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('month', <value: DATE>)",
+        "TgtPattern": "CAST(DATE_FORMAT(<value>, '%Y-%m-01') AS DATE)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATE_TRUNC('month', TO_DATE('2024-05-17'));",
+            "mysql": "SELECT CAST(DATE_FORMAT(CAST('2024-05-17' AS DATE), '%Y-%m-01') AS DATE);"
+        }
+    },
+    {
+        "Desc": "DATE_TRUNC_YEAR",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('year', <value: DATE>)",
+        "TgtPattern": "CAST(CONCAT(EXTRACT(YEAR FROM <value>), '-01-01') AS DATE)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATE_TRUNC('year', TO_DATE('2024-05-17'));",
+            "mysql": "SELECT CAST(CONCAT(EXTRACT(YEAR FROM CAST('2024-05-17' AS DATE)), '-01-01') AS DATE);"
+        }
+    },
+    {
+        "Desc": "ADD_MONTHS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADD_MONTHS(<value: DATE>, <n: INT>)",
+        "TgtPattern": "DATE_ADD(<value>, INTERVAL <n> MONTH)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT ADD_MONTHS(TO_DATE('2024-05-17'), 2);",
+            "mysql": "SELECT DATE_ADD(CAST('2024-05-17' AS DATE), INTERVAL 2 MONTH);"
+        }
+    },
+    {
+        "Desc": "DATEADD_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEADD(day, <n: INT>, <value: DATE>)",
+        "TgtPattern": "DATE_ADD(<value>, INTERVAL <n> DAY)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATEADD(day, 7, TO_DATE('2024-05-17'));",
+            "mysql": "SELECT DATE_ADD(CAST('2024-05-17' AS DATE), INTERVAL 7 DAY);"
+        }
+    },
+    {
+        "Desc": "DATEDIFF_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(day, <start: DATE, STRICT>, <end: DATE, STRICT>)",
+        "TgtPattern": "DATEDIFF(<end>, <start>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATEDIFF(day, TO_DATE('2024-05-01'), TO_DATE('2024-05-17'));",
+            "mysql": "SELECT DATEDIFF(CAST('2024-05-17' AS DATE), CAST('2024-05-01' AS DATE));"
+        }
+    },
+    {
+        "Desc": "NVL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+        "TgtPattern": "IFNULL(<expr1>, <expr2>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "snowflake": "SELECT NVL(NULL, 'fallback');",
+            "mysql": "SELECT IFNULL(NULL, 'fallback');"
+        }
+    },
+    {
+        "Desc": "NVL2",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+        "TgtPattern": "IF(<expr1> IS NOT NULL, <expr2>, <expr3>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "snowflake": "SELECT NVL2(NULL, 'not_null', 'is_null');",
+            "mysql": "SELECT IF(NULL IS NOT NULL, 'not_null', 'is_null');"
+        }
+    },
+    {
+        "Desc": "ZEROIFNULL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ZEROIFNULL(<expr: INT>)",
+        "TgtPattern": "IFNULL(<expr>, 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT ZEROIFNULL(NULL);",
+            "mysql": "SELECT IFNULL(NULL, 0);"
+        }
+    },
+    {
+        "Desc": "NULLIFZERO",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NULLIFZERO(<expr: INT>)",
+        "TgtPattern": "NULLIF(<expr>, 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT NULLIFZERO(0);",
+            "mysql": "SELECT NULLIF(0, 0);"
+        }
+    },
+    {
+        "Desc": "WIDTH_BUCKET",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CASE WHEN <num: INT> IS NOT NULL THEN WIDTH_BUCKET(NVL(<num>,0), <low: INT, LITERAL>, <low> + <val: INT, LITERAL, [5, 30)>, <num_buckets: INT, LITERAL, [5, 15]>) ELSE NULL END",
+        "TgtPattern": "CASE WHEN <num> IS NOT NULL THEN CASE WHEN <num> \\< <low> THEN 0 WHEN <num> \\>= <low> + <val> THEN <num_buckets> + 1 ELSE FLOOR((<num> - <low>) / ((<val> * 1.0) / <num_buckets>)) + 1 END ELSE NULL END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "SPLIT_PART",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SPLIT_PART(<str: STRING>, <delimiter: STRING>, <part_number: INT>)",
+        "TgtPattern": "SUBSTRING_INDEX(SUBSTRING_INDEX(<str>, <delimiter>, <part_number>), <delimiter>, -1)",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "snowflake": "SELECT SPLIT_PART('a.b.c', '.', 2);",
+            "mysql": "SELECT SUBSTRING_INDEX(SUBSTRING_INDEX('a.b.c', '.', 2), '.', -1);"
+        }
+    },
+    {
+        "Desc": "STARTSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STARTSWITH(<str: STRING>, <prefix: STRING>)",
+        "TgtPattern": "LEFT(<str>, CHAR_LENGTH(<prefix>)) = <prefix>",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT STARTSWITH('abcdef', 'abc');",
+            "mysql": "SELECT LEFT('abcdef', CHAR_LENGTH('abc')) = 'abc';"
+        }
+    },
+    {
+        "Desc": "ENDSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ENDSWITH(<str: STRING>, <suffix: STRING>)",
+        "TgtPattern": "RIGHT(<str>, CHAR_LENGTH(<suffix>)) = <suffix>",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT ENDSWITH('abcdef', 'def');",
+            "mysql": "SELECT RIGHT('abcdef', CHAR_LENGTH('def')) = 'def';"
+        }
+    },
+    {
+        "Desc": "CONTAINS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CONTAINS(<str: STRING>, <substr: STRING>)",
+        "TgtPattern": "LOCATE(<substr>, <str>) > 0",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT CONTAINS('abcdef', 'cd');",
+            "mysql": "SELECT LOCATE('cd', 'abcdef') > 0;"
+        }
+    },
+    {
+        "Desc": "POSITION",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "POSITION(<substr: STRING>, <str: STRING>)",
+        "TgtPattern": "LOCATE(<substr>, <str>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT POSITION('cd', 'abcdef');",
+            "mysql": "SELECT LOCATE('cd', 'abcdef');"
+        }
+    },
+    {
+        "Desc": "DIV0",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DIV0(<dividend: DOUBLE>, <divisor: DOUBLE>)",
+        "TgtPattern": "CASE WHEN <divisor> = 0 THEN 0 ELSE <dividend> / <divisor> END",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT DIV0(10, 0);",
+            "mysql": "SELECT CASE WHEN 0 = 0 THEN 0 ELSE 10 / 0 END;"
+        }
+    },
+    {
+        "Desc": "COVAR_POP",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COVAR_POP(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x>*<y> END)\n  -\n  SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> END)\n  *\n  SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END)\n  /\n  NULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)\n)\n/\nNULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_SLOPE",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SLOPE(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(IF(<x> + <y> IS NOT NULL, <x> * <y>, 0)) - COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL)) * AVG(IF(<x> + <y> IS NOT NULL, <x>, NULL)) * AVG(IF(<x> + <y> IS NOT NULL, <y>, NULL))) / (SUM(IF(<x> + <y> IS NOT NULL, <y> * <y>, 0)) - COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL)) * POW(AVG(IF(<x> + <y> IS NOT NULL, <y>, NULL)), 2))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_AVGY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGY(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_AVGX",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGX(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_COUNT",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_COUNT(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_SXX",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXX(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <x> * <x>, 0)) - POWER(SUM(IF(<x> + <y> IS NOT NULL, <x>, 0)), 2) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_SYY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SYY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <y> * <y>, 0)) - POWER(SUM(IF(<x> + <y> IS NOT NULL, <y>, 0)), 2) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "REGR_SXY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(IF(<x> + <y> IS NOT NULL, <x> * <y>, 0)) - SUM(IF(<x> + <y> IS NOT NULL, <y>, 0)) * SUM(IF(<x> + <y> IS NOT NULL, <x>, 0)) / COUNT(IF(<x> + <y> IS NOT NULL, 1, NULL))",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

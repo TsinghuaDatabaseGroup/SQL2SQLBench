@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "TRUNC",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNCATE(<value: NUMBER>, <bits: INT, LITERAL, [-5, 5]>)",
+        "TgtPattern": "TRUNC(<value>, <bits>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "LOG",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LOG(<value: INT>)",
+        "TgtPattern": "LN(<value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "LOG2",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LOG2(<value: INT>)",
+        "TgtPattern": "LOG(2, <value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TO_CHAR_INT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "FORMAT(<value: NUMBER>, <int_value: INT, LITERAL, [0,2]>)",
+        "TgtPattern": "TO_CHAR(<value>, <fmt: @GenToCharFmt(<int_value>)>)",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

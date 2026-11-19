@@ -1,0 +1,86 @@
+[
+    {
+        "Desc": "DATE_R",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "DATE",
+        "TgtPattern": "\"DATE\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_R",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "START",
+        "TgtPattern": "\"START\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "MODE_R",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "MODE",
+        "TgtPattern": "\"MODE\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "NUMBER_R",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "NUMBER",
+        "TgtPattern": "\"NUMBER\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "COMMENT_R",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "COMMENT",
+        "TgtPattern": "\"COMMENT\"",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "PUBLIC_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "TABLE",
+        "SrcPattern": "PUBLIC.<table_name: TABLE>",
+        "TgtPattern": "<table_name>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "PUBLIC_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "COLUMN",
+        "SrcPattern": "PUBLIC.<table_name: TABLE, LITERAL>.<column_name: @fetch_column_from_table(<table_name>)>",
+        "TgtPattern": "<table_name>.<column_name>",
+        "Condition": null,
+        "Return": "ANY_TYPE"
+    }
+]

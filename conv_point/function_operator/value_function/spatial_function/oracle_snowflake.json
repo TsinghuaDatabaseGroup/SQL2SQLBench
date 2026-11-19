@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "GETX",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<point: POINT>.SDO_POINT.X",
+        "TgtPattern": "<point>.Long",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GETY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<point: POINT>.SDO_POINT.Y",
+        "TgtPattern": "<point>.Lat",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

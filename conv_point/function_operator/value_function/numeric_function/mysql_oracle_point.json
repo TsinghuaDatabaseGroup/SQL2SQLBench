@@ -1,0 +1,134 @@
+[
+    {
+        "Desc": "CEILING",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CEILING(<value: FLOAT>)",
+        "TgtPattern": "CEIL(<value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "TO_CHAR_INT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "FORMAT(<value: NUMBER>, <int_value: INT, LITERAL, [0,2]>)",
+        "TgtPattern": "TO_CHAR(<value>, <fmt: @GenToCharFmt(<int_value>)>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "ATAN",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ATAN(<value1: NUMBER>, <value2: NUMBER>)",
+        "TgtPattern": "ATAN2(<value1>, <value2>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DEGREES",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DEGREES(<value: NUMBER>)",
+        "TgtPattern": "(<value>) * 180/ACOS(-1)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "RADIANS",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "RADIANS(<value: NUMBER>)",
+        "TgtPattern": "(<value>) * ACOS(-1)/180",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "PI",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "PI()",
+        "TgtPattern": "ACOS(-1)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "LOG",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LOG(<value: INT>)",
+        "TgtPattern": "LN(<value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "LOG2",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LOG2(<value: INT>)",
+        "TgtPattern": "LOG(2, <value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "COT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COT(<angle: INT>)",
+        "TgtPattern": "1 / TAN(<angle>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "POW",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "POW(<value1: NUMBER>, <value2: NUMBER, LITERAL, [1, 5]>)",
+        "TgtPattern": "POWER(<value1>, <value2>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNCATE(<value: NUMBER>, <bits: INT, LITERAL, [-5, 5]>)",
+        "TgtPattern": "TRUNC(<value>, <bits>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

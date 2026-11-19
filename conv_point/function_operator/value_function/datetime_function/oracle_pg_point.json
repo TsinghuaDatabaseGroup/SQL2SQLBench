@@ -1,0 +1,315 @@
+[
+    {
+        "Desc": "ADD_MONTHS",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADD_MONTHS(<date_value:DATE>, <months:INT,LITERAL>)",
+        "TgtPattern": "<date_value> + INTERVAL '<months> months'",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "SYSDATE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SYSDATE",
+        "TgtPattern": "CURRENT_TIMESTAMP(0)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "SYSTIMESTAMP",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SYSTIMESTAMP",
+        "TgtPattern": "CURRENT_TIMESTAMP",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "MONTHS_BETWEEN",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MONTHS_BETWEEN(<date1:DATE>, <date2:DATE>)",
+        "TgtPattern": "EXTRACT(MONTH FROM age(<date1>, <date2>)) + \nCASE \n        WHEN <date1> \\<\\> <date2> AND \n             (EXTRACT(MONTH FROM <date1> + INTERVAL '1 day') = EXTRACT(MONTH FROM <date1>) OR\n              EXTRACT(MONTH FROM <date2> + INTERVAL '1 day') = EXTRACT(MONTH FROM <date2>))\n        THEN \n            CASE \n                WHEN <date1> \\< <date2> THEN\n                    (31 - EXTRACT(DAY FROM <date2>) + EXTRACT(DAY FROM <date1>)) / 31.0\n                ELSE \n                    (EXTRACT(DAY FROM <date1>) - EXTRACT(DAY FROM <date2>)) / 31.0\n            END\n        ELSE 0\nEND",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "NUMTODSINTERVAL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NUMTODSINTERVAL(<value:INT,LITERAL,[1, 100]>, '<unit: OPTION['day', 'hour', 'minute', 'second']>')",
+        "TgtPattern": "INTERVAL '1 <unit>' * <value>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "NUMTOYMINTERVAL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NUMTOYMINTERVAL(<value:INT,LITERAL,[1, 100]>, '<unit:OPTION['year', 'month']>')",
+        "TgtPattern": "INTERVAL '1 <unit>' * <value>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "ROUND_YEAR",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ROUND(<value:DATE>, '<options:OPTION['YEAR', 'YYYY']>')",
+        "TgtPattern": "CASE WHEN EXTRACT(MONTH FROM <value>) >= 7 THEN DATE_TRUNC('YEAR', <value>) + INTERVAL '1 year' ELSE DATE_TRUNC('YEAR', <value>) END",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "ROUND_MONTH",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ROUND(<value:DATE>, '<options:OPTION['MONTH', 'MON']>')",
+        "TgtPattern": "CASE WHEN EXTRACT(DAY FROM <value>) >= 16 THEN DATE_TRUNC('MONTH', <value>) + INTERVAL '1 month' ELSE DATE_TRUNC('MONTH', <value>) END",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "ROUND_DAY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ROUND(<value:TIMESTAMP>, '<options:OPTION['DDD', 'DD']>')",
+        "TgtPattern": "CASE WHEN EXTRACT(HOUR FROM <value>) >= 12 THEN <value>::date + INTERVAL '1 day' ELSE <value>::date END",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TO_DSINTERVAL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DSINTERVAL('<sign:OPTION['+', '-', '']>P<days:INT_LITERAL,[0, 10]>DT<hours:INT_LITERAL,[0, 23]>H<minutes:INT_LITERAL,[0, 59]>M<seconds:INT_LITERAL,[0, 59]>S')",
+        "TgtPattern": "<sign>INTERVAL '<days> days <hours> hours <minutes> minutes <seconds> seconds'",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "TO_YMINTERVAL_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_YMINTERVAL('<sign:OPTION['+', '-', '']><years:INT_LITERAL,[0,10]>-<months:INT_LITERAL,[0, 12]>')",
+        "TgtPattern": "<sign>INTERVAL '<years> years <months> months'",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "TO_YMINTERVAL_2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_YMINTERVAL(<interval_literal: @GenISOIntervalLiteral('YM')>)",
+        "TgtPattern": "<interval: @GenPGMySQLInterval(<interval_literal>, 'ISO8601')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "TRUNC_DATE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value: TIMESTAMP>, '<option: OPTION['YYYY':'year','MM':'month','DD':'day','HH':'hour','MI':'minute']>')",
+        "TgtPattern": "DATE_TRUNC('<option>', <value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "LAST_DAY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(LAST_DAY(<value: DATE>) AS DATE)",
+        "TgtPattern": "DATE_TRUNC('MONTH', <value>) + INTERVAL '1 MONTH' - INTERVAL '1 DAY'",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "NEXT_DAY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NEXT_DAY(<date_value: DATE>, '<format: OPTION['SUN':'Sunday','Sunday','SAT':'Saturday','Saturday','FRI':'Friday','Friday','THU':'Thursday','Thursday','WED':'Wednesday','Wednesday','TUE':'Tuesday','Tuesday','MON':'Monday','Monday']>')",
+        "TgtPattern": "<date_value> + CASE WHEN\n        TO_CHAR(<date_value> + INTERVAL '1 day', 'Day') = <format> THEN 1 ELSE \n        CASE WHEN\n            TO_CHAR(<date_value> + INTERVAL '2 day' = <format> THEN 2 ELSE\n            CASE WHEN\n                TO_CHAR(<date_value> + INTERVAL '3 day', 'Day') = <format> THEN 4 ELSE\n                CASE WHEN\n                    TO_CHAR(<date_value> + INTERVAL '4 day', 'Day') = <format> THEN 4 ELSE\n                    CASE WHEN\n                        TO_CHAR(<date_value> + INTERVAL '5 day', 'Day' = <format> THEN 5 ELSE\n                        CASE WHEN\n                            TO_CHAR(<date_value> + INTERVAL '6 day', 'Day') = <format> THEN 6 ELSE \n                            CASE WHEN\n                                TO_CHAR(<date_value> + INTERVAL '7 day', 'Day' = <format> THEN 7 ELSE NULL\n                            END\n                        END\n                    END\n                END\n            END\n        END\n    END",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TO_CHAR_PARAM_AMER",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<date_value: DATE>)",
+        "TgtPattern": "TO_CHAR(<date_value>, 'DD-MON-YY')",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_LANGUAGE": "AMERICAN"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_CHAR_PARAM_GERMAN",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<date_value:DATE>)",
+        "TgtPattern": "TO_CHAR(<date_value>, 'DD-') ||\n    (ARRAY['JAN','FEB','MRZ','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV','DEZ'])[EXTRACT(MONTH FROM <date_value>)] || \n    to_char(<date_value>, '-YY')",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_LANGUAGE": "GERMAN"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_TIMESTAMP_R1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<timestamp_str: @GenTimestampOracleStr('DD-MON-RR HH.MI.SSXFF AM')>)",
+        "TgtPattern": "TO_TIMESTAMP(<mysql_timestamp: @TranToStandardTimeFormat(<timestamp_str>, 'DD-MON-RR HH.MI.SSXFF AM')>, 'YYYY-mm-DD HH24:MI:SS.US')::timestamp",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_TIMESTAMP_FORMAT": "DD-MON-RR HH.MI.SSXFF AM"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_TIMESTAMP_R2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<timestamp_str: @GenTimestampOracleStr('Mon dd, YYYY, HH24:MI:SS')>)",
+        "TgtPattern": "TO_TIMESTAMP(<timestamp_str>, 'Mon dd, YYYY, HH24:MI:SS')::timestamp",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_TIMESTAMP_FORMAT": "Mon dd, YYYY, HH24:MI:SS"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_DATE_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DATE(<date_str: @GenTimestampOracleStr('DD-MON-RR')>)",
+        "TgtPattern": "TO_DATE(<mysql_date: @TranToStandardTimeFormat(<date_str>, 'DD-MON-RR')>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "DD-MON-RR"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_DATE_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DATE(<timestamp_str: @GenTimestampOracleStr('Mon dd, YYYY')>)",
+        "TgtPattern": "TO_DATE(<timestamp_str>, 'Mon dd, YYYY')",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "Mon dd, YYYY"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "CAST_DATE_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<date_str: @GenTimestampOracleStr('DD-MON-RR')> AS DATE)",
+        "TgtPattern": "TO_DATE(<mysql_date: @TranToStandardTimeFormat(<date_str>, 'DD-MON-RR')>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "DD-MON-RR"
+                }
+            }
+        }
+    }
+]

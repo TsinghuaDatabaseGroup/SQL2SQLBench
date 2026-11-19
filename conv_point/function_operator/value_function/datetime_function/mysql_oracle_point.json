@@ -1,0 +1,374 @@
+[
+    {
+        "Desc": "FROM_DAYS",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "FROM_DAYS(<value: INT, LITERAL, (366, +\u221e]>)",
+        "TgtPattern": "DATE '0001-01-01' + <value> - 366",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "CURDATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CURDATE()",
+        "TgtPattern": "TRUNC(SYSDATE)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "CURRENT_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CURRENT_DATE()",
+        "TgtPattern": "TRUNC(SYSDATE)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "CURRENT_TIMESTAMP",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CURRENT_TIMESTAMP()",
+        "TgtPattern": "CURRENT_TIMESTAMP",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATE_FORMAT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_FORMAT(<date_value:DATE>, <used_format: @GenMySQLTimeFormat()>)",
+        "TgtPattern": "TO_CHAR(<date_value>, <format: @TranMySQLDateFormatToPG(<used_format>)>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "DATE_ADD INTERVAL",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_ADD(<value: TIMESTAMP>, <interval: INTERVAL>)",
+        "TgtPattern": "<value> + <interval>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATE_SUB INTERVAL",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_SUB(<value: TIMESTAMP>, <interval: INTERVAL>)",
+        "TgtPattern": "<value> - <interval>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "SUBDATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBDATE(<value: TIMESTAMP>, <interval: INTERVAL>)",
+        "TgtPattern": "<value> - <interval>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATE_DIFF_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(<date1: DATE, STRICT>, <date2: DATE, STRICT>)",
+        "TgtPattern": "<date1> - <date2>",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DATE_DIFF_TIMESTAMP",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(<time_stamp1: TIMESTAMP>, <time_stamp2: TIMESTAMP>)",
+        "TgtPattern": "TRUNC(<time_stamp1>) - TRUNC(<time_stamp2>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE(<value: TIMESTAMP, STRICT>)",
+        "TgtPattern": "TRUNC(<value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DAY",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAY(<value: DATE>)",
+        "TgtPattern": "EXTRACT(DAY FROM <value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DAYOFMONTH",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAYOFMONTH(<value: DATE>)",
+        "TgtPattern": "EXTRACT(DAY FROM <value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DAYNAME",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAYNAME(<value: DATE>)",
+        "TgtPattern": "TO_CHAR(<value>, 'FMDay')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "DAYOFWEEK",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAYOFWEEK(<value: DATE>)",
+        "TgtPattern": "TO_NUMBER(TO_CHAR(<value>, 'D'))",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "ADDDATE INTERVAL",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADDDATE(<value: DATE>, <interval: INTERVAL>)",
+        "TgtPattern": "<value> + <interval>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "ADDDATE INT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADDDATE(<value: DATE>, <int_value: INT, LITERAL>)",
+        "TgtPattern": "<value> + <int_value>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "NOW",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NOW(6)",
+        "TgtPattern": "SYSTIMESTAMP",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "SYSDATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SYSDATE()",
+        "TgtPattern": "SYSDATE",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "LAST_DAY",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LAST_DAY(<value: DATE>)",
+        "TgtPattern": "CAST(LAST_DAY(<value>) AS DATE)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "UNIX_TIMESTAMP",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UNIX_TIMESTAMP(<value: TIMESTAMP>)",
+        "TgtPattern": "CASE WHEN <value> IS NOT NULL THEN EXTRACT(DAY FROM (<value> - TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'))) * 86400 + EXTRACT(HOUR FROM (<value> - TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'))) * 3600 + EXTRACT(MINUTE FROM (<value> - TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'))) * 60 + EXTRACT(SECOND FROM (<value> - TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'))) ELSE NULL END",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "MAKE_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MAKEDATE(<year: INT>, <day: INT>)",
+        "TgtPattern": "TO_DATE(<year> || '-01-01', 'YYYY-MM-DD') + (<day> - 1)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DAYOFYEAR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAYOFYEAR(<value: DATE>)",
+        "TgtPattern": "TO_NUMBER(TO_CHAR(<value>, 'DDD'))",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "UTC_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UTC_DATE()",
+        "TgtPattern": "TRUNC(SYS_EXTRACT_UTC(CURRENT_TIMESTAMP))",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TIMESTAMPDIFF_MINUTE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TIMESTAMPDIFF(MINUTE, <value1: TIMESTAMP>, <value2: TIMESTAMP>)",
+        "TgtPattern": "EXTRACT(DAY FROM (<value2> -<value1>)) * 24 * 60 + EXTRACT(HOUR FROM (<value2> -<value1>)) * 60 + EXTRACT(MINUTE FROM (<value2> -<value1>))",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TIMESTAMPDIFF_HOUR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TIMESTAMPDIFF(HOUR, <value1: TIMESTAMP>, <value2: TIMESTAMP>)",
+        "TgtPattern": "EXTRACT(DAY FROM (<value2> -<value1>)) * 24 + EXTRACT(HOUR FROM (<value2> -<value1>))",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TIMESTAMPDIFF_DAY",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TIMESTAMPDIFF(DAY, <value1: TIMESTAMP>, <value2: TIMESTAMP>)",
+        "TgtPattern": "EXTRACT(DAY FROM <value2> - <value1>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "EXTRACT_YEAR_MONTH",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(YEAR_MONTH FROM <value: TIMESTAMP>)",
+        "TgtPattern": "100 * EXTRACT(YEAR FROM <value>) + EXTRACT(MONTH FROM <value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "EXTRACT_DAY_MINUTE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(DAY_MINUTE FROM <value: TIMESTAMP>)",
+        "TgtPattern": "10000 * EXTRACT(DAY FROM <value>) + 100 * EXTRACT(HOUR FROM <value>) + EXTRACT(MINUTE FROM <value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "STR_TO_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STR_TO_DATE(<value: STRING, DATE>, <fmt: @MySQLGetValueFormat(<value>)>)",
+        "TgtPattern": "TO_DATE(<value>, <fmt1: @TranMySQLDateFormatToPG(<fmt>)>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "YEAR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "YEAR(<value: DATE>)",
+        "TgtPattern": "EXTRACT(YEAR FROM <value>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

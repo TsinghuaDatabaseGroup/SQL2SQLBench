@@ -1,0 +1,52 @@
+[
+    {
+        "Desc": "REMAINDER",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REMAINDER(<value1: INT>, <value2: INT, [2,3]>)",
+        "TgtPattern": "MOD(<value1>, <value2>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "TO_CHAR_NUM_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<value: NUMBER>, 'FM99G999G999G999D00')",
+        "TgtPattern": "TRANSLATE(TO_CHAR(999.000, 'FM$99,999,999,999.00'), '.,', ',.')",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_NUMBER_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "snowflake"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_NUMBER(<value:  @GenOracleStrNumber(',.')>, 'FM99G999G999G999D99')",
+        "TgtPattern": "<num: @GenNumber(<value>, ',.')>",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_NUMERIC_CHARACTERS": ",."
+                }
+            }
+        }
+    }
+]

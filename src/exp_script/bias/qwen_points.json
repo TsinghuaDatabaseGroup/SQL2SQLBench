@@ -1,0 +1,972 @@
+{
+    "mysql_pg": [
+        {
+            "point": {
+                "Desc": "ADDDATEqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ADDDATE(<date_value: DATE>, <interval_value: INTERVAL>)",
+                "TgtPattern": "<date_value> + <interval_value>",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT e.first_name , e.last_name , e.job_id , jh.department_id , ADDDATE(e.hire_date, INTERVAL '4' DAY) AS ADDDATECOL FROM employees e INNER JOIN job_history jh ON e.employee_id = jh.employee_id WHERE jh.department_id BETWEEN 50 AND 100 AND e.hire_date < DATE '2020-01-01' ;",
+                "pg": "SELECT e.first_name , e.last_name , e.job_id , jh.department_id , e.hire_date + INTERVAL '4' DAY AS adddatecol FROM employees e INNER JOIN job_history jh ON e.employee_id = jh.employee_id WHERE jh.department_id BETWEEN 50 AND 100 AND e.hire_date < DATE '2020-01-01' ;",
+                "points": [
+                    {
+                        "point": "ADDDATE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DATABASEqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DATABASE()",
+                "TgtPattern": "current_database()",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DATABASE() AS DATABASECOL FROM client AS t1 INNER JOIN district AS t2 ON t1.district_id = t2.district_id WHERE t1.gender = 'M' AND t2.a3 = 'north Bohemia' AND t2.a11 > 8000",
+                "pg": "SELECT current_database( ) AS databasecol FROM client AS t1 INNER JOIN district AS t2 ON t1.district_id = t2.district_id WHERE t1.gender = 'M' AND t2.a3 = 'north Bohemia' AND t2.a11 > 8000",
+                "points": [
+                    {
+                        "point": "DATABASE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DATE_SUBqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DATE_SUB(<date: DATE>, <interval: INTERVAL>)",
+                "TgtPattern": "<date> - <interval>",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.language , DATE_SUB(t1.releasedate, INTERVAL '1' MONTH) AS COL_ALIAS FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "pg": "SELECT t2.language , t1.releasedate - INTERVAL '1' MONTH AS col_alias FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "points": [
+                    {
+                        "point": "DATE_SUB",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DATEDIFFqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DATEDIFF(<date1: DATE>, <date2: DATE>)",
+                "TgtPattern": "(<date1> - <date2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.school , t1.avgscrwrite , DATEDIFF(t2.closeddate, t2.opendate) AS DATEDIFFCOL FROM satscores AS t1 INNER JOIN schools AS t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+                "pg": "SELECT t2.school , t1.avgscrwrite , ( t2.closeddate - t2.opendate ) AS datediffcol FROM satscores AS t1 INNER JOIN schools AS t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+                "points": [
+                    {
+                        "point": "DATEDIFF",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAY(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DAY FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DAY(t1.birthday) AS DAYCOL FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.fg <= 150 OR t2.fg >= 450 AND t2.wbc > 3.5 AND t2.wbc < 9.0 AND t1.sex = 'M'",
+                "pg": "SELECT EXTRACT( DAY FROM t1.birthday ) AS daycol FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.fg <= 150 OR t2.fg >= 450 AND t2.wbc > 3.5 AND t2.wbc < 9.0 AND t1.sex = 'M'",
+                "points": [
+                    {
+                        "point": "DAY",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFMONTHqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFMONTH(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DAY FROM <date_value>)::INT",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DAYOFMONTH(t1.birth_date) AS DAYOFMONTHCOL FROM client AS t1 INNER JOIN district AS t2 ON t1.district_id = t2.district_id WHERE t1.gender = 'M' AND t2.a3 = 'north Bohemia' AND t2.a11 > 8000",
+                "pg": "SELECT EXTRACT( DAY FROM t1.birth_date ) :: INT AS dayofmonthcol FROM client AS t1 INNER JOIN district AS t2 ON t1.district_id = t2.district_id WHERE t1.gender = 'M' AND t2.a3 = 'north Bohemia' AND t2.a11 > 8000",
+                "points": [
+                    {
+                        "point": "DAYOFMONTH",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFWEEKqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFWEEK(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DOW FROM <date_value>) + 1",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DAYOFWEEK(t2.closeddate) AS DAYOFWEEKCOL FROM comments AS t1 INNER JOIN posts AS t2 ON t1.postid = t2.id WHERE t2.commentcount = 1 AND t2.score = 0",
+                "pg": "SELECT EXTRACT( DOW FROM t2.closeddate ) + 1 AS dayofweekcol FROM comments AS t1 INNER JOIN posts AS t2 ON t1.postid = t2.id WHERE t2.commentcount = 1 AND t2.score = 0",
+                "points": [
+                    {
+                        "point": "DAYOFWEEK",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "DAYOFYEARqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "DAYOFYEAR(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(DOY FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DISTINCT t1.id , EXTRACT( YEAR FROM CURRENT_TIMESTAMP ) - EXTRACT( YEAR FROM t1.birthday ) AS age , DAYOFYEAR(t1.description) AS DAYOFYEARCOL FROM patient AS t1 INNER JOIN laboratory AS t2 ON t1.id = t2.id WHERE t1.id IN ( SELECT id FROM laboratory WHERE hct >= 52 GROUP BY id HAVING COUNT( id ) >= 2 )",
+                "pg": "SELECT DISTINCT t1.id , EXTRACT( YEAR FROM CURRENT_TIMESTAMP ) - EXTRACT( YEAR FROM t1.birthday ) AS age , EXTRACT( DOY FROM t1.description ) AS dayofyearcol FROM patient AS t1 INNER JOIN laboratory AS t2 ON t1.id = t2.id WHERE t1.id IN ( SELECT id FROM laboratory WHERE hct >= 52 GROUP BY id HAVING COUNT( id ) >= 2 )",
+                "points": [
+                    {
+                        "point": "DAYOFYEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "IFqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "IF(<condition: BOOL>, <true_value: ANY_VALUE>, <false_value: ANY_VALUE>)",
+                "TgtPattern": "CASE WHEN <condition> THEN <true_value> ELSE <false_value> END",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.element , IF(t1.atom_id2 LIKE '%TR001_11%', t2.molecule_id, t1.atom_id2) AS IFCOL FROM connected AS t1 INNER JOIN atom AS t2 ON t1.atom_id = t2.atom_id WHERE t1.bond_id = 'TR001_10_11'",
+                "pg": "SELECT t2.element , CASE WHEN t1.atom_id2 LIKE '%TR001_11%' THEN t2.molecule_id ELSE t1.atom_id2 END AS ifcol FROM connected AS t1 INNER JOIN atom AS t2 ON t1.atom_id = t2.atom_id WHERE t1.bond_id = 'TR001_10_11'",
+                "points": [
+                    {
+                        "point": "IF",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "IFNULLqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "IFNULL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "COALESCE(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t1.event_name , NULL AS IFNULLCOL FROM event AS t1 INNER JOIN attendance AS t2 ON t1.event_id = t2.link_to_event GROUP BY t1.event_id HAVING COUNT( t2.link_to_event ) > 10 EXCEPT SELECT t1.event_name , IFNULL(t1.notes, t1.event_date) AS IFNULLCOL FROM event AS t1 WHERE t1.type = 'Meeting'",
+                "pg": "SELECT t1.event_name , NULL AS ifnullcol FROM event AS t1 INNER JOIN attendance AS t2 ON t1.event_id = t2.link_to_event GROUP BY t1.event_id HAVING COUNT( t2.link_to_event ) > 10 EXCEPT SELECT t1.event_name , COALESCE( t1.notes , t1.event_date ) AS ifnullcol FROM event AS t1 WHERE t1.type = 'Meeting'",
+                "points": [
+                    {
+                        "point": "IFNULL",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "INET_NTOAqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "INET_NTOA(<num: INT>)",
+                "TgtPattern": "host(inet '0.0.0.0' + <num>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.language , INET_NTOA(t1.totalsetsize) AS COL_ALIAS FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "pg": "SELECT t2.language , host( inet '0.0.0.0' + t1.totalsetsize ) AS col_alias FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "points": [
+                    {
+                        "point": "INET_NTOA",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "ISNULLqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ISNULL(<value: ANY_VALUE>)",
+                "TgtPattern": "(<value> IS NULL)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT name , ISNULL(foreign_data.type) AS ISNULLCOL FROM foreign_data WHERE uuid IN ( SELECT uuid FROM cards WHERE types = 'Creature' AND layout = 'normal' AND bordercolor = 'black' AND artist = 'Matthew D. Wilson' ) AND language = 'French'",
+                "pg": "SELECT name , ( foreign_data.type IS NULL ) AS isnullcol FROM foreign_data WHERE uuid IN ( SELECT uuid FROM cards WHERE types = 'Creature' AND layout = 'normal' AND bordercolor = 'black' AND artist = 'Matthew D. Wilson' ) AND language = 'French'",
+                "points": [
+                    {
+                        "point": "ISNULL",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "MINUTEqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "MINUTE(<datetime: TIMESTAMP>)",
+                "TgtPattern": "EXTRACT(MINUTE FROM <datetime>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , MINUTE(ho.order_date) AS MINUTECOL FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000",
+                "pg": "SELECT hc.cust_first_name AS first_name , w.warehouse_name AS nearest_warehouse , EXTRACT( MINUTE FROM ho.order_date ) AS minutecol FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w LEFT JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 10000",
+                "points": [
+                    {
+                        "point": "MINUTE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "MONTHqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "MONTH(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(MONTH FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT hc.cust_first_name , hc.cust_last_name , hc.cust_email , w.warehouse_name , ho.order_total , MONTH(ho.order_date) AS MONTHCOL FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w INNER JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 5000 AND l.country_id = 'US'",
+                "pg": "SELECT hc.cust_first_name , hc.cust_last_name , hc.cust_email , w.warehouse_name , ho.order_total , EXTRACT( MONTH FROM ho.order_date ) AS monthcol FROM h_customers hc INNER JOIN h_orders ho ON hc.customer_id = ho.customer_id CROSS JOIN warehouses w INNER JOIN locations l ON w.location_id = l.location_id WHERE ho.order_total > 5000 AND l.country_id = 'US'",
+                "points": [
+                    {
+                        "point": "MONTH",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "QUARTERqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "QUARTER(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(QUARTER FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.school , t1.avgscrwrite , QUARTER(t2.opendate) AS QUARTERCOL FROM satscores AS t1 INNER JOIN schools AS t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+                "pg": "SELECT t2.school , t1.avgscrwrite , EXTRACT( QUARTER FROM t2.opendate ) AS quartercol FROM satscores AS t1 INNER JOIN schools AS t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+                "points": [
+                    {
+                        "point": "QUARTER",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "SPACEqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "SPACE(<count: INT>)",
+                "TgtPattern": "repeat(' ', <count>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT superhero_name , SPACE(t1.weight_kg) AS SPACECOL FROM superhero AS t1 WHERE EXISTS ( SELECT 1 FROM hero_power AS t2 INNER JOIN superpower AS t3 ON t2.power_id = t3.id WHERE t3.power_name = 'Super Strength' AND t1.id = t2.hero_id ) AND EXISTS ( SELECT 1 FROM publisher AS t4 WHERE t4.publisher_name = 'Marvel Comics' AND t1.publisher_id = t4.id )",
+                "pg": "SELECT superhero_name , repeat( ' ' , t1.weight_kg ) AS spacecol FROM superhero AS t1 WHERE EXISTS ( SELECT 1 FROM hero_power AS t2 INNER JOIN superpower AS t3 ON t2.power_id = t3.id WHERE t3.power_name = 'Super Strength' AND t1.id = t2.hero_id ) AND EXISTS ( SELECT 1 FROM publisher AS t4 WHERE t4.publisher_name = 'Marvel Comics' AND t1.publisher_id = t4.id )",
+                "points": [
+                    {
+                        "point": "SPACE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "UNIX_TIMESTAMPqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "UNIX_TIMESTAMP(<timestamp: TIMESTAMP>)",
+                "TgtPattern": "EXTRACT(EPOCH FROM <timestamp>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.language , UNIX_TIMESTAMP(t1.releasedate) AS COL_ALIAS FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "pg": "SELECT t2.language , EXTRACT( EPOCH FROM t1.releasedate ) AS col_alias FROM sets AS t1 INNER JOIN set_translations AS t2 ON t1.code = t2.setcode WHERE t1.mcmname = 'Archenemy' AND t2.setcode = 'ARC'",
+                "points": [
+                    {
+                        "point": "UNIX_TIMESTAMP",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "WEEKOFYEARqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "WEEKOFYEAR(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(WEEK FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.translation , WEEKOFYEAR(t1.releasedate) AS WEEKOFYEARCOL FROM sets AS t1 INNER JOIN set_translations AS t2 ON t2.setcode = t1.code WHERE t1.name = 'Eighth Edition' AND t2.language = 'Chinese Simplified'",
+                "pg": "SELECT t2.translation , EXTRACT( WEEK FROM t1.releasedate ) AS weekofyearcol FROM sets AS t1 INNER JOIN set_translations AS t2 ON t2.setcode = t1.code WHERE t1.name = 'Eighth Edition' AND t2.language = 'Chinese Simplified'",
+                "points": [
+                    {
+                        "point": "WEEKOFYEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "YEARqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "YEAR(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(YEAR FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.school , t1.avgscrwrite , YEAR(t2.closeddate) AS YEARCOL FROM satscores AS t1 INNER JOIN schools AS t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+                "pg": "SELECT t2.school , t1.avgscrwrite , EXTRACT( YEAR FROM t2.closeddate ) AS yearcol FROM satscores AS t1 INNER JOIN schools AS t2 ON t1.cds = t2.cdscode WHERE t2.admfname1 = 'Ricci' AND t2.admlname1 = 'Ulrich'",
+                "points": [
+                    {
+                        "point": "YEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "YEARWEEKqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "YEARWEEK(<date: DATE>)",
+                "TgtPattern": "EXTRACT(YEAR FROM <date>) * 100 + EXTRACT(WEEK FROM <date>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT YEARWEEK(t2.releasedate) AS YEARWEEKCOL FROM cards AS t1 INNER JOIN sets AS t2 ON t2.code = t1.setcode WHERE t2.name = 'Coldsnap' AND t1.convertedmanacost > 5",
+                "pg": "SELECT EXTRACT( YEAR FROM t2.releasedate ) * 100 + EXTRACT( WEEK FROM t2.releasedate ) AS yearweekcol FROM cards AS t1 INNER JOIN sets AS t2 ON t2.code = t1.setcode WHERE t2.name = 'Coldsnap' AND t1.convertedmanacost > 5",
+                "points": [
+                    {
+                        "point": "YEARWEEK",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ],
+    "mysql_oracle": [
+        {
+            "point": {
+                "Desc": "IFqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "IF(<condition: BOOL>, <value_if_true: ANY_VALUE>, <value_if_false: ANY_VALUE>)",
+                "TgtPattern": "CASE WHEN <condition> THEN <value_if_true> ELSE <value_if_false> END",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT IF(t1.superhero_name LIKE '%Atlas%', t1.full_name, t1.superhero_name) IFCOL FROM superhero t1 INNER JOIN colour t2 ON t1.eye_colour_id = t2.id",
+                "oracle": "SELECT CASE WHEN t1.superhero_name LIKE '%Atlas%' THEN t1.full_name ELSE t1.superhero_name END ifcol FROM superhero t1 INNER JOIN colour t2 ON t1.eye_colour_id = t2.id",
+                "points": [
+                    {
+                        "point": "IF",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "IFNULLqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "IFNULL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "NVL(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT IFNULL(t1.power, t1.dueldeck) IFNULLCOL FROM cards t1 INNER JOIN set_translations t2 ON t2.setcode = t1.setcode WHERE t2.translation = 'Hauptset Zehnte Edition' AND t1.artist = 'Adam Rex'",
+                "oracle": "SELECT NVL( t1.power , t1.dueldeck ) ifnullcol FROM cards t1 INNER JOIN set_translations t2 ON t2.setcode = t1.setcode WHERE t2.translation = 'Hauptset Zehnte Edition' AND t1.artist = 'Adam Rex'",
+                "points": [
+                    {
+                        "point": "IFNULL",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "ISNULLqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ISNULL(<expr: ANY_VALUE>)",
+                "TgtPattern": "CASE WHEN <expr> IS NULL THEN 1 ELSE 0 END",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT DISTINCT t1.id , t1.sex , t1.birthday , ISNULL(t2.tp) ISNULLCOL FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.un = 29",
+                "oracle": "SELECT DISTINCT t1.id , t1.sex , t1.birthday , CASE WHEN t2.tp IS NULL THEN 1 ELSE 0 END isnullcol FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.un = 29",
+                "points": [
+                    {
+                        "point": "ISNULL",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "MONTHqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "MONTH(<date: DATE>)",
+                "TgtPattern": "EXTRACT(MONTH FROM <date>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.translation , MONTH(t1.releasedate) MONTHCOL FROM sets t1 INNER JOIN set_translations t2 ON t2.setcode = t1.code WHERE t1.name = 'Eighth Edition' AND t2.language = 'Chinese Simplified'",
+                "oracle": "SELECT t2.translation , EXTRACT( MONTH FROM t1.releasedate ) monthcol FROM sets t1 INNER JOIN set_translations t2 ON t2.setcode = t1.code WHERE t1.name = 'Eighth Edition' AND t2.language = 'Chinese Simplified'",
+                "points": [
+                    {
+                        "point": "MONTH",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "PIqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "PI()",
+                "TgtPattern": "ACOS(-1)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t3.constructorref , t3.url , PI() PICOL FROM results t1 INNER JOIN races t2 ON t1.raceid = t2.raceid INNER JOIN constructors t3 ON t1.constructorid = t3.constructorid WHERE t2.name = 'Singapore Grand Prix' AND t2.year = 2009 AND t1.time LIKE '_:%:__.___'",
+                "oracle": "SELECT t3.constructorref , t3.url , ACOS( - 1 ) picol FROM results t1 INNER JOIN races t2 ON t1.raceid = t2.raceid INNER JOIN constructors t3 ON t1.constructorid = t3.constructorid WHERE t2.name = 'Singapore Grand Prix' AND t2.year = 2009 AND t1.time LIKE '_:%:__.___'",
+                "points": [
+                    {
+                        "point": "PI",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "QUARTERqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "QUARTER(<date_value: DATE>)",
+                "TgtPattern": "TO_NUMBER(TO_CHAR(<date_value>, 'Q'))",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT t2.body , QUARTER(t2.communityowneddate) QUARTERCOL FROM tags t1 INNER JOIN posts t2 ON t2.id = t1.excerptpostid WHERE t1.tagname = 'bayesian'",
+                "oracle": "SELECT t2.body , TO_NUMBER( TO_CHAR( t2.communityowneddate , 'Q' ) ) quartercol FROM tags t1 INNER JOIN posts t2 ON t2.id = t1.excerptpostid WHERE t1.tagname = 'bayesian'",
+                "points": [
+                    {
+                        "point": "QUARTER",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "SUBDATEqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "SUBDATE(<date: DATE>, <interval: INTERVAL>)",
+                "TgtPattern": "<date> - <interval>",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT SUBDATE(t1.releasedate, INTERVAL '3' DAY) SUBDATECOL FROM sets t1 INNER JOIN set_translations t2 ON t2.setcode = t1.code WHERE t1.block = 'Ice Age' AND t2.language = 'Italian' AND NOT t2.translation IS NULL",
+                "oracle": "SELECT t1.releasedate - INTERVAL '3' DAY subdatecol FROM sets t1 INNER JOIN set_translations t2 ON t2.setcode = t1.code WHERE t1.block = 'Ice Age' AND t2.language = 'Italian' AND NOT t2.translation IS NULL",
+                "points": [
+                    {
+                        "point": "SUBDATE",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "WEEKDAYqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "WEEKDAY(<date: DATE>)",
+                "TgtPattern": "MOD(TO_NUMBER(TO_CHAR(<date>, 'D')) - 2, 7)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT WEEKDAY(t1.releasedate) WEEKDAYCOL FROM sets t1 INNER JOIN set_translations t2 ON t2.setcode = t1.code WHERE t1.block = 'Ice Age' AND t2.language = 'Italian' AND NOT t2.translation IS NULL",
+                "oracle": "SELECT MOD( TO_NUMBER( TO_CHAR( t1.releasedate , 'D' ) ) - 2 , 7 ) weekdaycol FROM sets t1 INNER JOIN set_translations t2 ON t2.setcode = t1.code WHERE t1.block = 'Ice Age' AND t2.language = 'Italian' AND NOT t2.translation IS NULL",
+                "points": [
+                    {
+                        "point": "WEEKDAY",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "WEEKOFYEARqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "WEEKOFYEAR(<date_value: DATE>)",
+                "TgtPattern": "TO_NUMBER(TO_CHAR(<date_value>, 'IW'))",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT WEEKOFYEAR(t1.description) WEEKOFYEARCOL FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.tg >= 200 AND EXTRACT( YEAR FROM CURRENT_TIMESTAMP ) - EXTRACT( YEAR FROM t1.birthday ) > 50",
+                "oracle": "SELECT TO_NUMBER( TO_CHAR( t1.description , 'IW' ) ) weekofyearcol FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.tg >= 200 AND EXTRACT( YEAR FROM CURRENT_TIMESTAMP ) - EXTRACT( YEAR FROM t1.birthday ) > 50",
+                "points": [
+                    {
+                        "point": "WEEKOFYEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "YEARqwen",
+                "Dialect": {
+                    "Src": "mysql",
+                    "Tgt": "oracle"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "YEAR(<date_value: DATE>)",
+                "TgtPattern": "EXTRACT(YEAR FROM <date_value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "mysql": "SELECT YEAR(t1.birthday) YEARCOL FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.plt > 400 AND t1.diagnosis = 'SLE' AND t1.sex = 'F'",
+                "oracle": "SELECT EXTRACT( YEAR FROM t1.birthday ) yearcol FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE t2.plt > 400 AND t1.diagnosis = 'SLE' AND t1.sex = 'F'",
+                "points": [
+                    {
+                        "point": "YEAR",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ],
+    "pg_mysql": [
+        {
+            "point": {
+                "Desc": "quote_literal(value anyelement)qwen",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "quote_literal(<value: ANY_VALUE>)",
+                "TgtPattern": "QUOTE(<value>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "pg": "SELECT DISTINCT t1.lat , t1.lng , quote_literal(t1.location) AS COL_ALIAS FROM circuits AS t1 INNER JOIN races AS t2 ON t2.circuitid = t1.circuitid WHERE t2.name = 'Abu Dhabi Grand Prix'",
+                "mysql": "SELECT DISTINCT t1.lat , t1.lng , QUOTE( t1.location ) AS col_alias FROM circuits AS t1 INNER JOIN races AS t2 ON t2.circuitid = t1.circuitid WHERE t2.name = 'Abu Dhabi Grand Prix'",
+                "points": [
+                    {
+                        "point": "quote_literal(value anyelement)",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "quote_nullable(value anyelement)qwen",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "quote_nullable(<value: ANY_VALUE>)",
+                "TgtPattern": "IF(<value> IS NULL, NULL, QUOTE(<value>))",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "pg": "SELECT quote_nullable(t2.status) AS COL_ALIAS FROM account AS t1 INNER JOIN loan AS t2 ON t1.account_id = t2.account_id WHERE t2.date BETWEEN '1995-01-01' AND '1997-12-31' AND t1.frequency = 'POPLATEK MESICNE' AND t2.amount >= 250000",
+                "mysql": "SELECT IF( t2.status IS NULL , NULL , QUOTE( t2.status ) ) AS col_alias FROM account AS t1 INNER JOIN loan AS t2 ON t1.account_id = t2.account_id WHERE t2.date BETWEEN '1995-01-01' AND '1997-12-31' AND t1.frequency = 'POPLATEK MESICNE' AND t2.amount >= 250000",
+                "points": [
+                    {
+                        "point": "quote_nullable(value anyelement)",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "current_database()qwen",
+                "Dialect": {
+                    "Src": "pg",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "current_database()",
+                "TgtPattern": "DATABASE()",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "pg": "SELECT d.department_name , j.job_title , AVG( e.salary ) AS avg_salary , current_database() AS COL_ALIAS FROM employees e INNER JOIN departments d ON e.department_id = d.department_id INNER JOIN jobs j ON e.job_id = j.job_id GROUP BY d.department_name , j.job_title HAVING COUNT( e.employee_id ) > 1 ;",
+                "mysql": "SELECT d.department_name , j.job_title , AVG( e.salary ) AS avg_salary , DATABASE( ) AS col_alias FROM employees e INNER JOIN departments d ON e.department_id = d.department_id INNER JOIN jobs j ON e.job_id = j.job_id GROUP BY d.department_name , j.job_title HAVING COUNT( e.employee_id ) > 1 ;",
+                "points": [
+                    {
+                        "point": "current_database()",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ],
+    "oracle_mysql": [
+        {
+            "point": {
+                "Desc": "ADD_MONTHSqwen",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ADD_MONTHS(<date: DATE>, <integer: INT>)",
+                "TgtPattern": "DATE_ADD(<date>, INTERVAL <integer> MONTH)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT ADD_MONTHS(t2.closeddate, t1.bountyamount) COL_ALIAS FROM votes t1 INNER JOIN posts t2 ON t1.userid = t2.owneruserid WHERE t1.userid = 24",
+                "mysql": "SELECT DATE_ADD( t2.closeddate , INTERVAL t1.bountyamount MONTH ) col_alias FROM votes t1 INNER JOIN posts t2 ON t1.userid = t2.owneruserid WHERE t1.userid = 24",
+                "points": [
+                    {
+                        "point": "ADD_MONTHS",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "NVLqwen",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "mysql"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "IFNULL(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT t2.major_name , NVL(t1.last_name, t2.major_id) NVLCOL FROM member t1 INNER JOIN major t2 ON t1.link_to_major = t2.major_id WHERE t1.first_name = 'Brent' AND t1.last_name = 'Thomason'",
+                "mysql": "SELECT t2.major_name , IFNULL( t1.last_name , t2.major_id ) nvlcol FROM member t1 INNER JOIN major t2 ON t1.link_to_major = t2.major_id WHERE t1.first_name = 'Brent' AND t1.last_name = 'Thomason'",
+                "points": [
+                    {
+                        "point": "NVL",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ],
+    "oracle_pg": [
+        {
+            "point": {
+                "Desc": "LAST_DAYqwen",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "LAST_DAY(<date: DATE>)",
+                "TgtPattern": "(date_trunc('MONTH', <date>) + INTERVAL '1 MONTH' - INTERVAL '1 DAY')::DATE",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT t1.school , t1.street , LAST_DAY(t1.opendate) COL_ALIAS FROM schools t1 INNER JOIN frpm t2 ON t1.cdscode = t2.cdscode WHERE t2.\"enrollment (k-12)\" - t2.\"enrollment (ages 5-17)\" > 30",
+                "pg": "SELECT t1.school , t1.street , ( date_trunc( 'MONTH' , t1.opendate ) + INTERVAL '1 MONTH' - INTERVAL '1 DAY' ) :: DATE col_alias FROM schools t1 INNER JOIN frpm t2 ON t1.cdscode = t2.cdscode WHERE t2.\"enrollment (k-12)\" - t2.\"enrollment (ages 5-17)\" > 30",
+                "points": [
+                    {
+                        "point": "LAST_DAY",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "ADD_MONTHSqwen",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "ADD_MONTHS(<date: DATE>, <months: INT>)",
+                "TgtPattern": "(<date> + (<months> || ' months')::INTERVAL)::DATE",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT ADD_MONTHS(t1.description, t2.wbc) COL_ALIAS FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE ( t2.crp = '+' ) AND t1.description IS NULL",
+                "pg": "SELECT ( t1.description + ( t2.wbc || ' months' ) :: INTERVAL ) :: DATE col_alias FROM patient t1 INNER JOIN laboratory t2 ON t1.id = t2.id WHERE ( t2.crp = '+' ) AND t1.description IS NULL",
+                "points": [
+                    {
+                        "point": "ADD_MONTHS",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "NVL2qwen",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+                "TgtPattern": "COALESCE(NULLIF(<expr2>, NULLIF(<expr1>, <expr1>)), <expr3>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT DISTINCT t2.molecule_id , NVL2(t1.bond_type, t1.molecule_id, t2.label) NVL2COL FROM bond t1 INNER JOIN molecule t2 ON t1.molecule_id = t2.molecule_id WHERE t1.bond_type = '#' AND t2.label = '+'",
+                "pg": "SELECT DISTINCT t2.molecule_id , COALESCE( NULLIF( t1.molecule_id , NULLIF( t1.bond_type , t1.bond_type ) ) , t2.label ) nvl2col FROM bond t1 INNER JOIN molecule t2 ON t1.molecule_id = t2.molecule_id WHERE t1.bond_type = '#' AND t2.label = '+'",
+                "points": [
+                    {
+                        "point": "NVL2",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "NULLIFqwen",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NULLIF(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "NULLIF(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT name , NULLIF(foreign_data.language, foreign_data.text) NULLIFCOL FROM foreign_data WHERE uuid IN ( SELECT uuid FROM cards WHERE types = 'Creature' AND layout = 'normal' AND bordercolor = 'black' AND artist = 'Matthew D. Wilson' ) AND language = 'French'",
+                "pg": "SELECT name , NULLIF( foreign_data.language , foreign_data.text ) nullifcol FROM foreign_data WHERE uuid IN ( SELECT uuid FROM cards WHERE types = 'Creature' AND layout = 'normal' AND bordercolor = 'black' AND artist = 'Matthew D. Wilson' ) AND language = 'French'",
+                "points": [
+                    {
+                        "point": "NULLIF",
+                        "num": 1
+                    }
+                ]
+            }
+        },
+        {
+            "point": {
+                "Desc": "NVLqwen",
+                "Dialect": {
+                    "Src": "oracle",
+                    "Tgt": "pg"
+                },
+                "Type": "EXPRESSION",
+                "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+                "TgtPattern": "COALESCE(<expr1>, <expr2>)",
+                "Condition": null,
+                "Return": "ANY_VALUE"
+            },
+            "sql_pair": {
+                "oracle": "SELECT DISTINCT t2.name , CASE WHEN t1.status = 'Legal' THEN t1.format ELSE NULL END , NVL(t2.life, t2.colors) NVLCOL FROM legalities t1 INNER JOIN cards t2 ON t2.uuid = t1.uuid WHERE t2.setcode IN ( SELECT code FROM sets WHERE name = 'Hour of Devastation' )",
+                "pg": "SELECT DISTINCT t2.name , CASE WHEN t1.status = 'Legal' THEN t1.format ELSE NULL END , COALESCE( t2.life , t2.colors ) nvlcol FROM legalities t1 INNER JOIN cards t2 ON t2.uuid = t1.uuid WHERE t2.setcode IN ( SELECT code FROM sets WHERE name = 'Hour of Devastation' )",
+                "points": [
+                    {
+                        "point": "NVL",
+                        "num": 1
+                    }
+                ]
+            }
+        }
+    ]
+}

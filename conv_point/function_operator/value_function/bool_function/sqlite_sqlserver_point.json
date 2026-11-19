@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "LIKELY",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LIKELY(<expr: BOOL>)",
+        "TgtPattern": "<expr>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "LIKELIHOOD",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LIKELIHOOD(<expr: BOOL>, <value: DOUBLE, [0,1]>)",
+        "TgtPattern": "<expr>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "USER_R",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "RESERVED_KEYWORD",
+        "SrcPattern": "USER",
+        "TgtPattern": "\"USER\"",
+        "Condition": null,
+        "Return": null
+    }
+]

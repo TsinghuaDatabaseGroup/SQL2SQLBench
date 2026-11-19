@@ -1,0 +1,98 @@
+[
+    {
+        "Desc": "INTERVAL_1",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <int_value: @GenMySQLIntervalInt(<unit: OPTION['MICROSECOND', 'SECOND', 'MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR']>)> <unit>",
+        "TgtPattern": "<ora_interval: @GenMySQLOracleIntervalValue(<int_value>, <unit>)>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_2",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <literal: @GenMySQLIntervalString(<unit: OPTION['MINUTE_MICROSECOND', 'HOUR_SECOND', 'HOUR_MINUTE', 'DAY_SECOND', 'DAY_MINUTE', 'DAY_HOUR', 'YEAR_MONTH']>)> <unit>",
+        "TgtPattern": "<ora_interval: @GenMySQLOracleIntervalValue(<literal>, <unit>)>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_3",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL '<hour: INT_LITERAL, [1, 24]>/<min: INT_LITERAL, [1, 59]>' HOUR_MINUTE",
+        "TgtPattern": "INTERVAL '<hour>:<min>' HOUR TO MINUTE",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "HEX_STRING_1",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "X'<value: @GenHexString()>'",
+        "TgtPattern": "HEXTORAW('<value>')",
+        "Condition": null,
+        "Return": "BINARY"
+    },
+    {
+        "Desc": "HEX_STRING_2",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "0x<value: @GenHexString()>",
+        "TgtPattern": "HEXTORAW('<value>')",
+        "Condition": null,
+        "Return": "BINARY"
+    },
+    {
+        "Desc": "TRUE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "(<cond: BOOL>) = TRUE",
+        "TgtPattern": "<cond>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "FALSE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "(<cond: BOOL>) = FALSE",
+        "TgtPattern": "not <cond>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "COMMON_STRING",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "<string: @ContainBackSlash()>",
+        "TgtPattern": "<string1: @RepBackSlash(<string>)>",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

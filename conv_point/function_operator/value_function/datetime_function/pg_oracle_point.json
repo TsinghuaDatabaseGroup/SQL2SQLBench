@@ -1,0 +1,136 @@
+[
+    {
+        "Desc": "EXTRACT_CENTURY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(CENTURY FROM <value: TIMESTAMP>)",
+        "TgtPattern": "TRUNC(EXTRACT(YEAR FROM <value>) / 100)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXTRACT_DECADE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(DECADE FROM <value: TIMESTAMP>)",
+        "TgtPattern": "TRUNC(EXTRACT(YEAR FROM <value>) / 10)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXTRACT_DOW",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(DOW FROM <value: TIMESTAMP>)",
+        "TgtPattern": "MOD(CAST(TO_CHAR(<value>, 'D') AS NUMBER) + 6, 7)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXTRACT_DOY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(DOY FROM <value: TIMESTAMP>)",
+        "TgtPattern": "CAST(TO_CHAR(CAST(<value> AS DATE), 'DDD') AS NUMBER)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "EXTRACT_EPOCH",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(EPOCH FROM <value: TIMESTAMP>)",
+        "TgtPattern": "CASE WHEN <value> IS NOT NULL THEN EXTRACT(DAY FROM (<value> - TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'))) * 86400 + EXTRACT(HOUR FROM (<value> - TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'))) * 3600 + EXTRACT(MINUTE FROM (<value> - TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'))) * 60 + EXTRACT(SECOND FROM (<value> - TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'))) ELSE NULL END",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TO_TIMESTAMP",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<value: NUMBER>)",
+        "TgtPattern": "CASE WHEN <value> IS NOT NULL THEN TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(<value>, 'SECOND') ELSE NULL END",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "TRUNC_DATE1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('<option: OPTION['year': 'YYYY', 'month': 'MM', 'day': 'DD' , 'hour': 'HH', 'minute': 'MI']>', <value: TIMESTAMP>)",
+        "TgtPattern": "TRUNC(<value>, '<option>')",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "TRUNC_DATE2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('weak', <value: TIMESTAMP>)",
+        "TgtPattern": "TRUNC(<value> - (TO_CHAR(<value>, 'D') - 2))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DATE_PARA_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE(<date_str: @GenPGDateParaStr('MDY')>)",
+        "TgtPattern": "TO_DATE(<ora_date: @GenStandardDate(<date_str>, 'MDY')>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "pg": {
+                    "datestyle": "MDY"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "DATE_PARA_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE(<date_str: @GenPGDateParaStr('DMY')>)",
+        "TgtPattern": "TO_DATE(<ora_date: @GenStandardDate(<date_str>, 'DMY')>, 'YYYY-MM-DD')",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "pg": {
+                    "datestyle": "DMY"
+                }
+            }
+        }
+    }
+]

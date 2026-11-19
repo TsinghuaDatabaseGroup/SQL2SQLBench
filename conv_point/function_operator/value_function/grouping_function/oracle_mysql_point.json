@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "GROUPING_ID",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "GROUPING_ID(<col1: ANY_VALUE, GROUP_BY>, <col2: ANY_VALUE, GROUP_BY>)",
+        "TgtPattern": "GROUPING(<col1>) * 2 +  GROUPING(<col2>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

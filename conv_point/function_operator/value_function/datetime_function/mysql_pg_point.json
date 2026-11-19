@@ -1,0 +1,266 @@
+[
+    {
+        "Desc": "FROM_DAYS",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "FROM_DAYS(<value: INT, LITERAL, (1, +\u221e]>)",
+        "TgtPattern": "'0001-01-01'::DATE + (<value> - 1)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "UTC_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UTC_DATE()",
+        "TgtPattern": "DATE(current_timestamp AT TIME ZONE 'UTC')",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "LAST_DAY",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LAST_DAY(<value: DATE>)",
+        "TgtPattern": "DATE_TRUNC('MONTH', <value>) + INTERVAL '1 MONTH' - INTERVAL '1 DAY'",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "UNIX_TIMESTAMP",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UNIX_TIMESTAMP(<value: TIMESTAMP>)",
+        "TgtPattern": "EXTRACT(EPOCH FROM <value>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "MAKE_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "MAKEDATE(<year: INT, LITERAL, [1950,2050]>, <day: INT, LITERAL, [1,365]>)",
+        "TgtPattern": "DATE (<year> || '-01-01') + (<day> - 1) * INTERVAL '1 day'",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "CURDATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CURDATE()",
+        "TgtPattern": "CURRENT_DATE",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATE_FORMAT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_FORMAT(<date_value:TIMESTAMP>, <used_format: @GenMySQLTimeFormat()>)",
+        "TgtPattern": "TO_CHAR(<date_value>, <format: @TranMySQLDateFormatToPG(<used_format>)>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "ADDDATE INTERVAL",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADDDATE(<value: TIMESTAMP>, <interval: INTERVAL>)",
+        "TgtPattern": "<value> + <interval>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATE_ADD INTERVAL",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_ADD(<value: TIMESTAMP>, <interval: INTERVAL>)",
+        "TgtPattern": "<value> + <interval>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "ADDDATE INT",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADDDATE(<value: DATE>, <int_value: INT, LITERAL>)",
+        "TgtPattern": "<value> + INTERVAL '<int_value> days'",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATE_SUB INTERVAL",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_SUB(<value: TIMESTAMP>, <interval: INTERVAL>)",
+        "TgtPattern": "<value> - <interval>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "SUBDATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBDATE(<value: TIMESTAMP>, <interval: INTERVAL>)",
+        "TgtPattern": "<value> - <interval>",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATE_DIFF_1",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(<date1: DATE, STRICT>, <date2: DATE, STRICT>)",
+        "TgtPattern": "<date1> - <date2>",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DATE_DIFF_2",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(<time_stamp1: TIMESTAMP, STRICT>, <time_stamp2: TIMESTAMP, STRICT>)",
+        "TgtPattern": "DATE(<time_stamp1>) - DATE(<time_stamp2>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DAY",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAY(<value: DATE>)",
+        "TgtPattern": "EXTRACT(DAY FROM <value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DAYOFMONTH",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAYOFMONTH(<value: DATE>)",
+        "TgtPattern": "EXTRACT(DAY FROM <value>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "DAYOFWEEK",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAYOFWEEK(<value: DATE>)",
+        "TgtPattern": "TO_CHAR(<value>, 'D')::INT",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "NOW",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NOW(6)",
+        "TgtPattern": "CURRENT_TIMESTAMP",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DAYOFYEAR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DAYOFYEAR(<value: DATE>)",
+        "TgtPattern": "TO_CHAR(<value>, 'DDD')::INT",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "STR_TO_DATE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STR_TO_DATE(<value: STRING, DATE>, <fmt: @MySQLGetValueFormat(<value>)>)",
+        "TgtPattern": "TO_DATE(<value>, <fmt1: @TranMySQLDateFormatToPG(<fmt>)>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+     {
+        "Desc": "CURRENT_TIMESTAMP",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CURRENT_TIMESTAMP()",
+        "TgtPattern": "CURRENT_TIMESTAMP",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "YEAR",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "YEAR(<value: DATE>)",
+        "TgtPattern": "EXTRACT(YEAR FROM <value>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

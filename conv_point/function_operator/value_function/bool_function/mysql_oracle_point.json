@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "IF",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "IF(<condition: BOOL>, <exp2: ANY_VALUE>, <exp3: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <condition> THEN <exp2> ELSE <exp3> END",
+        "Condition": null,
+        "Return": "ANY_VALUE"
+    },
+    {
+        "Desc": "IFNULL",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "IFNULL(<value: ANY_VALUE>, <exp2: ANY_VALUE>)",
+        "TgtPattern": "NVL(<value>, <exp2>)",
+        "Condition": null,
+        "Return": "ANY_VALUE"
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "CAST_DOUBLE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: NUMBER> AS DOUBLE)",
+        "TgtPattern": "CAST(<value> AS DOUBLE PRECISION)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_UNSIGNED",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: ANY_VALUE, NUMBER> AS UNSIGNED)",
+        "TgtPattern": "CASE WHEN CAST(<value> AS BIGINT) \\< 0 THEN CAST(<value> AS BIGINT) + POWER(2, 64)::BIGINT ELSE CAST(<value> AS BIGINT) END",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

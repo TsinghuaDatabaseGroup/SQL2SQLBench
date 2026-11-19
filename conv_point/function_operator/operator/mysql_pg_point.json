@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "#",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> ^ <value2: NUMBER>",
+        "TgtPattern": "<value1> # <value2>",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "DIV",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: NUMBER> DIV <value2: NUMBER>",
+        "TgtPattern": "<value1> /  NULLIF(<value2>, 0)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "<=>",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: ANY_VALUE> \\<=\\> <value2: ANY_VALUE>",
+        "TgtPattern": "<value1> IS DISTINCT FROM <value2>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "REGEXP",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: STRING> REGEXP <pattern: @GenRegPattern(<value>)>",
+        "TgtPattern": "<value> ~ <pattern>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

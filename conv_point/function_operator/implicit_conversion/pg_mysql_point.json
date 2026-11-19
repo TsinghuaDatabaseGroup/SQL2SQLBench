@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "INT_TO_INTERVAL",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: DATE> + <int_value :INT, LITERAL, [1,10]>",
+        "TgtPattern": "<value> + INTERVAL <int_value> DAY",
+        "Condition": null,
+        "Return": "DATE"
+    }
+]

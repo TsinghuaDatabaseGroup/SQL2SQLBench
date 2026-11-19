@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "EXISTSNODE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXISTSNODE(<xml: XML>, <xpath: @GenXmlPath(<xml>)>)",
+        "TgtPattern": "CASE WHEN <xml>.exist(<xpath>) = 1 THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "XMLEXISTS",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "XMLEXISTS(<xpath: @GenXmlPath(<xml: XML>)> PASSING <xml>)",
+        "TgtPattern": "<xml>.exist(<xpath>) = 1",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

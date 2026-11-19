@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "AS_ALIAS",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "TABLE",
+        "SrcPattern": "<tbl: TABLE> AS <alias: ALIAS>",
+        "TgtPattern": "<tbl> <alias>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE <cond: BOOL> LIMIT <num: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT * FROM (SELECT <value_list> FROM <tbl_list> WHERE <cond>) subquery WHERE ROWNUM \\<= <num>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> LIMIT <num: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <value_list> FROM <tbl_list> WHERE ROWNUM \\<= <num>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_3",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: ANY_VALUE> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY <g_cols: LIST[ANY_VALUE, GROUP_BY]> LIMIT <num: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT * FROM (SELECT <value_list> FROM <tbl_list> WHERE <cond> GROUP BY <g_cols>) subquery WHERE ROWNUM \\<= <num>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "WINDOW_CLAUSE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <ele_list: LIST[ANY_VALUE]>, SUM(<value1: NUMBER>) OVER <window_name: ALIAS>, AVG(<value2: NUMBER>) OVER <window_name> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> WINDOW <window_name> AS (<window_def: WINDOW_DEFINITION>)",
+        "TgtPattern": "SELECT <ele_list>, SUM(<value1>) OVER(<window_def>), AVG(<value2>) OVER(<window_def>) FROM <tbl_list> WHERE <cond>",
+        "Condition": null,
+        "Return": null
+    }
+]

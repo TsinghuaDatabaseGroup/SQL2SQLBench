@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "XMLEXISTS",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "XPATH_EXISTS(<xpath: @GenXmlPath(<xml: XML>)>, <xml>)",
+        "TgtPattern": "EXTRACTVALUE(<xml>, <xpath1: @GenCountXpath(<xpath>)>) != 0",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

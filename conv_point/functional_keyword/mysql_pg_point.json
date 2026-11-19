@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "ORDER_BY_CLAUSE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "ORDER_BY_CLAUSE",
+        "SrcPattern": "ORDER BY <col_list: LIST[ORDER_BY_ELEMENT]>",
+        "TgtPattern": "ORDER BY <rev_col_list: @MySQLOrderBy(<col_list>)>",
+        "Condition": null,
+        "Return": null
+    }
+]

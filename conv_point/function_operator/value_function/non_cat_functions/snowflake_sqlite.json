@@ -1,0 +1,418 @@
+[
+    {
+        "Desc": "DATEPART_YEAR",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('year', <value: DATE>)",
+        "TgtPattern": "CAST(strftime('%Y', <value>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('year', TO_DATE('2024-05-17'));",
+            "sqlite": "SELECT CAST(strftime('%Y', '2024-05-17') AS INTEGER);"
+        }
+    },
+    {
+        "Desc": "DATEPART_MONTH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('month', <value: DATE>)",
+        "TgtPattern": "CAST(strftime('%m', <value>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('month', TO_DATE('2024-05-17'));",
+            "sqlite": "SELECT CAST(strftime('%m', '2024-05-17') AS INTEGER);"
+        }
+    },
+    {
+        "Desc": "DATEPART_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_PART('day', <value: DATE>)",
+        "TgtPattern": "CAST(strftime('%d', <value>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATE_PART('day', TO_DATE('2024-05-17'));",
+            "sqlite": "SELECT CAST(strftime('%d', '2024-05-17') AS INTEGER);"
+        }
+    },
+    {
+        "Desc": "DATE_TRUNC_MONTH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('month', <value: DATE>)",
+        "TgtPattern": "date(<value>, 'start of month')",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATE_TRUNC('month', TO_DATE('2024-05-17'));",
+            "sqlite": "SELECT date('2024-05-17', 'start of month');"
+        }
+    },
+    {
+        "Desc": "DATE_TRUNC_YEAR",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATE_TRUNC('year', <value: DATE>)",
+        "TgtPattern": "date(<value>, 'start of year')",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATE_TRUNC('year', TO_DATE('2024-05-17'));",
+            "sqlite": "SELECT date('2024-05-17', 'start of year');"
+        }
+    },
+    {
+        "Desc": "ADD_MONTHS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADD_MONTHS(<value: DATE>, <n: INT>)",
+        "TgtPattern": "date(date(<value>, 'start of month', printf('%+d months', <n>)), printf('+%d days', MIN(CAST(strftime('%d', <value>) AS INTEGER) - 1, CAST(strftime('%d', date(<value>, 'start of month', printf('%+d months', <n> + 1), '-1 day')) AS INTEGER) - 1)))",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT ADD_MONTHS(TO_DATE('2024-01-31'), 1);",
+            "sqlite": "SELECT date(date('2024-01-31', 'start of month', printf('%+d months', 1)), printf('+%d days', MIN(CAST(strftime('%d', '2024-01-31') AS INTEGER) - 1, CAST(strftime('%d', date('2024-01-31', 'start of month', printf('%+d months', 2), '-1 day')) AS INTEGER) - 1)));"
+        }
+    },
+    {
+        "Desc": "DATEADD_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEADD(day, <n: INT>, <value: DATE>)",
+        "TgtPattern": "date(<value>, printf('%+d days', <n>))",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATEADD(day, 7, TO_DATE('2024-05-17'));",
+            "sqlite": "SELECT date('2024-05-17', printf('%+d days', 7));"
+        }
+    },
+    {
+        "Desc": "DATEDIFF_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(day, <start: DATE>, <end: DATE>)",
+        "TgtPattern": "CAST(julianday(<end>) - julianday(<start>) AS INTEGER)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATEDIFF(day, TO_DATE('2024-05-01'), TO_DATE('2024-05-17'));",
+            "sqlite": "SELECT CAST(julianday('2024-05-17') - julianday('2024-05-01') AS INTEGER);"
+        }
+    },
+    {
+        "Desc": "NVL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+        "TgtPattern": "IFNULL(<expr1>, <expr2>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "snowflake": "SELECT NVL(NULL, 'fallback');",
+            "sqlite": "SELECT IFNULL(NULL, 'fallback');"
+        }
+    },
+    {
+        "Desc": "NVL2",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <expr1> IS NOT NULL THEN <expr2> ELSE <expr3> END",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "snowflake": "SELECT NVL2(NULL, 'not_null', 'is_null');",
+            "sqlite": "SELECT CASE WHEN NULL IS NOT NULL THEN 'not_null' ELSE 'is_null' END;"
+        }
+    },
+    {
+        "Desc": "ZEROIFNULL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ZEROIFNULL(<expr: INT>)",
+        "TgtPattern": "IFNULL(<expr>, 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT ZEROIFNULL(NULL);",
+            "sqlite": "SELECT IFNULL(NULL, 0);"
+        }
+    },
+    {
+        "Desc": "NULLIFZERO",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NULLIFZERO(<expr: INT>)",
+        "TgtPattern": "NULLIF(<expr>, 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT NULLIFZERO(0);",
+            "sqlite": "SELECT NULLIF(0, 0);"
+        }
+    },
+    {
+        "Desc": "WIDTH_BUCKET",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CASE WHEN <num: INT> IS NOT NULL THEN WIDTH_BUCKET(NVL(<num>,0), <low: INT, LITERAL>, <low> + <val: INT, LITERAL, [5, 30)>, <num_buckets: INT, LITERAL, [5, 15]>) ELSE NULL END",
+        "TgtPattern": "CASE WHEN <num> IS NOT NULL THEN CASE WHEN <num> \\< <low> THEN 0 WHEN <num> >= <low> + <val> THEN <num_buckets> + 1 ELSE CAST((<num> - <low>) / ((<val> * 1.0) / <num_buckets>) AS INTEGER) + 1 END ELSE NULL END",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT CASE WHEN 7 IS NOT NULL THEN WIDTH_BUCKET(NVL(7,0), 0, 10, 5) ELSE NULL END;",
+            "sqlite": "SELECT CASE WHEN 7 IS NOT NULL THEN CASE WHEN 7 < 0 THEN 0 WHEN 7 >= 10 THEN 6 ELSE CAST((7 - 0) / ((10 * 1.0) / 5) AS INTEGER) + 1 END ELSE NULL END;"
+        }
+    },
+    {
+        "Desc": "STARTSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STARTSWITH(<str: STRING>, <prefix: STRING>)",
+        "TgtPattern": "substr(<str>, 1, length(<prefix>)) = <prefix>",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT STARTSWITH('abcdef', 'abc');",
+            "sqlite": "SELECT substr('abcdef', 1, length('abc')) = 'abc';"
+        }
+    },
+    {
+        "Desc": "ENDSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ENDSWITH(<str: STRING>, <suffix: STRING>)",
+        "TgtPattern": "substr(<str>, -length(<suffix>)) = <suffix>",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT ENDSWITH('abcdef', 'def');",
+            "sqlite": "SELECT substr('abcdef', -length('def')) = 'def';"
+        }
+    },
+    {
+        "Desc": "CONTAINS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CONTAINS(<str: STRING>, <substr: STRING>)",
+        "TgtPattern": "instr(<str>, <substr>) > 0",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT CONTAINS('abcdef', 'cd');",
+            "sqlite": "SELECT instr('abcdef', 'cd') > 0;"
+        }
+    },
+    {
+        "Desc": "POSITION",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "POSITION(<substr: STRING>, <str: STRING>)",
+        "TgtPattern": "instr(<str>, <substr>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT POSITION('cd', 'abcdef');",
+            "sqlite": "SELECT instr('abcdef', 'cd');"
+        }
+    },
+    {
+        "Desc": "DIV0",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DIV0(<dividend: DOUBLE>, <divisor: DOUBLE>)",
+        "TgtPattern": "CASE WHEN <divisor> = 0 THEN 0 ELSE <dividend> / <divisor> END",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT DIV0(10, 0);",
+            "sqlite": "SELECT CASE WHEN 0 = 0 THEN 0 ELSE 10.0 / 0 END;"
+        }
+    },
+    {
+        "Desc": "COVAR_POP",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COVAR_POP(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> END) - SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> END) * SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END) * 1.0 / NULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)) / NULLIF(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END), 0)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT COVAR_POP(x, y) FROM VALUES (1, 2), (2, 4), (3, 6) AS t(x, y);",
+            "sqlite": "SELECT (SUM(CASE WHEN x + y IS NOT NULL THEN x * y END) - SUM(CASE WHEN x + y IS NOT NULL THEN x END) * SUM(CASE WHEN x + y IS NOT NULL THEN y END) * 1.0 / NULLIF(SUM(CASE WHEN x + y IS NOT NULL THEN 1 END), 0)) / NULLIF(SUM(CASE WHEN x + y IS NOT NULL THEN 1 END), 0) FROM (VALUES (1, 2), (2, 4), (3, 6)) AS t(x, y);"
+        }
+    },
+    {
+        "Desc": "REGR_SLOPE",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SLOPE(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "(SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END)) / (SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END) * (AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END) * AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> END)))",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_SLOPE(x, y) FROM VALUES (2, 1), (4, 2), (6, 3) AS t(x, y);",
+            "sqlite": "SELECT (SUM(CASE WHEN x + y IS NOT NULL THEN x * y ELSE 0 END) - COUNT(CASE WHEN x + y IS NOT NULL THEN 1 END) * AVG(CASE WHEN x + y IS NOT NULL THEN x END) * AVG(CASE WHEN x + y IS NOT NULL THEN y END)) / (SUM(CASE WHEN x + y IS NOT NULL THEN y * y ELSE 0 END) - COUNT(CASE WHEN x + y IS NOT NULL THEN 1 END) * (AVG(CASE WHEN x + y IS NOT NULL THEN y END) * AVG(CASE WHEN x + y IS NOT NULL THEN y END))) FROM (VALUES (2, 1), (4, 2), (6, 3)) AS t(x, y);"
+        }
+    },
+    {
+        "Desc": "REGR_AVGY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGY(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE NULL END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_AVGY(x, y) FROM VALUES (2, 1), (4, 2), (6, 3) AS t(x, y);",
+            "sqlite": "SELECT AVG(CASE WHEN x + y IS NOT NULL THEN x ELSE NULL END) FROM (VALUES (2, 1), (4, 2), (6, 3)) AS t(x, y);"
+        }
+    },
+    {
+        "Desc": "REGR_AVGX",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_AVGX(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "AVG(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE NULL END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_AVGX(x, y) FROM VALUES (2, 1), (4, 2), (6, 3) AS t(x, y);",
+            "sqlite": "SELECT AVG(CASE WHEN x + y IS NOT NULL THEN y ELSE NULL END) FROM (VALUES (2, 1), (4, 2), (6, 3)) AS t(x, y);"
+        }
+    },
+    {
+        "Desc": "REGR_COUNT",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_COUNT(<x: NUMBER>, <y: NUMBER>)",
+        "TgtPattern": "COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_COUNT(x, y) FROM VALUES (2, 1), (4, 2), (NULL, 3) AS t(x, y);",
+            "sqlite": "SELECT COUNT(CASE WHEN x + y IS NOT NULL THEN 1 END) FROM (VALUES (2, 1), (4, 2), (NULL, 3)) AS t(x, y);"
+        }
+    },
+    {
+        "Desc": "REGR_SXX",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXX(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <x> ELSE 0 END) - (SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END) * SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END)) * 1.0 / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_SXX(y, x) FROM VALUES (1, 2), (2, 4), (3, 6) AS t(y, x);",
+            "sqlite": "SELECT SUM(CASE WHEN x + y IS NOT NULL THEN x * x ELSE 0 END) - (SUM(CASE WHEN x + y IS NOT NULL THEN x ELSE 0 END) * SUM(CASE WHEN x + y IS NOT NULL THEN x ELSE 0 END)) * 1.0 / COUNT(CASE WHEN x + y IS NOT NULL THEN 1 END) FROM (VALUES (1, 2), (2, 4), (3, 6)) AS t(y, x);"
+        }
+    },
+    {
+        "Desc": "REGR_SYY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SYY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> * <y> ELSE 0 END) - (SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END) * SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END)) * 1.0 / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_SYY(y, x) FROM VALUES (1, 2), (2, 4), (3, 6) AS t(y, x);",
+            "sqlite": "SELECT SUM(CASE WHEN x + y IS NOT NULL THEN y * y ELSE 0 END) - (SUM(CASE WHEN x + y IS NOT NULL THEN y ELSE 0 END) * SUM(CASE WHEN x + y IS NOT NULL THEN y ELSE 0 END)) * 1.0 / COUNT(CASE WHEN x + y IS NOT NULL THEN 1 END) FROM (VALUES (1, 2), (2, 4), (3, 6)) AS t(y, x);"
+        }
+    },
+    {
+        "Desc": "REGR_SXY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "sqlite"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REGR_SXY(<y: NUMBER>, <x: NUMBER>)",
+        "TgtPattern": "SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> * <y> ELSE 0 END) - SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <y> ELSE 0 END) * SUM(CASE WHEN <x> + <y> IS NOT NULL THEN <x> ELSE 0 END) * 1.0 / COUNT(CASE WHEN <x> + <y> IS NOT NULL THEN 1 END)",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT REGR_SXY(y, x) FROM VALUES (1, 2), (2, 4), (3, 6) AS t(y, x);",
+            "sqlite": "SELECT SUM(CASE WHEN x + y IS NOT NULL THEN x * y ELSE 0 END) - SUM(CASE WHEN x + y IS NOT NULL THEN y ELSE 0 END) * SUM(CASE WHEN x + y IS NOT NULL THEN x ELSE 0 END) * 1.0 / COUNT(CASE WHEN x + y IS NOT NULL THEN 1 END) FROM (VALUES (1, 2), (2, 4), (3, 6)) AS t(y, x);"
+        }
+    }
+]

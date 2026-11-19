@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "TO_DATE",
+        "Dialect": {
+            "Src": "sqlserver",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<date_str: @GenTimestampOracleStr('Mon dd, YYYY')>)",
+        "TgtPattern": "CAST(<mysql_date: @TranToStandardTimeFormat(<date_str>, 'Mon dd, YYYY')> AS DATE)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    }
+]

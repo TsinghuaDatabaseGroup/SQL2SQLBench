@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "NOTNULL",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: ANY_VALUE> NOTNULL",
+        "TgtPattern": "NOT <value> IS NULL",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

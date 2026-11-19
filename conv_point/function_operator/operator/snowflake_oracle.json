@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "ILIKE",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str: STRING> ILIKE <pattern: @GenIlikePattern(<str>)>",
+        "TgtPattern": "LOWER(<str>) LIKE LOWER(<pattern>)",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

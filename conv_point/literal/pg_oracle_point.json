@@ -1,0 +1,110 @@
+[
+    {
+        "Desc": "INTERVAL_PG_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<interval_literal: @GenPGOriIntervalLiteral()>::interval",
+        "TgtPattern": "<interval: @GenPGOracleInterval(<interval_literal>, 'PG')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_ISO8601_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<interval_literal: @GenISOIntervalLiteral()>::interval",
+        "TgtPattern": "<interval: @GenPGOracleInterval(<interval_literal>, 'ISO8601')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_SQL_Standard_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<interval_literal: @GenPGSQLStandardLiteral()>::interval",
+        "TgtPattern": "<interval: @GenPGOracleInterval(<interval_literal>, 'STANDARD')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_PG_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INTERVAL <interval_literal: @GenPGOriIntervalLiteral()>",
+        "TgtPattern": "<interval: @GenPGOracleInterval(<interval_literal>, 'PG')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_ISO8601_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INTERVAL <interval_literal: @GenISOIntervalLiteral()>",
+        "TgtPattern": "<interval: @GenPGOracleInterval(<interval_literal>, 'ISO8601')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_SQL_Standard_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INTERVAL <interval_literal: @GenPGSQLStandardLiteral()>",
+        "TgtPattern": "<interval: @GenPGOracleInterval(<interval_literal>, 'STANDARD')>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "E escape",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "E<string: STRING_LITERAL>",
+        "TgtPattern": "<string1: @RepBackSlash(<string>)>",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "TRUE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "(<cond: BOOL>) = TRUE",
+        "TgtPattern": "<cond>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "FALSE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "(<cond: BOOL>) = FALSE",
+        "TgtPattern": "not <cond>",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

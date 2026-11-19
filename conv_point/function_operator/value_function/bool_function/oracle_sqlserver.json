@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "NVL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+        "TgtPattern": "ISNULL(<expr1>, <expr2>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "NVL2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+        "TgtPattern": "IIF(<expr1> IS NOT NULL, <expr2>, <expr3>)",
+        "Condition": null,
+        "Return": "DATE"
+    }
+]

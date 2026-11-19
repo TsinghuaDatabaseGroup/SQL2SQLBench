@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "ARY_0",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str_ary: ARRAY[STRING]>[0]",
+        "TgtPattern": "(SELECT column_value cv FROM TABLE(<str_ary>) WHERE ROWNUM \\<= 1)",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "NSTRING",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "N<string: STRING_LITERAL>",
+        "TgtPattern": "<string>",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "INTERVAL_1",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <int_value: @GenMySQLIntervalInt(<unit: OPTION['MICROSECOND', 'SECOND', 'MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'QUARTER', 'YEAR']>)> <unit>",
+        "TgtPattern": "<pg_interval: @GenMySQLPGIntervalValue(<int_value>, <unit>)>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_2",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "INTERVAL <literal: @GenMySQLIntervalString(<unit: OPTION['MINUTE_MICROSECOND', 'HOUR_SECOND', 'HOUR_MINUTE', 'DAY_SECOND', 'DAY_MINUTE', 'DAY_HOUR', 'YEAR_MONTH']>)> <unit>",
+        "TgtPattern": "<pg_interval: @GenMySQLPGIntervalValue(<literal>, <unit>)>",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL_DIV",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INTERVAL '<hour: INT_LITERAL, [1, 24]>/<min: INT_LITERAL, [1, 59]>' HOUR_MINUTE",
+        "TgtPattern": "'<hour>:<min>'::interval",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "COMMON_STRING",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "pg"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "<string: @ContainBackSlash()>",
+        "TgtPattern": "E<string>",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

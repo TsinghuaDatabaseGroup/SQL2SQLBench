@@ -1,0 +1,74 @@
+[
+    {
+        "Desc": "LIMIT_1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE <cond: BOOL> LIMIT <num1: INT_LITERAL, [1,5]>, <num2: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <value_list> FROM <tbl_list> WHERE <cond> OFFSET <num1> FETCH NEXT <num2> ROWS ONLY",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> LIMIT <num1: INT_LITERAL, [1,5]>, <num2: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <value_list> FROM <tbl_list> OFFSET <num1> FETCH NEXT <num2> ROWS ONLY",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_3",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: ANY_VALUE> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY <g_cols: LIST[ANY_VALUE, GROUP_BY]> LIMIT <num1: INT_LITERAL, [1,5]>, <num2: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <value_list> FROM <tbl_list> WHERE <cond> GROUP BY <g_cols> OFFSET <num1> FETCH NEXT <num2> ROWS ONLY",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_4",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE <cond: BOOL> LIMIT <num1: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <value_list> FROM <tbl_list> WHERE <cond> FETCH NEXT <num1> ROWS ONLY",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_5",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> LIMIT <num2: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <value_list> FROM <tbl_list> FETCH NEXT <num2> ROWS ONLY",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_6",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: ANY_VALUE> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY <g_cols: LIST[ANY_VALUE, GROUP_BY]> LIMIT <num2: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <value_list> FROM <tbl_list> WHERE <cond> GROUP BY <g_cols> FETCH NEXT <num2> ROWS ONLY",
+        "Condition": null,
+        "Return": null
+    }
+]

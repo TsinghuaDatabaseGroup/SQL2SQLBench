@@ -1,0 +1,524 @@
+[
+  {
+    "Desc": "Convert NOTNULL operator to IS NOT NULL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "<column: ANY_VALUE> NOTNULL",
+    "TgtPattern": "<column> IS NOT NULL",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL EXTRACT(DECADE FROM ...) to Oracle equivalent using TRUNC and YEAR extraction",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "EXTRACT( DECADE FROM <date_value: DATE> )",
+    "TgtPattern": "TRUNC( EXTRACT( YEAR FROM <date_value> ) / 10 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL SUBSTRING function with FROM/FOR syntax to Oracle SUBSTR function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "SUBSTRING ( <str_expr: STRING> FROM <start_pos: INT> FOR <length: INT> )",
+    "TgtPattern": "SUBSTR ( <str_expr> , <start_pos> , <length> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL TRIM(BOTH ...) to Oracle equivalent using nested RTRIM and LTRIM since Oracle TRIM only supports single-character sets",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "TRIM ( BOTH <trim_set: ANY_VALUE> FROM <expr: ANY_VALUE> )",
+    "TgtPattern": "RTRIM ( LTRIM ( <expr> , <trim_set> ) , <trim_set> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL TRIM(LEADING <multi-char> FROM ...) to Oracle-compatible equivalent. Oracle's TRIM only allows single-character trim sets, so we conditionally use native TRIM for single-character strings and REGEXP_REPLACE for multi-character strings to remove only the first occurrence.",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "TRIM ( LEADING <trim_str: STRING> FROM <source: ANY_VALUE> )",
+    "TgtPattern": "CASE WHEN LENGTH ( <trim_str> ) = 1 THEN TRIM ( LEADING <trim_str> FROM <source> ) ELSE REGEXP_REPLACE ( <source> , '^' || <trim_str> , '' ) END",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace CHAR_LENGTH function with Oracle's LENGTH function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "CHAR_LENGTH( <expr: ANY_VALUE> )",
+    "TgtPattern": "LENGTH( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert CHARACTER_LENGTH function to Oracle's LENGTH function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "CHARACTER_LENGTH ( <expr: ANY_VALUE> )",
+    "TgtPattern": "LENGTH ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL LEFT function to Oracle SUBSTR function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "LEFT ( <str: ANY_VALUE> , <n: INT> )",
+    "TgtPattern": "SUBSTR ( <str> , 1 , <n> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL STRPOS function to Oracle INSTR function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "STRPOS ( <string: STRING> , <substring: STRING> )",
+    "TgtPattern": "INSTR ( <string> , <substring> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace PostgreSQL ASINH function with equivalent mathematical expression in Oracle",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "ASINH ( <expr: ANY_VALUE> )",
+    "TgtPattern": "LN ( <expr> + SQRT ( POWER ( <expr> , 2 ) + 1 ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace PostgreSQL ACOSH function with equivalent Oracle expression using LN and SQRT",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "ACOSH ( <x: ANY_VALUE> )",
+    "TgtPattern": "LN ( <x> + SQRT ( <x> * <x> - 1 ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace PostgreSQL ATANH function with equivalent Oracle expression using LN and arithmetic operations",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "ATANH ( <expr: DOUBLE> )",
+    "TgtPattern": "( CASE WHEN <expr> IS NULL THEN NULL WHEN ABS(<expr>) >= 1 THEN NULL ELSE 0.5 * LN( (1 + <expr>) / (1 - <expr>) ) END )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace PostgreSQL PI() function with Oracle-compatible ACOS(-1) expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "PI ( )",
+    "TgtPattern": "ACOS ( -1 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL CBRT function to Oracle POWER expression for cube root calculation",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "CBRT ( <value: ANY_VALUE> )",
+    "TgtPattern": "POWER ( <value> , 1/3 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace non-standard DIV function with division operator",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "DIV( <a: ANY_VALUE> , <b: ANY_VALUE> )",
+    "TgtPattern": "<a> / <b>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL cast operator to Oracle CAST function for TEXT type",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "<expr: ANY_VALUE> :: TEXT",
+    "TgtPattern": "CAST ( <expr> AS VARCHAR2(4000) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL ILIKE operator to Oracle using UPPER and LIKE",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "<expression: ANY_VALUE> ILIKE <pattern: ANY_VALUE>",
+    "TgtPattern": "UPPER(<expression>) LIKE UPPER(<pattern>)",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL square root operator |/ to Oracle SQRT function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "|/ <expr: ANY_VALUE>",
+    "TgtPattern": "SQRT ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert bitwise AND operator from PostgreSQL to Oracle BITAND function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "<expr1: ANY_VALUE> & <expr2: ANY_VALUE>",
+    "TgtPattern": "BITAND ( <expr1> , <expr2> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL bitwise right shift operator to Oracle equivalent using CASE expression with FLOOR and POWER functions to handle both positive and negative shift amounts",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "<expr1: ANY_VALUE> >> <expr2: ANY_VALUE>",
+    "TgtPattern": "CASE WHEN <expr2> >= 0 THEN FLOOR(<expr1> / POWER(2, <expr2>)) ELSE <expr1> * POWER(2, -<expr2>) END",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL IS NOT DISTINCT FROM to Oracle equivalent for NULL-safe equality",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "<expr1: ANY_VALUE> IS NOT DISTINCT FROM <expr2: ANY_VALUE>",
+    "TgtPattern": "( <expr1> = <expr2> ) OR ( <expr1> IS NULL AND <expr2> IS NULL )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL STRING_AGG without ORDER BY to Oracle LISTAGG",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "STRING_AGG ( <expression: ANY_VALUE> , <delimiter: STRING> )",
+    "TgtPattern": "LISTAGG ( <expression> , <delimiter> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL STRING_AGG with ORDER BY to Oracle LISTAGG WITHIN GROUP",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "STRING_AGG ( <expression: ANY_VALUE> , <delimiter: STRING> ORDER BY <order_by_clause: ANY_VALUE> )",
+    "TgtPattern": "LISTAGG ( <expression> , <delimiter> ) WITHIN GROUP ( ORDER BY <order_by_clause> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL DOUBLE PRECISION type to Oracle BINARY_DOUBLE",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "CAST ( <expr: ANY_VALUE> AS DOUBLE PRECISION )",
+    "TgtPattern": "CAST ( <expr> AS BINARY_DOUBLE )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Remove explicit comparison to boolean literal TRUE in conditions since Oracle doesn't support boolean expressions in WHERE clauses",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "( <condition: ANY_VALUE> ) = TRUE",
+    "TgtPattern": "<condition>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Remove explicit comparison to boolean literal TRUE for unparenthesized conditions in Oracle",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "<condition: ANY_VALUE> = TRUE",
+    "TgtPattern": "<condition>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert boolean comparison to conditional expression in Oracle since Oracle doesn't support direct boolean comparisons in SQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "( <expr: ANY_VALUE> ) = FALSE",
+    "TgtPattern": "NOT ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert boolean comparison without parentheses for Oracle compatibility",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "<expr: ANY_VALUE> = FALSE",
+    "TgtPattern": "NOT ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert PostgreSQL OCTET_LENGTH function to Oracle LENGTHB function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "pg",
+      "Tgt": "oracle"
+    },
+    "SrcPattern": "OCTET_LENGTH ( <expr: ANY_VALUE> )",
+    "TgtPattern": "LENGTHB ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "pg": {},
+        "oracle": {}
+      }
+    }
+  }
+]

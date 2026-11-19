@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "GETX",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_X(<point: POINT>::geometry)",
+        "TgtPattern": "ST_Y(<point>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GETY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_Y(<point: POINT>::geometry)",
+        "TgtPattern": "ST_X(<point>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "SPHERE_DISTANCE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_DistanceSphere(<point1: POINT>, <point2: POINT>)",
+        "TgtPattern": "ST_Distance_Sphere(<point1>, <point2>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ST_Distance",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_Distance(<point1: POINT>::geography, <point2: POINT>::geography)",
+        "TgtPattern": "ST_Distance(<point1>, <point2>)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "WITHIN_DISTANCE",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_DWithin(<point1: POINT>, <point2: POINT>, 1000000)",
+        "TgtPattern": "ST_Distance_Sphere(<point1>, <point2>) \\<= 1000000",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

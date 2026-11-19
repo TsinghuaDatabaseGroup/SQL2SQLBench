@@ -1,0 +1,210 @@
+[
+    {
+        "Desc": "ADD_MONTHS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADD_MONTHS(<value: DATE>, <n: INT>)",
+        "TgtPattern": "CAST(<value> + (<n> * INTERVAL '1 month') AS DATE)",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT ADD_MONTHS(TO_DATE('2024-05-17'), 2);",
+            "pg": "SELECT CAST(CAST('2024-05-17' AS DATE) + (2 * INTERVAL '1 month') AS DATE);"
+        }
+    },
+    {
+        "Desc": "DATEADD_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEADD(day, <n: INT>, <value: DATE>)",
+        "TgtPattern": "<value> + (<n> * INTERVAL '1 day')",
+        "Condition": null,
+        "Return": "DATE",
+        "Demo": {
+            "snowflake": "SELECT DATEADD(day, 7, TO_DATE('2024-05-17'));",
+            "pg": "SELECT CAST('2024-05-17' AS DATE) + (7 * INTERVAL '1 day');"
+        }
+    },
+    {
+        "Desc": "DATEDIFF_DAY",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATEDIFF(day, <start: DATE>, <end: DATE>)",
+        "TgtPattern": "<end> - <start>",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT DATEDIFF(day, TO_DATE('2024-05-01'), TO_DATE('2024-05-17'));",
+            "pg": "SELECT CAST('2024-05-17' AS DATE) - CAST('2024-05-01' AS DATE);"
+        }
+    },
+    {
+        "Desc": "NVL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>)",
+        "TgtPattern": "COALESCE(<expr1>, <expr2>)",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "snowflake": "SELECT NVL(NULL, 'fallback');",
+            "pg": "SELECT COALESCE(NULL, 'fallback');"
+        }
+    },
+    {
+        "Desc": "NVL2",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NVL2(<expr1: ANY_VALUE>, <expr2: ANY_VALUE>, <expr3: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <expr1> IS NOT NULL THEN <expr2> ELSE <expr3> END",
+        "Condition": null,
+        "Return": "ANY_VALUE",
+        "Demo": {
+            "snowflake": "SELECT NVL2(NULL, 'not_null', 'is_null');",
+            "pg": "SELECT CASE WHEN NULL IS NOT NULL THEN 'not_null' ELSE 'is_null' END;"
+        }
+    },
+    {
+        "Desc": "ZEROIFNULL",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ZEROIFNULL(<expr: INT>)",
+        "TgtPattern": "COALESCE(<expr>, 0)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT ZEROIFNULL(NULL);",
+            "pg": "SELECT COALESCE(NULL, 0);"
+        }
+    },
+    {
+        "Desc": "NULLIFZERO",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "NULLIFZERO(<expr: INT>)",
+        "TgtPattern": "NULLIF(<expr>, 0)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT NULLIFZERO(0);",
+            "pg": "SELECT NULLIF(0, 0);"
+        }
+    },
+    {
+        "Desc": "SPLIT_PART",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SPLIT_PART(<str: STRING>, <delimiter: STRING>, 0)",
+        "TgtPattern": "SPLIT_PART(<str>, <delimiter>, 1)",
+        "Condition": null,
+        "Return": "STRING",
+        "Demo": {
+            "snowflake": "SELECT SPLIT_PART('a.b.c', '.', 0);",
+            "pg": "SELECT SPLIT_PART('a.b.c', '.', CASE WHEN 0 = 0 THEN 1 ELSE 0 END);"
+        }
+    },
+    {
+        "Desc": "ENDSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STARTSWITH(<str: STRING>, <prefix: STRING>)",
+        "TgtPattern": "STARTS_WITH(<str>, <prefix>)",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT ENDSWITH('abcdef', 'def');",
+            "pg": "SELECT RIGHT('abcdef', LENGTH('def')) = 'def';"
+        }
+    },
+    {
+        "Desc": "ENDSWITH",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ENDSWITH(<str: STRING>, <suffix: STRING>)",
+        "TgtPattern": "RIGHT(<str>, LENGTH(<suffix>)) = <suffix>",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT ENDSWITH('abcdef', 'def');",
+            "pg": "SELECT RIGHT('abcdef', LENGTH('def')) = 'def';"
+        }
+    },
+    {
+        "Desc": "CONTAINS",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CONTAINS(<str: STRING>, <substr: STRING>)",
+        "TgtPattern": "STRPOS(<str>, <substr>) > 0",
+        "Condition": null,
+        "Return": "BOOL",
+        "Demo": {
+            "snowflake": "SELECT CONTAINS('abcdef', 'cd');",
+            "pg": "SELECT STRPOS('abcdef', 'cd') > 0;"
+        }
+    },
+    {
+        "Desc": "POSITION",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "POSITION(<substr: STRING>, <str: STRING>)",
+        "TgtPattern": "POSITION(<substr> IN <str>)",
+        "Condition": null,
+        "Return": "INT",
+        "Demo": {
+            "snowflake": "SELECT POSITION('cd', 'abcdef');",
+            "pg": "SELECT POSITION('cd' IN 'abcdef');"
+        }
+    },
+    {
+        "Desc": "DIV0",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DIV0(<dividend: DOUBLE>, <divisor: DOUBLE>)",
+        "TgtPattern": "CASE WHEN <divisor> = 0 THEN 0 ELSE <dividend> / <divisor> END",
+        "Condition": null,
+        "Return": "NUMBER",
+        "Demo": {
+            "snowflake": "SELECT DIV0(10, 0);",
+            "pg": "SELECT CASE WHEN 0 = 0 THEN 0 ELSE 10 / 0 END;"
+        }
+    }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "XMLEXISTS",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACTVALUE(<xml: XML>, <xpath: @GenCountLiteral(<xml>)>) != 0",
+        "TgtPattern": "XMLEXISTS(<xpath1: @TranCountLiteralOra(<xpath>)> PASSING <xml>)",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

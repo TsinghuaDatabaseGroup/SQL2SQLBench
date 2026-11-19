@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "||",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<str1: STRING> || <str2: STRING>",
+        "TgtPattern": "CONCAT(NULLIF(<str1>, ''), NULLIF(<str2>, ''))",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "DATE_MINUS_DATE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<date1: DATE, STRICT> - <date2: DATE, STRICT>",
+        "TgtPattern": "DATEDIFF(<date1>, <date2>)",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

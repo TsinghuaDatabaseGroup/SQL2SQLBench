@@ -1,0 +1,74 @@
+[
+    {
+        "Desc": "GETX",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_X(<point: POINT>)",
+        "TgtPattern": "<point>.SDO_POINT.Y",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "GETY",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_Y(<point: POINT>)",
+        "TgtPattern": "<point>.SDO_POINT.X",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "SPHERE_DISTANCE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_Distance_Sphere(<point1: POINT>, <point2: POINT>)",
+        "TgtPattern": "6371000 * 2 * ASIN(SQRT(POWER(SIN((<point2>.SDO_POINT.Y - <point1>.SDO_POINT.Y) * ACOS(-1) / 180 / 2), 2) + COS(<point1>.SDO_POINT.Y * ACOS(-1) / 180) * COS(<point2>.SDO_POINT.Y * ACOS(-1) / 180) * POWER(SIN((<point2>.SDO_POINT.X - <point1>.SDO_POINT.X) * ACOS(-1) / 180 / 2), 2)))",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ST_Distance",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_Distance(<point1: POINT>, <point2: POINT>)",
+        "TgtPattern": "SDO_GEOM.SDO_DISTANCE(<point1>, <point2>, 0.0001, 'unit=M')",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ST_LATITUDE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_LATITUDE(<point: POINT>)",
+        "TgtPattern": "<point>.SDO_POINT.Y",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "ST_LONGITUDE",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ST_LONGITUDE(<point: POINT>)",
+        "TgtPattern": "<point>.SDO_POINT.X",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

@@ -1,0 +1,122 @@
+[
+    {
+        "Desc": "SUBSTRING",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUBSTRING(<value: STRING>, 0, <len: INT, LITERAL, [1, 50]>)",
+        "TgtPattern": "SUBSTRING(<value>, 1, <len>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "INSTR3",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, <start_pos: INT, LITERAL, [1,3]>, 1)>, <start_pos>)",
+        "TgtPattern": "LOCATE(<sub_str>, <str>, <start_pos>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "INSTR4",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INSTR(<str: STRING>, <sub_str: @GenSubString(<str>, <start_pos: INT, LITERAL, [1,3]>, 2)>, <start_pos>, 2)",
+        "TgtPattern": "LOCATE(<sub_str>, <str>, LOCATE(<sub_str>, <str>, <start_pos>) + 1)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "LENGTH",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LENGTH(<str: NVARCHAR>)",
+        "TgtPattern": "CHAR_LENGTH(<str>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "LENGTHB",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LENGTHB(<str: NVARCHAR>)",
+        "TgtPattern": "LENGTH(<str>)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "LPAD",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LPAD(<str: STRING>, <len: INT, LITERAL, [1, 50]>)",
+        "TgtPattern": "LPAD(<str>, <len>, ' ')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "RPAD",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "RPAD(<str: STRING>, <len: INT, LITERAL, [1, 50]>)",
+        "TgtPattern": " RPAD(<str>, <len>, ' ')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "REPLACE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "REPLACE(<string: STRING>, <substr: STRING>)",
+        "TgtPattern": "REPLACE(<string>, <substr>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "RTRIM",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "RTRIM(<str: STRING>, <chars: STRING>)",
+        "TgtPattern": " REGEXP_REPLACE(<str>, <rem_str: @RtrimReg(<chars>)>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "LTRIM",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "LTRIM(<str: STRING>, <chars: STRING>)",
+        "TgtPattern": "REGEXP_REPLACE(<str>, <rem_str: @LtrimReg(<chars>)>, '')",
+        "Condition": null,
+        "Return": "STRING"
+    }
+]

@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "TRUE",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "(<cond: BOOL>) = TRUE",
+        "TgtPattern": "<cond>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "FALSE",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "(<cond: BOOL>) = FALSE",
+        "TgtPattern": "not <cond>",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "INTERVAL1",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INTERVAL '2 days'",
+        "TgtPattern": "INTERVAL 2 DAY",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL1",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INTERVAL '2 months'",
+        "TgtPattern": "INTERVAL 2 MONTH",
+        "Condition": null,
+        "Return": "INTERVAL"
+    }
+]

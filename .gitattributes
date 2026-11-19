@@ -1,0 +1,6 @@
+*.csv !text !filter !merge !diff
+*.json !text !filter !merge !diff
+*.pkl !text !filter !merge !diff
+*.pt !text !filter !merge !diff
+*.zip !text !filter !merge !diff
+*.bin !text !filter !merge !diff

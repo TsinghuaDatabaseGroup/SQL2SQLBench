@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "DATE_LITERAL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "DATE <value: @GenDateLiteral()>",
+        "TgtPattern": "CAST(<value> AS DATE)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TS_LITERAL",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "LITERAL",
+        "SrcPattern": "TIMESTAMP <value: @GenTimestampLiteral()>",
+        "TgtPattern": "CAST(<value> AS datetime2)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    }
+]

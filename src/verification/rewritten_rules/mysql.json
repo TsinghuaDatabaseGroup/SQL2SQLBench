@@ -1,0 +1,38 @@
+[
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "FROM_DAYS(<value: INT, LITERAL, (366, +∞]>)",
+        "TgtPattern": "DATE '0001-01-01' + <value> - 366",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "PI()",
+        "TgtPattern": "3.1415926",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "IF(<condition: BOOL>, <exp2: ANY_VALUE>, <exp3: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <condition> THEN <exp2> ELSE <exp3> END",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "IFNULL(<value: ANY_VALUE>, <exp2: ANY_VALUE>)",
+        "TgtPattern": "CASE WHEN <value> IS NULL THEN <exp2> ELSE <value> END",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "~ <value1: NUMBER>",
+        "TgtPattern": "-(<value1>) - 1",
+        "Condition": null
+    },
+    {
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value1: ANY_VALUE> \\<=\\> <value2: ANY_VALUE>",
+        "TgtPattern": "((a = b) OR (a IS NULL AND b IS NULL))",
+        "Condition": null
+    }
+]

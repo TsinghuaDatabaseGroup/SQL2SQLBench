@@ -1,0 +1,38 @@
+[
+    {
+        "Desc": "LIMIT_1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> WHERE <cond: BOOL> LIMIT <num: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT * FROM (SELECT <value_list> FROM <tbl_list> WHERE <cond>) subquery WHERE ROWNUM \\<= <num>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: LIST[ANY_VALUE]> FROM <tbl_list: LIST[TABLE]> LIMIT <num: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT <value_list> FROM <tbl_list> WHERE ROWNUM \\<= <num>",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "LIMIT_3",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <value_list: ANY_VALUE> FROM <tbl_list: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY <g_cols: LIST[ANY_VALUE, GROUP_BY]> LIMIT <num: INT_LITERAL, [1,5]>",
+        "TgtPattern": "SELECT * FROM (SELECT <value_list> FROM <tbl_list> WHERE <cond> GROUP BY <g_cols>) subquery WHERE ROWNUM \\<= <num>",
+        "Condition": null,
+        "Return": null
+    }
+]

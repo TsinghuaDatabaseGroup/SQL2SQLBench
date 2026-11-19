@@ -1,0 +1,568 @@
+[
+  {
+    "Desc": "Convert Oracle NVL function to MySQL IFNULL function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "NVL ( <expr1: ANY_VALUE> , <expr2: ANY_VALUE> )",
+    "TgtPattern": "IFNULL ( <expr1> , <expr2> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle NVL2 function to MySQL equivalent using IF and IS NOT NULL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "NVL2 ( <expr1: ANY_VALUE> , <expr2: ANY_VALUE> , <expr3: ANY_VALUE> )",
+    "TgtPattern": "IF ( <expr1> IS NOT NULL , <expr2> , <expr3> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle TO_CHAR date formatting to MySQL DATE_FORMAT with equivalent format specifiers",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TO_CHAR ( <date_expr: DATE> , 'YYYY-MM-DD' )",
+    "TgtPattern": "DATE_FORMAT ( <date_expr> , '%Y-%m-%d' )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "General rule for converting Oracle TO_CHAR date formatting to MySQL DATE_FORMAT",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TO_CHAR ( <date_expr: DATE> , <format_str: STRING> )",
+    "TgtPattern": "DATE_FORMAT ( <date_expr> , REPLACE ( REPLACE ( REPLACE ( <format_str> , 'YYYY', '%Y' ) , 'MM', '%m' ) , 'DD', '%d' ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle ADD_MONTHS function to MySQL equivalent using DATE_ADD with INTERVAL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "ADD_MONTHS ( <date_value: ANY_VALUE> , <num_months: INT> )",
+    "TgtPattern": "DATE_ADD ( <date_value> , INTERVAL <num_months> MONTH )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle TRUNC function with 'YYYY' format to MySQL equivalent for year truncation",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TRUNC( <date_value: DATE> , 'YYYY' )",
+    "TgtPattern": "MAKEDATE( YEAR( <date_value> ) , 1 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle TRUNC function for dates to MySQL DATE function when used with single date argument",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TRUNC ( <date_value: DATE> )",
+    "TgtPattern": "DATE ( <date_value> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle numtodsinterval function for minute unit to MySQL interval expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "numtodsinterval ( <n: DOUBLE> , 'minute' )",
+    "TgtPattern": "INTERVAL <n> MINUTE",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle numtodsinterval function for uppercase MINUTE unit to MySQL interval expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "numtodsinterval ( <n: DOUBLE> , 'MINUTE' )",
+    "TgtPattern": "INTERVAL <n> MINUTE",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle NUMTODSINTERVAL function for minute unit to MySQL interval expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "NUMTODSINTERVAL ( <n: DOUBLE> , 'minute' )",
+    "TgtPattern": "INTERVAL <n> MINUTE",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle NUMTODSINTERVAL function for uppercase MINUTE unit to MySQL interval expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "NUMTODSINTERVAL ( <n: DOUBLE> , 'MINUTE' )",
+    "TgtPattern": "INTERVAL <n> MINUTE",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle numtoyminterval function in date arithmetic to MySQL INTERVAL syntax",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "<date_expr: DATE> + numtoyminterval ( <value: INT> , <unit_str: STRING> )",
+    "TgtPattern": "<date_expr> + INTERVAL <value> <unit_str>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle numtoyminterval function in date subtraction to MySQL INTERVAL syntax",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "<date_expr: DATE> - numtoyminterval ( <value: INT> , <unit_str: STRING> )",
+    "TgtPattern": "<date_expr> - INTERVAL <value> <unit_str>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle ROUND function with date and format string to MySQL equivalent for month rounding",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "ROUND ( <date_value: DATE> , 'MON' )",
+    "TgtPattern": "CAST( CASE WHEN DAY(<date_value>) >= 16 THEN DATE_FORMAT(DATE_ADD(<date_value>, INTERVAL 1 MONTH), '%Y-%m-01') ELSE DATE_FORMAT(<date_value>, '%Y-%m-01') END AS DATE )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle TO_TIMESTAMP function with default format to MySQL STR_TO_DATE using converted format specifiers",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {
+          "NLS_TIMESTAMP_FORMAT": "DD-MON-RR HH.MI.SSXFF AM"
+        },
+        "mysql": {}
+      }
+    },
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TO_TIMESTAMP ( <str: STRING> )",
+    "TgtPattern": "STR_TO_DATE ( <str> , '%d-%b-%y %I.%i.%s.%f %p' )",
+    "Condition": null,
+    "Return": "ANY_VALUE"
+  },
+  {
+    "Desc": "Convert Oracle TO_DATE function without format parameter to MySQL STR_TO_DATE using NLS_DATE_FORMAT",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {
+          "NLS_DATE_FORMAT": "Mon dd, YYYY"
+        },
+        "mysql": {}
+      }
+    },
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TO_DATE ( <date_str: STRING> )",
+    "TgtPattern": "STR_TO_DATE ( <date_str> , '%b %d, %Y' )",
+    "Condition": null,
+    "Return": "ANY_VALUE"
+  },
+  {
+    "Desc": "Convert Oracle CAST of string to DATE using NLS_DATE_FORMAT to MySQL STR_TO_DATE with explicit format mapping",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {
+          "NLS_DATE_FORMAT": "Mon dd, YYYY"
+        },
+        "mysql": {}
+      }
+    },
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "CAST( <date_str: STRING> AS DATE )",
+    "TgtPattern": "STR_TO_DATE( <date_str> , '%b %d, %Y' )",
+    "Condition": null,
+    "Return": "ANY_VALUE"
+  },
+  {
+    "Desc": "Convert Oracle INSTR function with three arguments to MySQL LOCATE function with reordered parameters",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "INSTR( <str: ANY_VALUE> , <substr: ANY_VALUE> , <start: INT> )",
+    "TgtPattern": "LOCATE( <substr> , <str> , <start> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle LENGTHB function to MySQL LENGTH function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "LENGTHB ( <expr: ANY_VALUE> )",
+    "TgtPattern": "LENGTH ( <expr> )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle LPAD function with two arguments to MySQL by adding default padding character (space)",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "LPAD ( <str: ANY_VALUE> , <length: INT> )",
+    "TgtPattern": "LPAD ( <str> , <length> , ' ' )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle existsnode XML function to MySQL equivalent using EXTRACTVALUE and CASE expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "existsnode ( <xml_data: ANY_VALUE> , <xpath: STRING> )",
+    "TgtPattern": "CASE WHEN <xml_data> IS NULL THEN NULL WHEN EXTRACTVALUE ( <xml_data> , <xpath> ) IS NOT NULL THEN 1 ELSE 0 END",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace Oracle COSH function with equivalent exponential expression in MySQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "COSH( <arg: DOUBLE> )",
+    "TgtPattern": "( EXP( <arg> ) + EXP( - ( <arg> ) ) ) / 2",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Replace Oracle TANH function with equivalent mathematical expression in MySQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "tanh( <expr: DOUBLE> )",
+    "TgtPattern": "( EXP( <expr> ) - EXP( - <expr> ) ) / ( EXP( <expr> ) + EXP( - <expr> ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle numeric TRUNC function to MySQL TRUNCATE function",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TRUNC( <number: DOUBLE> )",
+    "TgtPattern": "TRUNCATE( <number> , 0 )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle TO_CHAR number formatting with specific currency pattern to MySQL CONCAT and FORMAT",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {
+          "NLS_NUMERIC_CHARACTERS": ".,"
+        },
+        "mysql": {}
+      }
+    },
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "TO_CHAR( <number: ANY_VALUE> , 'FM$99G999G999G999D00' )",
+    "TgtPattern": "CONCAT( '$' , FORMAT( <number> , 2 ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE"
+  },
+  {
+    "Desc": "Convert Oracle NUMBER type in CAST function to MySQL DECIMAL type",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "CAST( <expr: ANY_VALUE> AS NUMBER( <precision: INT> , <scale: INT> ) )",
+    "TgtPattern": "CAST( <expr> AS DECIMAL( <precision> , <scale> ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle CAST to INTEGER type to MySQL CAST to SIGNED type",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "CAST ( <expr: ANY_VALUE> AS INTEGER )",
+    "TgtPattern": "CAST ( <expr> AS SIGNED )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle COVAR_POP function to MySQL equivalent expression",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "COVAR_POP ( <expr1: ANY_VALUE> , <expr2: ANY_VALUE> )",
+    "TgtPattern": "( ( COUNT( <expr1> * <expr2> ) * SUM( <expr1> * <expr2> ) - SUM( <expr1> ) * SUM( <expr2> ) ) / NULLIF( COUNT( <expr1> * <expr2> ) * COUNT( <expr1> * <expr2> ), 0 ) )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle REGR_AVGX function to MySQL equivalent using AVG with conditional logic",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "regr_avgx ( <y: ANY_VALUE> , <x: ANY_VALUE> )",
+    "TgtPattern": "AVG ( CASE WHEN <y> IS NOT NULL AND <x> IS NOT NULL THEN <x> END )",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Convert Oracle REGR_SXX function to MySQL equivalent expression using basic aggregates",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "regr_sxx( <expr1: ANY_VALUE> , <expr2: ANY_VALUE> )",
+    "TgtPattern": "(SUM(IF(<expr1> IS NOT NULL AND <expr2> IS NOT NULL, <expr2> * <expr2>, NULL)) - (SUM(IF(<expr1> IS NOT NULL AND <expr2> IS NOT NULL, <expr2>, NULL)) * SUM(IF(<expr1> IS NOT NULL AND <expr2> IS NOT NULL, <expr2>, NULL))) / COUNT(IF(<expr1> IS NOT NULL AND <expr2> IS NOT NULL, 1, NULL)))",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  },
+  {
+    "Desc": "Remove 'D' suffix from double literals in Oracle to make them valid in MySQL",
+    "Type": "EXPRESSION",
+    "Dialect": {
+      "Src": "oracle",
+      "Tgt": "mysql"
+    },
+    "SrcPattern": "<literal_value: ANY_VALUE>D",
+    "TgtPattern": "<literal_value>",
+    "Condition": null,
+    "Return": "ANY_VALUE",
+    "Tag": {
+      "DB PARAMETER": {
+        "oracle": {},
+        "mysql": {}
+      }
+    }
+  }
+]

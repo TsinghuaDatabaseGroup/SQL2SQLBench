@@ -1,0 +1,134 @@
+[
+    {
+        "Desc": "STRFTIME",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', <value: DATE>)",
+        "TgtPattern": "TO_CHAR(<value>, 'YYYY')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRFTIME('%Y', 'now')",
+        "TgtPattern": "TO_CHAR(CURRENT_DATE, 'YYYY')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME3",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', <date: TIMESTAMP, STRICT>, '+3 hours')",
+        "TgtPattern": "TO_CHAR(<date> + INTERVAL '3 hours', 'YYYY-MM-DD HH24:MI:SS')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRFTIME4",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "strftime('%Y-%m-%d %H:%M:%S', 'now', '+3 hours')",
+        "TgtPattern": "TO_CHAR(CURRENT_TIMESTAMP + INTERVAL '3 hours', 'YYYY-MM-DD HH24:MI:SS')",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "FROM_UNIXTIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UNIXEPOCH(<value: TIMESTAMP>)",
+        "TgtPattern": "CAST(EXTRACT(EPOCH FROM <value>) AS BIGINT)",
+        "Condition": null,
+        "Return": "INT"
+    },
+    {
+        "Desc": "FROM_UNIXTIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<value: NUMBER>, 'unixepoch')",
+        "TgtPattern": "TO_TIMESTAMP(<value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATE_ADD1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day', 'start of month')",
+        "TgtPattern": "DATE_TRUNC('month', <date> + INTERVAL '1 day')::DATE",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATE_ADD2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "date(<date: DATE>, '+1 day')",
+        "TgtPattern": "<date> + INTERVAL '1 day'",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "DATETIME1",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>, '+1 day')",
+        "TgtPattern": "CAST(<date> + INTERVAL '1 day' AS TIMESTAMP)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "DATETIME2",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "DATETIME(<date: TIMESTAMP>)",
+        "TgtPattern": "CAST(<date> AS TIMESTAMP)",
+        "Condition": null,
+        "Return": "TIMESTAMP"
+    },
+    {
+        "Desc": "JULIANDAY",
+        "Dialect": {
+            "Src": "sqlite",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "JULIANDAY(<date1: DATE>) - JULIANDAY(<date2: DATE>)",
+        "TgtPattern": "<date1> - <date2>",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

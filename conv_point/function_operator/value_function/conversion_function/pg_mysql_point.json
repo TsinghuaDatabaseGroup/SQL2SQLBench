@@ -1,0 +1,62 @@
+[
+    {
+        "Desc": "TYPE_CONVERSION",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: ANY_VALUE, NUMBER>::DOUBLE PRECISION",
+        "TgtPattern": "CAST(<value> AS DOUBLE)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CONV_TEXT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: ANY_VALUE>::TEXT",
+        "TgtPattern": "CAST(<value> AS CHAR)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_INTEGER",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: ANY_VALUE, NUMBER> AS INTEGER)",
+        "TgtPattern": "CAST(<value> AS SIGNED)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "CAST_NUMERIC",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "CAST(<value: ANY_VALUE, NUMBER> AS NUMERIC)",
+        "TgtPattern": "CAST(<value> AS DOUBLE)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "::NUMERIC",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "<value: ANY_VALUE, NUMBER>::NUMERIC",
+        "TgtPattern": "CAST(<value> AS DOUBLE)",
+        "Condition": null,
+        "Return": "NUMBER"
+    }
+]

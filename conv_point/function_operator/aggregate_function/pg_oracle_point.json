@@ -1,0 +1,110 @@
+[
+    {
+        "Desc": "FILTER_1",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "SUM(<value: NUMBER>) FILTER(WHERE <condition: BOOL>)",
+        "TgtPattern": "SUM(CASE WHEN <condition> THEN <value> ELSE 0 END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "FILTER_2",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "COUNT(*) FILTER(WHERE <condition: BOOL>)",
+        "TgtPattern": "SUM(CASE WHEN <condition> THEN 1 ELSE 0 END)",
+        "Condition": null,
+        "Return": "NUMBER"
+    },
+    {
+        "Desc": "STRING_AGG NO DISTINCT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "STRING_AGG(<value: STRING, COLUMN>, <sep: OPTION['\\', \\'', '\\';\\'']> ORDER BY <value> <order_rule: OPTION['ASC', 'DESC']>)",
+        "TgtPattern": "LISTAGG(<value>, <sep>) WITHIN GROUP (ORDER BY <value> <order_rule>)",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "STRING_AGG DISTINCT",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <group_by: LIST[ANY_VALUE, GROUP_BY]>, STRING_AGG(DISTINCT <value: STRING, COLUMN>, <sep: OPTION['\\', \\'', '\\';\\'']> ORDER BY <value> <order_rule: OPTION['ASC': 'ASC NULLS FIRST', 'DESC': 'DESC NULLS LAST']>) FROM <tables: LIST[TABLE]> WHERE <cond: ANY_VALUE> GROUP BY <group_by>",
+        "TgtPattern": "SELECT <alias_list: LIST[ALIAS]>, LISTAGG(<value_alias: ALIAS>, <sep>) WITHIN GROUP (ORDER BY <value_alias> <order_rule>) FROM ( SELECT DISTINCT {for <group_col>, <alias> in <group_by>, <alias_list> ADD ',': <group_col> AS <alias>}, <value> AS <value_alias> FROM <tables> WHERE <cond>) GROUP BY <alias_list>",
+        "Condition": null,
+        "Return": "STRING"
+    },
+    {
+        "Desc": "BIT_AND",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <group_by: LIST[ANY_VALUE, GROUP_BY]>, BIT_AND(<bit_and_value: INT, STRICT>) FROM <tables:LIST[TABLE]>\nGROUP BY <group_by>",
+        "TgtPattern": "WITH <alias1: ALIAS> AS (\n    SELECT {for <ele>, <alias> in <group_by>, <alias_list: LIST[ALIAS]> ADD ',': <ele> AS <alias>}, <bit_and_value> AS <alias_value: ALIAS>, ROW_NUMBER() OVER (PARTITION BY <group_by> ORDER BY <bit_and_value>) AS <alias3: ALIAS>\n    FROM <tables>\n),\n<alias2: ALIAS> (<alias_list>, <alias4: ALIAS>, <alias3>) AS (\n    SELECT <alias_list>, <alias_value>, <alias3>\n    FROM <alias1>\n    WHERE <alias3> = 1\n    UNION ALL\n    SELECT {for <alias> in <alias_list> ADD ',': g.<alias>}, CASE WHEN g.<alias_value> IS NOT NULL THEN BITAND(r.<alias4>, g.<alias_value>) ELSE r.<alias4> END, g.<alias3>\n    FROM <alias1> g\n    JOIN <alias2> r\n      ON {for <alias> in <alias_list> ADD 'AND': g.<alias> = r.<alias>} AND g.<alias3> = r.<alias3> + 1\n)\nSELECT <alias_list>, <alias4>\nFROM <alias2> r\nWHERE <alias3> = (SELECT MAX(<alias3>) FROM <alias1> g WHERE {for <alias> in <alias_list> ADD 'AND': g.<alias> = r.<alias>})",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "BIT_OR",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT <group_by: LIST[ANY_VALUE, GROUP_BY]>, BIT_OR(<bit_value: INT, STRICT>)\nFROM <tables: LIST[TABLE]>\nGROUP BY <group_by>",
+        "TgtPattern": "WITH <alias1: ALIAS> AS (\n    SELECT {for <ele>, <alias> in <group_by>, <alias_list: LIST[ALIAS]> ADD ',': <ele> AS <alias>}, <bit_value> AS <alias_value: ALIAS>, ROW_NUMBER() OVER (PARTITION BY <group_by> ORDER BY <bit_value>) AS <alias3: ALIAS>\n    FROM <tables>\n),\n<alias2: ALIAS> (<alias_list>, <alias4: ALIAS>, <alias3>) AS (\n    SELECT <alias_list>, <alias_value>, <alias3>\n    FROM <alias1>\n    WHERE <alias3> = 1\n    UNION ALL\n    SELECT {for <alias> in <alias_list> ADD ',': g.<alias>}, CASE WHEN g.<alias_value> IS NOT NULL THEN r.<alias4> + g.<alias_value> - BITAND(r.<alias4>, g.<alias_value>) ELSE r.<alias4> END, g.<alias3>\n    FROM <alias1> g\n    JOIN <alias2> r\n      ON {for <alias> in <alias_list> ADD 'AND': g.<alias> = r.<alias>} AND g.<alias3> = r.<alias3> + 1\n)\nSELECT <alias_list>, <alias4>\nFROM <alias2> r\nWHERE <alias3> = (SELECT MAX(<alias3>) FROM <alias1> g WHERE {for <alias> in <alias_list> ADD 'AND': g.<alias> = r.<alias>})",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "EVERY",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EVERY(<value: BOOL>)",
+        "TgtPattern": "DECODE(MIN(CASE WHEN <value> THEN 1 ELSE 0 END), 0, 0, 1, 1, NULL, NULL)",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "BOOL_AND",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "BOOL_AND(<value: BOOL>)",
+        "TgtPattern": "DECODE(MIN(CASE WHEN <value> THEN 1 ELSE 0 END), 0, 0, 1, 1, NULL, NULL)",
+        "Condition": null,
+        "Return": "BOOL"
+    },
+    {
+        "Desc": "BOOL_OR",
+        "Dialect": {
+            "Src": "pg",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "BOOL_OR(<value: BOOL>)",
+        "TgtPattern": "DECODE(MAX(CASE WHEN <value> THEN 1 ELSE 0 END), 1, 1, 0, 0, NULL, NULL)",
+        "Condition": null,
+        "Return": "BOOL"
+    }
+]

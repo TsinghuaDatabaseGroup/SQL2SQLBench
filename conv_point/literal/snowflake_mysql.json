@@ -1,0 +1,26 @@
+[
+    {
+        "Desc": "INTERVAL1",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INTERVAL '2 days'",
+        "TgtPattern": "INTERVAL 2 DAY",
+        "Condition": null,
+        "Return": "INTERVAL"
+    },
+    {
+        "Desc": "INTERVAL2",
+        "Dialect": {
+            "Src": "snowflake",
+            "Tgt": "mysql"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "INTERVAL '2 months'",
+        "TgtPattern": "INTERVAL 2 MONTH",
+        "Condition": null,
+        "Return": "INTERVAL"
+    }
+]

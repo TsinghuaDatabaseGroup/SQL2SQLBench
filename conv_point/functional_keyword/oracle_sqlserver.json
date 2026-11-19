@@ -1,0 +1,50 @@
+[
+    {
+        "Desc": "SELECT UNIQUE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "SELECT UNIQUE {for <value> in <values: LIST[ANY_VALUE]> ADD ',': <value>} FROM {for <table> in <tables: LIST[TABLE]> ADD ',': <table>}",
+        "TgtPattern": "SELECT DISTINCT {for <value> in <values> ADD ',': <value>} FROM {for <table> in <tables> ADD ',': <table>}",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_WITH_1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "",
+        "TgtPattern": "",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_WITH_2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "",
+        "TgtPattern": "",
+        "Condition": null,
+        "Return": null
+    },
+    {
+        "Desc": "START_WITH_3",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "PATTERN",
+        "SrcPattern": "",
+        "TgtPattern": "",
+        "Condition": null,
+        "Return": null
+    }
+]

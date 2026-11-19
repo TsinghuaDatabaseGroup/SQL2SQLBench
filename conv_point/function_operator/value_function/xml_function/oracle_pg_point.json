@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "EXISTSNODE",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "pg"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXISTSNODE(<xml: XML>, <xpath: @GenXmlPath(<xml>)>)",
+        "TgtPattern": "CASE WHEN XPATH_EXISTS(<xpath>, <xml>) THEN 1 ELSE 0 END",
+        "Condition": null,
+        "Return": "INT"
+    }
+]

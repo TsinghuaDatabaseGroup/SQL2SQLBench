@@ -1,0 +1,14 @@
+[
+    {
+        "Desc": "Hex",
+        "Dialect": {
+            "Src": "mysql",
+            "Tgt": "oracle"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "UNHEX(<value: @GenDoubleHexString()>)",
+        "TgtPattern": "HEXTORAW(<value>)",
+        "Condition": null,
+        "Return": "BINARY"
+    }
+]

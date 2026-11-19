@@ -1,0 +1,200 @@
+[
+    {
+        "Desc": "ADD_MONTHS",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "ADD_MONTHS(<date_value: DATE>, <months: INT>)",
+        "TgtPattern": "DATEADD(MONTH, <months>, <date_value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "EXTRACT_YEAR",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(YEAR FROM <date_value: DATE>)",
+        "TgtPattern": "DATEPART(year, <date_value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "EXTRACT_MONTH",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(MONTH FROM <date_value: DATE>)",
+        "TgtPattern": "DATEPART(MONTH, <date_value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "EXTRACT_DAY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "EXTRACT(DAY FROM <date_value: DATE>)",
+        "TgtPattern": "DATEPART(day, <date_value>)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TO_CHAR_PARAM_AMER",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<date_value:DATE>)",
+        "TgtPattern": "UPPER(FORMAT(<date_value>, 'dd-MMM-yy', 'en-US'))",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_LANGUAGE": "AMERICAN"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_CHAR_PARAM_GERMAN",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_CHAR(<date_value:DATE>)",
+        "TgtPattern": "UPPER(FORMAT(<date_value>, 'dd-MMM-yy', 'de-DE'))",
+        "Condition": null,
+        "Return": "STRING",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_LANGUAGE": "GERMAN"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_TIMESTAMP_R1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<timestamp_str: @GenTimestampOracleStr('DD-MON-RR HH.MI.SSXFF AM')>)",
+        "TgtPattern": "CAST(<mysql_timestamp: @TranToStandardTimeFormat(<timestamp_str>, 'DD-MON-RR HH.MI.SSXFF AM')> AS DATETIME2)",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_TIMESTAMP_FORMAT": "DD-MON-RR HH.MI.SSXFF AM"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_TIMESTAMP_R2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_TIMESTAMP(<timestamp_str: @GenTimestampOracleStr('Mon dd, YYYY, HH24:MI:SS')>)",
+        "TgtPattern": "CAST(<mysql_timestamp: @TranToStandardTimeFormat(<timestamp_str>, 'Mon dd, YYYY, HH24:MI:SS')> AS DATETIME2)",
+        "Condition": null,
+        "Return": "TIMESTAMP",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_TIMESTAMP_FORMAT": "Mon dd, YYYY, HH24:MI:SS"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_DATE_PARA1",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DATE(<date_str: @GenTimestampOracleStr('DD-MON-RR')>)",
+        "TgtPattern": "CAST(<mysql_date: @TranToStandardTimeFormat(<date_str>, 'DD-MON-RR')> AS DATE)",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "DD-MON-RR"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TO_DATE_PARA2",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TO_DATE(<timestamp_str: @GenTimestampOracleStr('Mon dd, YYYY')>)",
+        "TgtPattern": "CAST(<mysql_date: @TranToStandardTimeFormat(<timestamp_str>, 'Mon dd, YYYY')> AS DATE)",
+        "Condition": null,
+        "Return": "DATE",
+        "Tag": {
+            "DB PARAMETER": {
+                "oracle": {
+                    "NLS_DATE_FORMAT": "Mon dd, YYYY"
+                }
+            }
+        }
+    },
+    {
+        "Desc": "TRUNC_DEFAULT",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value:TIMESTAMP>)",
+        "TgtPattern": "CAST(<value> AS DATE)",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TRUNC_IW",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value:TIMESTAMP>, 'IW')",
+        "TgtPattern": "DATEADD(day, -((DATEDIFF(day, '19000101', CAST(<value> AS date)) + 0) % 7), CAST(<value> AS date))",
+        "Condition": null,
+        "Return": "DATE"
+    },
+    {
+        "Desc": "TRUNC_DAY",
+        "Dialect": {
+            "Src": "oracle",
+            "Tgt": "sqlserver"
+        },
+        "Type": "EXPRESSION",
+        "SrcPattern": "TRUNC(<value:TIMESTAMP>, 'DAY')",
+        "TgtPattern": "DATEADD(day, -1, DATEADD(day,  -((DATEDIFF(day, '19000101', CAST(<value> AS date)) + 0) % 7), CAST(<value> AS date)))",
+        "Condition": null,
+        "Return": "DATE"
+    }
+]

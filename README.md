@@ -222,6 +222,20 @@ All data is stored in format:
 We have given the script and experiment data of all the experiments in our paper, and you can run the script in `exp_scripts/` to reproduce the experiment results. You can also run the script with your own generated SQLs to get the performance of different translators on your SQLs.
 
 
+## Citations
+
+Please cite the following paper
+
+```bibtex
+@article{SQL2SQLBench,
+      title={SQL2SQLBench: A Benchmark for Database Dialect Translation}, 
+      author={Yuyang Gao and Zhaoyan Sun and Guoliang Li},
+      year={2027},
+      journal={KDD}
+}
+```
+
+
 
 
 
